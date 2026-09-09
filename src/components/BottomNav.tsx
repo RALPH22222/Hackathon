@@ -10,75 +10,154 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   activeTab = 'home',
   onTabChange,
 }) => {
+  // Map tabs to 0, 1, 2 index for sliding calculation
+  const activeIndex = activeTab === 'home' ? 0 : activeTab === 'backup' ? 1 : 2;
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#c5d8c3] px-4 py-2 shadow-lg sm:hidden">
-      <div className="max-w-md mx-auto flex items-center justify-around">
-        {/* Home */}
-        <button
-          type="button"
-          onClick={() => onTabChange?.('home')}
-          className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'home'
-              ? 'text-[#214321] font-bold'
-              : 'text-stone-400 hover:text-stone-600'
-          }`}
-        >
-          <div
-            className={`p-1.5 rounded-lg ${
-              activeTab === 'home' ? 'bg-[#edf5ec] text-[#214321]' : ''
-            }`}
-          >
-            <Home className="w-5 h-5" />
-          </div>
-          <span className="text-[10px] tracking-tight">Home</span>
-        </button>
+    <nav
+      aria-label="Mobile Navigation"
+      className="fixed bottom-4 left-3 right-3 z-40 max-w-md mx-auto sm:hidden"
+    >
+      {/* Floating Glassmorphic Dock Container */}
+      <div className="relative bg-white/95 backdrop-blur-xl border border-white/80 rounded-3xl p-1.5 shadow-[0_12px_36px_-6px_rgba(31,56,31,0.22),0_4px_16px_rgba(0,0,0,0.04)] ring-1 ring-stone-900/5">
+        
+        {/* Subtle Ambient Top Glow Line */}
+        <div className="absolute -top-px left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#5d8c55]/40 to-transparent" />
 
-        {/* Request Backup */}
-        <button
-          type="button"
-          onClick={() => {
-            onTabChange?.('backup');
-            alert('Backup request dispatched to CCS marshals.');
-          }}
-          className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'backup'
-              ? 'text-[#214321] font-bold'
-              : 'text-stone-400 hover:text-stone-600'
-          }`}
-        >
+        {/* Grid Container for 3 Equal Columns */}
+        <div className="relative grid grid-cols-3 gap-1.5 p-1">
+          
+          {/* Smooth Sliding Active Background Pill (Green) */}
           <div
-            className={`p-1.5 rounded-lg ${
-              activeTab === 'backup' ? 'bg-[#edf5ec] text-[#214321]' : ''
-            }`}
-          >
-            <ShieldAlert className="w-5 h-5 text-amber-600" />
-          </div>
-          <span className="text-[10px] tracking-tight">Request Backup</span>
-        </button>
+            className="absolute top-1 bottom-1 rounded-2xl bg-gradient-to-r from-[#1f381f] to-[#355935] shadow-md shadow-[#355935]/30 border border-[#4d7a4d]/40 transition-all duration-300 ease-out pointer-events-none z-0"
+            style={{
+              width: 'calc((100% - 0.75rem) / 3)',
+              transform: `translateX(calc(${activeIndex * 100}% + ${activeIndex * 0.375}rem))`,
+            }}
+          />
 
-        {/* QR Code */}
-        <button
-          type="button"
-          onClick={() => {
-            onTabChange?.('qr');
-            alert('Attendance QR Scanner opened.');
-          }}
-          className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'qr'
-              ? 'text-[#214321] font-bold'
-              : 'text-stone-400 hover:text-stone-600'
-          }`}
-        >
-          <div
-            className={`p-1.5 rounded-lg ${
-              activeTab === 'qr' ? 'bg-[#edf5ec] text-[#214321]' : ''
-            }`}
+          {/* 1. HOME TAB */}
+          <button
+            type="button"
+            onClick={() => onTabChange?.('home')}
+            className="relative z-10 flex flex-col items-center justify-center py-2 px-2 rounded-2xl transition-all duration-300 cursor-pointer group select-none"
           >
-            <QrCode className="w-5 h-5 text-[#355935]" />
-          </div>
-          <span className="text-[10px] tracking-tight">QR Code</span>
-        </button>
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={`p-1.5 rounded-xl transition-all duration-300 group-active:scale-90 ${
+                  activeTab === 'home'
+                    ? 'text-white scale-105'
+                    : 'text-stone-400 group-hover:text-stone-700'
+                }`}
+              >
+                <Home className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <span
+                className={`text-[11px] tracking-tight font-semibold transition-colors duration-300 ${
+                  activeTab === 'home' ? 'text-white font-bold' : 'text-stone-500'
+                }`}
+              >
+                Home
+              </span>
+            </div>
+
+            {/* Bottom active dot indicator */}
+            <span
+              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
+                activeTab === 'home' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
+              }`}
+            />
+          </button>
+
+          {/* 2. REQUEST BACKUP TAB */}
+          <button
+            type="button"
+            onClick={() => {
+              onTabChange?.('backup');
+              alert('Backup request dispatched to CCS marshals.');
+            }}
+            className="relative z-10 flex flex-col items-center justify-center py-2 px-2 rounded-2xl transition-all duration-300 cursor-pointer group select-none"
+          >
+            <div className="flex flex-col items-center gap-1">
+              <div className="relative">
+                <div
+                  className={`p-1.5 rounded-xl transition-all duration-300 group-active:scale-90 ${
+                    activeTab === 'backup'
+                      ? 'text-white scale-105'
+                      : 'text-stone-400 group-hover:text-amber-600'
+                  }`}
+                >
+                  <ShieldAlert
+                    className={`w-5 h-5 transition-colors duration-300 group-hover:scale-110 ${
+                      activeTab === 'backup' ? 'text-white' : 'text-amber-600'
+                    }`}
+                  />
+                </div>
+                {/* Live pulse indicator dot */}
+                <span className="absolute top-1 right-1 flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+                </span>
+              </div>
+
+              <span
+                className={`text-[11px] tracking-tight font-semibold transition-colors duration-300 ${
+                  activeTab === 'backup' ? 'text-white font-bold' : 'text-stone-500'
+                }`}
+              >
+                Request Backup
+              </span>
+            </div>
+
+            {/* Bottom active dot indicator */}
+            <span
+              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
+                activeTab === 'backup' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
+              }`}
+            />
+          </button>
+
+          {/* 3. QR CODE SCANNER */}
+          <button
+            type="button"
+            onClick={() => {
+              onTabChange?.('qr');
+              alert('Attendance QR Scanner opened.');
+            }}
+            className="relative z-10 flex flex-col items-center justify-center py-2 px-2 rounded-2xl transition-all duration-300 cursor-pointer group select-none"
+          >
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={`p-1.5 rounded-xl transition-all duration-300 group-active:scale-90 ${
+                  activeTab === 'qr'
+                    ? 'text-white scale-105'
+                    : 'text-[#355935] group-hover:text-[#214321]'
+                }`}
+              >
+                <QrCode className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <span
+                className={`text-[11px] tracking-tight font-semibold transition-colors duration-300 ${
+                  activeTab === 'qr' ? 'text-white font-bold' : 'text-stone-500'
+                }`}
+              >
+                QR Code
+              </span>
+            </div>
+
+            {/* Bottom active dot indicator */}
+            <span
+              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
+                activeTab === 'qr' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
+              }`}
+            />
+          </button>
+
+        </div>
       </div>
     </nav>
   );
 };
+
+
+
