@@ -1,7 +1,21 @@
-import React, { useState } from 'react';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, ShieldCheck, AlertCircle, CheckCircle2, UserCheck } from 'lucide-react';
-import { CcsLogo } from './components/CcsLogo';
+import React, { useState, useEffect } from 'react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { CyberBackground } from './components/CyberBackground';
+import ccsLogo from './assets/CCS.png';
+
+// Campus & Department Slideshow Images
+import img1 from './assets/567980503_1296620839145720_6285529420524500912_n.png';
+import img2 from './assets/568680614_1299221382218999_2627522291761815343_n.png';
+import img3 from './assets/569129390_1299214032219734_7626190114260015381_n.png';
+import img4 from './assets/569270178_1299215178886286_2296681164532258347_n.png';
+import img5 from './assets/569371806_1299221158885688_3389601969675179337_n.png';
+import img6 from './assets/570183959_1299214072219730_8484950406059815015_n.png';
+import img7 from './assets/570192208_1299215512219586_5884095804666635848_n.png';
+import img8 from './assets/570590907_1299216668886137_4995968703077383714_n.png';
+import img9 from './assets/571188908_1299214158886388_232373941161725289_n.png';
+import img10 from './assets/571398943_1299215352219602_3843302549433566862_n.png';
+
+const backgroundSlides = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
 
 export function App() {
   const [email, setEmail] = useState('');
@@ -10,13 +24,22 @@ export function App() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Background Slideshow timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % backgroundSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatusMessage(null);
 
     if (!email.trim()) {
-      setStatusMessage({ type: 'error', text: 'Please enter your student ID or institutional email.' });
+      setStatusMessage({ type: 'error', text: 'Please enter your email or student ID.' });
       return;
     }
 
@@ -27,99 +50,108 @@ export function App() {
 
     setIsLoading(true);
 
-    // Simulate attendance recording & verification
     setTimeout(() => {
       setIsLoading(false);
       setStatusMessage({
         type: 'success',
-        text: 'Attendance recorded successfully! Authenticating session token...',
+        text: 'Attendance recorded successfully.',
       });
-    }, 1200);
+    }, 1000);
   };
 
   return (
-    <div className="fixed inset-0 h-screen w-screen overflow-hidden flex items-center justify-center p-3 sm:p-6 text-slate-100 selection:bg-emerald-500 selection:text-black font-sans">
-      {/* Computer Science Circuit & Matrix Canvas Background */}
-      <CyberBackground />
+    <div className="fixed inset-0 h-screen w-screen overflow-hidden flex items-center justify-center p-4 sm:p-6 font-sans select-none">
+      
+      {/* 1. FULL SCREEN BACKGROUND SLIDESHOW (Behind everything) */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {backgroundSlides.map((slideImg, index) => (
+          <img
+            key={index}
+            src={slideImg}
+            alt="Campus Background"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out scale-105 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
 
-      {/* Login Card with internal scrolling if screen height is constrained */}
-      <div className="relative z-10 w-full max-w-[440px] max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] overflow-y-auto overflow-x-hidden rounded-2xl sm:rounded-3xl glass-panel border border-emerald-500/30 p-5 sm:p-7 shadow-[0_0_40px_rgba(16,185,129,0.14)]">
+        {/* 2. TRANSLUCENT GREEN OVERLAY */}
+        <div className="absolute inset-0 bg-[#274627]/75 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#1b341b]/85 via-[#355935]/70 to-[#5d8c55]/60" />
+        <div className="absolute inset-0 bg-black/20" />
+
+        {/* 3. PURE GRID LAYOUT OVERLAY */}
+        <CyberBackground />
+      </div>
+
+      {/* 4. LOGIN CARD */}
+      <div className="relative z-20 w-full max-w-[390px] max-h-[calc(100dvh-2rem)] overflow-y-auto overflow-x-hidden rounded-2xl bg-white/95 backdrop-blur-md border border-white/40 p-6 sm:p-8 shadow-2xl shadow-black/40">
         
-        {/* Emblem & Department Header */}
-        <div className="text-center mb-5 sm:mb-6">
-          <div className="inline-block relative mb-2.5 group">
-            <CcsLogo size={106} glow={true} animated={true} />
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap text-[10px] font-mono bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/40 shadow-lg pointer-events-none">
-              01100011 01100011 01110011 = &quot;ccs&quot;
-            </div>
+        {/* Header with Logo */}
+        <div className="text-center mb-6">
+          <div className="inline-block mb-3 select-none">
+            <img
+              src={ccsLogo}
+              alt="College of Computing Studies Seal"
+              className="w-24 h-24 sm:w-28 sm:h-28 object-contain mx-auto drop-shadow-sm"
+            />
           </div>
 
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-[11px] font-mono mb-1">
-              <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>CCS Attendance Portal</span>
-            </div>
-            <h1 className="text-lg sm:text-xl font-bold font-display text-white tracking-wide">
-              College of Computing Studies
-            </h1>
-            <p className="text-[11px] sm:text-xs text-emerald-400 font-mono tracking-wider uppercase font-semibold">
-              ACT • IT • CS Attendance
-            </p>
-            <p className="text-[10px] sm:text-[11px] text-slate-400">
-              Western Mindanao State University
-            </p>
-          </div>
+          <h1 className="text-lg sm:text-xl font-bold font-display text-[#1f381f] tracking-tight">
+            College of Computing Studies
+          </h1>
+          <p className="text-xs text-[#3d6e35] font-semibold mt-0.5">
+            Attendance Portal
+          </p>
         </div>
 
-        {/* Status Message Alert */}
+        {/* Status Message */}
         {statusMessage && (
           <div
             className={`mb-4 p-3 rounded-xl flex items-center gap-2.5 text-xs animate-fadeIn ${
               statusMessage.type === 'error'
-                ? 'bg-rose-950/60 border border-rose-500/50 text-rose-200'
-                : 'bg-emerald-950/60 border border-emerald-500/50 text-emerald-200'
+                ? 'bg-red-50 border border-red-200 text-red-700'
+                : 'bg-[#edf5ec] border border-[#5d8c55]/40 text-[#254625]'
             }`}
           >
             {statusMessage.type === 'error' ? (
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
             ) : (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#5d8c55] shrink-0" />
             )}
-            <span>{statusMessage.text}</span>
+            <span className="font-medium">{statusMessage.text}</span>
           </div>
         )}
 
-        {/* Attendance Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
-          {/* Email / Student ID Field */}
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email / Student ID */}
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Institutional Email / Student ID</span>
+            <label className="block text-xs font-semibold text-[#254225] mb-1.5 flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-[#5d8c55]" />
+              <span>Email or Student ID</span>
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="student@wmsu.edu.ph"
-                className="w-full glass-input px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm text-slate-100 placeholder:text-slate-600 font-mono"
-              />
-            </div>
+            <input
+              type="text"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="student@wmsu.edu.ph"
+              className="w-full bg-white border border-[#c5d8c3] focus:border-[#355935] text-[#1a2f1a] focus:ring-2 focus:ring-[#5d8c55]/20 outline-none transition-all px-3.5 py-2.5 rounded-xl text-xs sm:text-sm placeholder:text-stone-400 font-mono shadow-sm"
+            />
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-1.5 text-xs">
-              <label className="font-medium text-slate-300 flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-emerald-400" />
+              <label className="font-semibold text-[#254225] flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-[#5d8c55]" />
                 <span>Password</span>
               </label>
               <button
                 type="button"
-                onClick={() => alert('Please contact the CCS IT Department to reset your attendance portal password.')}
-                className="text-emerald-400 hover:text-emerald-300 transition-colors hover:underline text-[11px]"
+                onClick={() => alert('Please contact the CCS IT coordinator to reset your attendance credentials.')}
+                className="text-[#417439] hover:text-[#254225] transition-colors text-[11px] font-semibold cursor-pointer"
               >
                 Forgot Password?
               </button>
@@ -132,67 +164,66 @@ export function App() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full glass-input px-3.5 py-2 sm:py-2.5 pr-10 rounded-xl text-xs sm:text-sm text-slate-100 placeholder:text-slate-600 font-mono"
+                className="w-full bg-white border border-[#c5d8c3] focus:border-[#355935] text-[#1a2f1a] focus:ring-2 focus:ring-[#5d8c55]/20 outline-none transition-all px-3.5 py-2.5 pr-10 rounded-xl text-xs sm:text-sm placeholder:text-stone-400 font-mono shadow-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-[#355935] p-1 transition-colors cursor-pointer"
                 title={showPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
           </div>
 
           {/* Remember Me */}
-          <div className="flex items-center justify-between text-xs text-slate-300 pt-0.5">
+          <div className="flex items-center justify-between text-xs text-[#355235] pt-0.5">
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-black/60 border-emerald-700 text-emerald-600 focus:ring-emerald-500 focus:ring-offset-0 focus:ring-1"
+                className="w-4 h-4 rounded border-stone-300 text-[#355935] focus:ring-[#5d8c55]"
               />
-              <span className="text-[11px] sm:text-xs">Remember this device</span>
+              <span className="text-xs font-medium">Remember this device</span>
             </label>
+
+            {/* Slide Indicator dots */}
+            <div className="flex items-center gap-1">
+              {backgroundSlides.map((_, dotIdx) => (
+                <button
+                  key={dotIdx}
+                  type="button"
+                  onClick={() => setCurrentSlide(dotIdx)}
+                  className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${
+                    dotIdx === currentSlide ? 'bg-[#355935] w-3' : 'bg-[#355935]/25 hover:bg-[#355935]/50'
+                  }`}
+                  title={`Photo ${dotIdx + 1}`}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Solid Theme Button (No Gradient) */}
+          {/* Solid Green Button */}
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full mt-2 py-2.5 sm:py-3 px-5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 border border-emerald-400/30 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/70 hover:shadow-emerald-900/40 transition-all duration-200 transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="w-full mt-2 py-2.5 px-4 bg-[#355935] hover:bg-[#2b492b] active:bg-[#213921] text-white font-semibold rounded-xl flex items-center justify-center gap-2 text-xs sm:text-sm shadow-md shadow-[#355935]/20 transition-all duration-200 transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span className="font-mono text-xs sm:text-sm">Recording Attendance...</span>
+                <span>Signing In...</span>
               </div>
             ) : (
               <>
-                <span className="text-xs sm:text-sm tracking-wide font-medium">
-                  Record Attendance & Sign In
-                </span>
+                <span>Sign In to Portal</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
           </button>
         </form>
-
-        {/* Footer Security Badge */}
-        <div className="mt-5 pt-3.5 border-t border-emerald-900/30 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-500 font-mono">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Secure Attendance Gateway</span>
-          </div>
-          <span>WMSU • 2016</span>
-        </div>
-
-        {/* Bottom Copyright */}
-        <p className="text-center text-[10px] text-slate-500 font-mono mt-3">
-          © {new Date().getFullYear()} WMSU College of Computing Studies.
-        </p>
       </div>
     </div>
   );

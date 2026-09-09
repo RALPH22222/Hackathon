@@ -3,62 +3,26 @@ import React from 'react';
 interface CcsLogoProps {
   className?: string;
   size?: number;
-  glow?: boolean;
-  animated?: boolean;
 }
 
 export const CcsLogo: React.FC<CcsLogoProps> = ({
   className = '',
-  size = 120,
-  glow = true,
-  animated = true,
+  size = 110,
 }) => {
   return (
     <div
       className={`relative inline-flex items-center justify-center select-none ${className}`}
       style={{ width: size, height: size }}
     >
-      {/* Outer ambient glow */}
-      {glow && (
-        <div
-          className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl animate-pulse-slow"
-          style={{ transform: 'scale(1.15)' }}
-        />
-      )}
-
       <svg
         viewBox="0 0 400 400"
         width={size}
         height={size}
-        className={`w-full h-full transform transition-transform duration-500 ${
-          animated ? 'hover:scale-105' : ''
-        }`}
+        className="w-full h-full"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Gradients */}
-          <linearGradient id="sealGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0B4D2C" />
-            <stop offset="50%" stopColor="#063820" />
-            <stop offset="100%" stopColor="#022112" />
-          </linearGradient>
-
-          <linearGradient id="circuitGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#34d399" />
-            <stop offset="100%" stopColor="#059669" />
-          </linearGradient>
-
-          <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#042013" />
-            <stop offset="100%" stopColor="#0a3822" />
-          </linearGradient>
-
-          <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-
           {/* Text Paths */}
           {/* Top Arc for "COLLEGE OF COMPUTING STUDIES" */}
           <path
@@ -75,61 +39,31 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
           />
         </defs>
 
-        {/* Outer Green Ring */}
+        {/* Outer Ring */}
         <circle
           cx="200"
           cy="200"
           r="190"
-          stroke="#0d5230"
+          stroke="#355935"
           strokeWidth="18"
-          className="transition-colors duration-300"
         />
-        
-        {/* Subtle accent border rings */}
-        <circle
-          cx="200"
-          cy="200"
-          r="198"
-          stroke="#34d399"
-          strokeWidth="2"
-          strokeOpacity="0.6"
-        />
+
+        {/* Inner Ring Fill */}
         <circle
           cx="200"
           cy="200"
           r="178"
-          stroke="#10b981"
-          strokeWidth="2"
-          strokeOpacity="0.8"
+          fill="#355935"
         />
 
-        {/* Inner Ring with Dark Forest Fill */}
-        <circle
-          cx="200"
-          cy="200"
-          r="178"
-          fill="url(#sealGreenGrad)"
-        />
-
-        {/* Inner White/Off-White Center Disk */}
+        {/* Inner White Center Disk */}
         <circle
           cx="200"
           cy="200"
           r="126"
-          fill="#06120b"
-          stroke="#10b981"
-          strokeWidth="3"
-        />
-
-        {/* Inner decorative grid circle */}
-        <circle
-          cx="200"
-          cy="200"
-          r="120"
-          stroke="#059669"
-          strokeWidth="1"
-          strokeDasharray="4 4"
-          strokeOpacity="0.4"
+          fill="#ffffff"
+          stroke="#355935"
+          strokeWidth="3.5"
         />
 
         {/* --- CURVED TEXT --- */}
@@ -139,14 +73,13 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
           fontSize="22"
           fontWeight="800"
           letterSpacing="4"
-          fontFamily="'Plus Jakarta Sans', 'Arial Black', sans-serif"
-          className="tracking-widest drop-shadow-sm"
+          fontFamily="'Plus Jakarta Sans', Arial, sans-serif"
         >
           <textPath
             href="#topArc"
             startOffset="50%"
             textAnchor="middle"
-            className="select-none fill-emerald-100"
+            className="select-none"
           >
             COLLEGE OF COMPUTING STUDIES
           </textPath>
@@ -158,31 +91,31 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
           fontSize="28"
           fontWeight="900"
           letterSpacing="8"
-          fontFamily="'Plus Jakarta Sans', 'Arial Black', sans-serif"
+          fontFamily="'Plus Jakarta Sans', Arial, sans-serif"
         >
           <textPath
             href="#bottomArc"
             startOffset="50%"
             textAnchor="middle"
-            className="select-none fill-emerald-100"
+            className="select-none"
           >
             • WMSU •
           </textPath>
         </text>
 
-        {/* Stars / Dots separating top & bottom */}
-        <circle cx="56" cy="200" r="4" fill="#34d399" />
-        <circle cx="344" cy="200" r="4" fill="#34d399" />
+        {/* Dots separating top & bottom */}
+        <circle cx="56" cy="200" r="4.5" fill="#ffffff" />
+        <circle cx="344" cy="200" r="4.5" fill="#ffffff" />
 
-        {/* Year "2016" placed right below center circle inside the bottom curve */}
+        {/* Year "2016" */}
         <text
           x="200"
           y="302"
           textAnchor="middle"
-          fill="#34d399"
-          fontSize="16"
+          fill="#355935"
+          fontSize="17"
           fontWeight="700"
-          letterSpacing="3"
+          letterSpacing="2.5"
           fontFamily="'Fira Code', monospace"
         >
           2016
@@ -191,8 +124,8 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
         {/* --- CENTER: CIRCUIT BRAIN & CPU --- */}
         <g id="circuit-brain" transform="translate(200, 185) scale(0.82) translate(-200, -185)">
           {/* Circuit Traces forming Brain Hemisphere Contours */}
-          <g stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.95">
-            {/* Left Hemisphere Circuit Traces */}
+          <g stroke="#355935" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+            {/* Left Hemisphere */}
             <path d="M 160 185 H 125 V 160 H 105 V 140 H 130 V 120 H 155" />
             <path d="M 160 170 H 135 V 145 H 150 V 130" />
             <path d="M 160 200 H 120 V 225 H 100 V 240 H 135 V 255 H 155" />
@@ -204,7 +137,7 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
             <path d="M 130 120 H 115 V 105 H 140" />
             <path d="M 135 255 H 115 V 270 H 140" />
 
-            {/* Right Hemisphere Circuit Traces */}
+            {/* Right Hemisphere */}
             <path d="M 240 185 H 275 V 160 H 295 V 140 H 270 V 120 H 245" />
             <path d="M 240 170 H 265 V 145 H 250 V 130" />
             <path d="M 240 200 H 280 V 225 H 300 V 240 H 265 V 255 H 245" />
@@ -216,15 +149,13 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
             <path d="M 270 120 H 285 V 105 H 260" />
             <path d="M 265 255 H 285 V 270 H 260" />
 
-            {/* Top frontal lobes connector */}
+            {/* Connectors */}
             <path d="M 175 105 H 190 V 125 H 210 V 105 H 225" />
-            {/* Bottom cerebellum traces */}
             <path d="M 175 270 H 190 V 255 H 210 V 270 H 225" />
           </g>
 
-          {/* Circuit Trace Nodes (Pads) */}
-          <g fill="#34d399">
-            {/* Left nodes */}
+          {/* Circuit Nodes */}
+          <g fill="#355935">
             <circle cx="85" cy="195" r="3.5" />
             <circle cx="95" cy="175" r="3" />
             <circle cx="90" cy="210" r="3" />
@@ -237,7 +168,6 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
             <circle cx="150" cy="130" r="3" />
             <circle cx="150" cy="250" r="3" />
 
-            {/* Right nodes */}
             <circle cx="315" cy="195" r="3.5" />
             <circle cx="305" cy="175" r="3" />
             <circle cx="310" cy="210" r="3" />
@@ -250,81 +180,62 @@ export const CcsLogo: React.FC<CcsLogoProps> = ({
             <circle cx="250" cy="130" r="3" />
             <circle cx="250" cy="250" r="3" />
 
-            {/* Center nodes */}
             <circle cx="200" cy="125" r="3" />
             <circle cx="200" cy="255" r="3" />
           </g>
 
-          {/* Glowing Animated Pulses along traces */}
-          {animated && (
-            <g fill="#a7f3d0" className="animate-pulse">
-              <circle cx="105" cy="140" r="2.5" />
-              <circle cx="295" cy="140" r="2.5" />
-              <circle cx="100" cy="240" r="2.5" />
-              <circle cx="300" cy="240" r="2.5" />
-              <circle cx="85" cy="195" r="2.5" />
-              <circle cx="315" cy="195" r="2.5" />
-            </g>
-          )}
-
-          {/* Central Microchip (CPU) */}
+          {/* Central Microchip */}
           <g id="cpu-chip">
-            {/* Chip outer shadow & border */}
             <rect
               x="160"
               y="152"
               width="80"
               height="66"
-              rx="6"
-              fill="url(#chipGrad)"
-              stroke="#10b981"
-              strokeWidth="2.5"
-              filter="url(#neonGlow)"
+              rx="4"
+              fill="#355935"
+              stroke="#5d8c55"
+              strokeWidth="1.5"
             />
 
-            {/* Chip pins / legs */}
-            {/* Top pins */}
-            <path d="M 172 152 V 146 M 184 152 V 146 M 196 152 V 146 M 208 152 V 146 M 220 152 V 146 M 228 152 V 146" stroke="#34d399" strokeWidth="2" strokeLinecap="round" />
-            {/* Bottom pins */}
-            <path d="M 172 218 V 224 M 184 218 V 224 M 196 218 V 224 M 208 218 V 224 M 220 218 V 224 M 228 218 V 224" stroke="#34d399" strokeWidth="2" strokeLinecap="round" />
-            {/* Left pins */}
-            <path d="M 160 162 H 154 M 160 174 H 154 M 160 185 H 154 M 160 196 H 154 M 160 208 H 154" stroke="#34d399" strokeWidth="2" strokeLinecap="round" />
-            {/* Right pins */}
-            <path d="M 240 162 H 246 M 240 174 H 246 M 240 185 H 246 M 240 196 H 246 M 240 208 H 246" stroke="#34d399" strokeWidth="2" strokeLinecap="round" />
+            {/* Pins */}
+            <path d="M 172 152 V 146 M 184 152 V 146 M 196 152 V 146 M 208 152 V 146 M 220 152 V 146 M 228 152 V 146" stroke="#355935" strokeWidth="2" strokeLinecap="round" />
+            <path d="M 172 218 V 224 M 184 218 V 224 M 196 218 V 224 M 208 218 V 224 M 220 218 V 224 M 228 218 V 224" stroke="#355935" strokeWidth="2" strokeLinecap="round" />
+            <path d="M 160 162 H 154 M 160 174 H 154 M 160 185 H 154 M 160 196 H 154 M 160 208 H 154" stroke="#355935" strokeWidth="2" strokeLinecap="round" />
+            <path d="M 240 162 H 246 M 240 174 H 246 M 240 185 H 246 M 240 196 H 246 M 240 208 H 246" stroke="#355935" strokeWidth="2" strokeLinecap="round" />
 
-            {/* Binary Code: "c" "c" "s" */}
+            {/* Binary Code */}
             <text
               x="200"
-              y="169"
+              y="170"
               textAnchor="middle"
-              fill="#34d399"
+              fill="#ffffff"
               fontSize="9.5"
               fontWeight="700"
-              fontFamily="'Fira Code', 'Courier New', monospace"
+              fontFamily="'Fira Code', monospace"
               letterSpacing="1"
             >
               01100011
             </text>
             <text
               x="200"
-              y="188"
+              y="189"
               textAnchor="middle"
-              fill="#6ee7b7"
+              fill="#e2efe2"
               fontSize="9.5"
               fontWeight="700"
-              fontFamily="'Fira Code', 'Courier New', monospace"
+              fontFamily="'Fira Code', monospace"
               letterSpacing="1"
             >
               01100011
             </text>
             <text
               x="200"
-              y="207"
+              y="208"
               textAnchor="middle"
-              fill="#34d399"
+              fill="#ffffff"
               fontSize="9.5"
               fontWeight="700"
-              fontFamily="'Fira Code', 'Courier New', monospace"
+              fontFamily="'Fira Code', monospace"
               letterSpacing="1"
             >
               01110011

@@ -3,6 +3,8 @@
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f2f6f2;
+    color: #1e331e;
   }
   
   .font-mono {
@@ -14,89 +16,56 @@
   }
 }
 
-/* Custom CS Circuit Background and Glow */
-.bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+/* Minimalist Light Card & Inputs using #355935 and #5d8c55 */
+.minimal-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(53, 89, 53, 0.16);
+  box-shadow: 0 12px 36px -8px rgba(53, 89, 53, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.bg-radial-gradient {
-  background: radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.15), transparent 65%);
+.minimal-input {
+  background: #ffffff;
+  border: 1.5px solid #d3e2d1;
+  color: #1a2f1a;
+  transition: all 0.2s ease;
 }
 
-.glass-panel {
-  background: rgba(10, 24, 18, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(16, 185, 129, 0.05);
-}
-
-.glass-input {
-  background: rgba(4, 15, 10, 0.6);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  transition: all 0.25s ease;
-}
-
-.glass-input:focus {
-  background: rgba(6, 22, 14, 0.85);
-  border-color: #10b981;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+.minimal-input:focus {
+  background: #ffffff;
+  border-color: #355935;
+  box-shadow: 0 0 0 3px rgba(93, 140, 85, 0.22);
   outline: none;
 }
 
-.glow-emerald {
-  filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.45));
+.minimal-btn {
+  background-color: #355935;
+  color: #ffffff;
+  transition: all 0.2s ease;
 }
 
-.glow-emerald-strong {
-  filter: drop-shadow(0 0 24px rgba(16, 185, 129, 0.7));
+.minimal-btn:hover {
+  background-color: #2b492b;
 }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.03); }
+.minimal-btn:active {
+  background-color: #213921;
 }
 
-.animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
-}
-
-@keyframes float-chip {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(1deg); }
-}
-
-.animate-float {
-  animation: float-chip 6s ease-in-out infinite;
-}
-
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(1000%); }
-}
-
-.animate-scanline {
-  animation: scanline 8s linear infinite;
-}
-
-/* Custom scrollbar */
+/* Custom minimal scrollbar for card */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #060c09;
+  background: #f2f6f2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.3);
-  border-radius: 3px;
+  background: rgba(93, 140, 85, 0.35);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.6);
+  background: rgba(53, 89, 53, 0.6);
 }
