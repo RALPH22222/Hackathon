@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { HomeHeader } from '../../components/home/HomeHeader';
-import { SectionScheduleCard } from '../../components/home/SectionScheduleCard';
-import { GameScheduleCard } from '../../components/home/GameScheduleCard';
-import { MedalTallyCard } from '../../components/home/MedalTallyCard';
-import { BottomNav } from '../../components/home/BottomNav';
+import { HomeHeader } from '../components/home/HomeHeader';
+import { SectionScheduleCard } from '../components/home/SectionScheduleCard';
+import { GameScheduleCard } from '../components/home/GameScheduleCard';
+import { MedalTallyCard } from '../components/home/MedalTallyCard';
+import { BottomNav } from '../components/BottomNav';
 
 export function Home() {
   const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr'>('home');

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Login from './pages/auth/login';
-import Home from './pages/home/Home';
+import Home from './pages/Home';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'login' | 'home'>('login');

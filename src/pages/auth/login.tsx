@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { CyberBackground } from '../../components/CyberBackground';
+import { CyberBackground } from '../../components/auth/CyberBackground';
 import ccsLogo from '../../assets/CCS.png';
 
 // Campus & Department Slideshow Images
