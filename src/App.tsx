@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, ShieldCheck, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, ShieldCheck, AlertCircle, CheckCircle2, UserCheck } from 'lucide-react';
 import { CcsLogo } from './components/CcsLogo';
 import { CyberBackground } from './components/CyberBackground';
 
@@ -16,7 +16,7 @@ export function App() {
     setStatusMessage(null);
 
     if (!email.trim()) {
-      setStatusMessage({ type: 'error', text: 'Please enter your institutional email.' });
+      setStatusMessage({ type: 'error', text: 'Please enter your student ID or institutional email.' });
       return;
     }
 
@@ -27,12 +27,12 @@ export function App() {
 
     setIsLoading(true);
 
-    // Simulate login verification
+    // Simulate attendance recording & verification
     setTimeout(() => {
       setIsLoading(false);
       setStatusMessage({
         type: 'success',
-        text: 'Access Granted. Authenticating CS session token...',
+        text: 'Attendance recorded successfully! Authenticating session token...',
       });
     }, 1200);
   };
@@ -54,12 +54,16 @@ export function App() {
             </div>
           </div>
 
-          <div className="space-y-0.5">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-[11px] font-mono mb-1">
+              <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>CCS Attendance Portal</span>
+            </div>
             <h1 className="text-lg sm:text-xl font-bold font-display text-white tracking-wide">
               College of Computing Studies
             </h1>
             <p className="text-[11px] sm:text-xs text-emerald-400 font-mono tracking-wider uppercase font-semibold">
-              Department of Computer Science
+              ACT • IT • CS Attendance
             </p>
             <p className="text-[10px] sm:text-[11px] text-slate-400">
               Western Mindanao State University
@@ -85,17 +89,17 @@ export function App() {
           </div>
         )}
 
-        {/* Login Form */}
+        {/* Attendance Login Form */}
         <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
-          {/* Email Field */}
+          {/* Email / Student ID Field */}
           <div>
             <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Institutional Email</span>
+              <span>Institutional Email / Student ID</span>
             </label>
             <div className="relative">
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -114,7 +118,7 @@ export function App() {
               </label>
               <button
                 type="button"
-                onClick={() => alert('Please contact the CCS IT Department to reset your portal password.')}
+                onClick={() => alert('Please contact the CCS IT Department to reset your attendance portal password.')}
                 className="text-emerald-400 hover:text-emerald-300 transition-colors hover:underline text-[11px]"
               >
                 Forgot Password?
@@ -163,11 +167,13 @@ export function App() {
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span className="font-mono text-xs sm:text-sm">Authenticating...</span>
+                <span className="font-mono text-xs sm:text-sm">Recording Attendance...</span>
               </div>
             ) : (
               <>
-                <span className="text-xs sm:text-sm tracking-wide font-medium">Sign In to Portal</span>
+                <span className="text-xs sm:text-sm tracking-wide font-medium">
+                  Record Attendance & Sign In
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -178,7 +184,7 @@ export function App() {
         <div className="mt-5 pt-3.5 border-t border-emerald-900/30 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-500 font-mono">
           <div className="flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Secure CS Gateway</span>
+            <span>Secure Attendance Gateway</span>
           </div>
           <span>WMSU • 2016</span>
         </div>
