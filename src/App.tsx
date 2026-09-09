@@ -1,8 +1,17 @@
-import Login from "./pages/auth/login";
-
+import { useState } from 'react';
+import Login from './pages/auth/login';
+import Home from './pages/home/Home';
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<'login' | 'home'>('login');
+
   return (
-    <Login />
+    <div>
+      {currentPage === 'login' ? (
+        <Login onLoginSuccess={() => setCurrentPage('home')} />
+      ) : (
+        <Home />
+      )}
+    </div>
   );
 }

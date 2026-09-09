@@ -17,7 +17,11 @@ import img10 from '../../assets/571398943_1299215352219602_3843302549433566862_n
 
 const backgroundSlides = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
 
-export function App() {
+interface LoginProps {
+  onLoginSuccess?: () => void;
+}
+
+export function Login({ onLoginSuccess }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -56,12 +60,16 @@ export function App() {
         type: 'success',
         text: 'Attendance recorded successfully.',
       });
+
+      if (onLoginSuccess) {
+        setTimeout(onLoginSuccess, 600);
+      }
     }, 1000);
   };
 
   return (
     <div className="fixed inset-0 h-screen w-screen overflow-hidden flex items-center justify-center p-4 sm:p-6 font-sans select-none">
-      
+
       {/* 1. FULL SCREEN BACKGROUND SLIDESHOW (Behind everything) */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         {backgroundSlides.map((slideImg, index) => (
@@ -86,7 +94,7 @@ export function App() {
 
       {/* 4. LOGIN CARD */}
       <div className="relative z-20 w-full max-w-[390px] max-h-[calc(100dvh-2rem)] overflow-y-auto overflow-x-hidden rounded-2xl bg-white/95 backdrop-blur-md border border-white/40 p-6 sm:p-8 shadow-2xl shadow-black/40">
-        
+
         {/* Header with Logo */}
         <div className="text-center mb-6">
           <div className="inline-block mb-3 select-none">
@@ -229,4 +237,4 @@ export function App() {
   );
 }
 
-export default App;
+export default Login;
