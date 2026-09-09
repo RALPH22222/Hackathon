@@ -3,7 +3,6 @@ import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 
 interface ScheduleItem {
   id: string;
-  section: string;
   sport: string;
   time: string;
   venue: string;
@@ -11,10 +10,10 @@ interface ScheduleItem {
 }
 
 const sectionSchedules: ScheduleItem[] = [
-  { id: '1', section: 'CS-3A', sport: 'Basketball Men', time: '10:00 AM', venue: 'Gymnasium', status: 'In Progress' },
-  { id: '2', section: 'IT-2B', sport: 'Volleyball Women', time: '01:30 PM', venue: 'Court B', status: 'Upcoming' },
-  { id: '3', section: 'ACT-1A', sport: 'MLBB Esports', time: '03:45 PM', venue: 'CCS Lab 3', status: 'Upcoming' },
-  { id: '4', section: 'CS-4B', sport: 'Badminton Doubles', time: '05:00 PM', venue: 'Covered Court', status: 'Upcoming' },
+  { id: '1', sport: 'Basketball Men vs COE', time: '10:00 AM', venue: 'Gymnasium', status: 'In Progress' },
+  { id: '2', sport: 'Volleyball Women vs CLA', time: '01:30 PM', venue: 'Court B', status: 'Upcoming' },
+  { id: '3', sport: 'MLBB Esports vs CTE', time: '03:45 PM', venue: 'CCS Lab 3', status: 'Upcoming' },
+  { id: '4', sport: 'Badminton Doubles vs CCJE', time: '05:00 PM', venue: 'Covered Court', status: 'Upcoming' },
 ];
 
 export const SectionScheduleCard: React.FC = () => {
@@ -27,14 +26,17 @@ export const SectionScheduleCard: React.FC = () => {
             <Calendar className="w-4 h-4 text-[#355935]" />
           </div>
           <h2 className="text-xs sm:text-sm font-bold text-[#1f381f] uppercase tracking-wide font-display">
-            Section Schedule
+            BSCS 4-B
           </h2>
         </div>
-        <span className="text-[10px] font-mono text-stone-500 font-medium">Assigned Events</span>
+        
+        <span className="text-[11px] font-mono text-stone-500 font-semibold">
+          Section Schedule
+        </span>
       </div>
 
       {/* List */}
-      <div className="space-y-2.5 overflow-y-auto max-h-[300px] pr-1">
+      <div className="space-y-2.5 overflow-y-auto max-h-[290px] sm:max-h-[320px] pr-1">
         {sectionSchedules.map((item) => (
           <div
             key={item.id}
@@ -43,7 +45,7 @@ export const SectionScheduleCard: React.FC = () => {
             <div className="flex items-center justify-between">
               <span className="font-bold text-[#1f381f] flex items-center gap-1.5 text-xs sm:text-sm">
                 <Users className="w-3.5 h-3.5 text-[#355935]" />
-                {item.section}
+                {item.sport}
               </span>
               <span
                 className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
@@ -55,8 +57,6 @@ export const SectionScheduleCard: React.FC = () => {
                 {item.status}
               </span>
             </div>
-
-            <p className="font-semibold text-slate-800 text-xs">{item.sport}</p>
 
             <div className="flex items-center justify-between text-[11px] text-stone-500 font-mono pt-0.5">
               <span className="flex items-center gap-1">
