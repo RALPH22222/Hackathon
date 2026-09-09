@@ -19,29 +19,34 @@ const sectionSchedules: ScheduleItem[] = [
 
 export const SectionScheduleCard: React.FC = () => {
   return (
-    <div className="bg-white rounded-2xl border border-[#c5d8c3] p-3.5 shadow-xs flex flex-col h-full">
+    <div className="bg-white rounded-2xl border border-[#c5d8c3] p-4 sm:p-5 shadow-xs flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-1.5 pb-2 mb-2.5 border-b border-[#e2ece0]">
-        <Calendar className="w-4 h-4 text-[#355935]" />
-        <h2 className="text-xs font-bold text-[#1f381f] uppercase tracking-wide">
-          Section Schedule
-        </h2>
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#e2ece0]">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-[#edf5ec] flex items-center justify-center border border-[#c5d8c3]/60">
+            <Calendar className="w-4 h-4 text-[#355935]" />
+          </div>
+          <h2 className="text-xs sm:text-sm font-bold text-[#1f381f] uppercase tracking-wide font-display">
+            Section Schedule
+          </h2>
+        </div>
+        <span className="text-[10px] font-mono text-stone-500 font-medium">Assigned Events</span>
       </div>
 
       {/* List */}
-      <div className="space-y-2 overflow-y-auto max-h-[190px] pr-0.5">
+      <div className="space-y-2.5 overflow-y-auto max-h-[300px] pr-1">
         {sectionSchedules.map((item) => (
           <div
             key={item.id}
-            className="p-2 rounded-xl bg-[#f8faf8] border border-[#e2ece0] text-xs space-y-1"
+            className="p-3 rounded-xl bg-[#f8faf8] hover:bg-[#f1f6f0] transition-colors border border-[#e2ece0] text-xs space-y-1.5"
           >
             <div className="flex items-center justify-between">
-              <span className="font-bold text-[#1f381f] flex items-center gap-1">
-                <Users className="w-3 h-3 text-[#355935]" />
+              <span className="font-bold text-[#1f381f] flex items-center gap-1.5 text-xs sm:text-sm">
+                <Users className="w-3.5 h-3.5 text-[#355935]" />
                 {item.section}
               </span>
               <span
-                className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                   item.status === 'In Progress'
                     ? 'bg-amber-100 text-amber-800'
                     : 'bg-[#edf5ec] text-[#254625]'
@@ -51,15 +56,15 @@ export const SectionScheduleCard: React.FC = () => {
               </span>
             </div>
 
-            <p className="font-semibold text-slate-800 text-[11px] truncate">{item.sport}</p>
+            <p className="font-semibold text-slate-800 text-xs">{item.sport}</p>
 
-            <div className="flex items-center justify-between text-[10px] text-stone-500 font-mono">
-              <span className="flex items-center gap-0.5">
-                <Clock className="w-3 h-3 text-[#5d8c55]" />
+            <div className="flex items-center justify-between text-[11px] text-stone-500 font-mono pt-0.5">
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-[#5d8c55]" />
                 {item.time}
               </span>
-              <span className="flex items-center gap-0.5 truncate max-w-[90px]">
-                <MapPin className="w-3 h-3 text-[#5d8c55]" />
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-[#5d8c55]" />
                 {item.venue}
               </span>
             </div>

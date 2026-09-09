@@ -29,26 +29,28 @@ export const GameScheduleCard: React.FC = () => {
   const list = activeTab === 'upcoming' ? upcomingGames : venomResults;
 
   return (
-    <div className="bg-white rounded-2xl border border-[#c5d8c3] p-3.5 shadow-xs flex flex-col h-full">
+    <div className="bg-white rounded-2xl border border-[#c5d8c3] p-4 sm:p-5 shadow-xs flex flex-col h-full">
       {/* Toggle Controls */}
-      <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-[#e2ece0]">
-        <div className="flex items-center gap-1.5">
-          {activeTab === 'upcoming' ? (
-            <Swords className="w-4 h-4 text-[#355935]" />
-          ) : (
-            <Trophy className="w-4 h-4 text-[#355935]" />
-          )}
-          <span className="text-xs font-bold text-[#1f381f] uppercase tracking-wide">
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#e2ece0]">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-[#edf5ec] flex items-center justify-center border border-[#c5d8c3]/60">
+            {activeTab === 'upcoming' ? (
+              <Swords className="w-4 h-4 text-[#355935]" />
+            ) : (
+              <Trophy className="w-4 h-4 text-[#355935]" />
+            )}
+          </div>
+          <span className="text-xs sm:text-sm font-bold text-[#1f381f] uppercase tracking-wide font-display">
             Venom Games
           </span>
         </div>
 
         {/* Tab switch */}
-        <div className="flex bg-[#edf5ec] p-0.5 rounded-lg border border-[#c5d8c3]/60 text-[10px]">
+        <div className="flex bg-[#edf5ec] p-1 rounded-xl border border-[#c5d8c3]/60 text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('upcoming')}
-            className={`px-2 py-0.5 rounded-md font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
               activeTab === 'upcoming'
                 ? 'bg-[#355935] text-white shadow-xs'
                 : 'text-[#355935] hover:text-[#1f381f]'
@@ -59,7 +61,7 @@ export const GameScheduleCard: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('results')}
-            className={`px-2 py-0.5 rounded-md font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
               activeTab === 'results'
                 ? 'bg-[#355935] text-white shadow-xs'
                 : 'text-[#355935] hover:text-[#1f381f]'
@@ -71,17 +73,17 @@ export const GameScheduleCard: React.FC = () => {
       </div>
 
       {/* Content List */}
-      <div className="space-y-2 overflow-y-auto max-h-[190px] pr-0.5">
+      <div className="space-y-2.5 overflow-y-auto max-h-[300px] pr-1">
         {list.map((item) => (
           <div
             key={item.id}
-            className="p-2 rounded-xl bg-[#f8faf8] border border-[#e2ece0] text-xs space-y-1"
+            className="p-3 rounded-xl bg-[#f8faf8] hover:bg-[#f1f6f0] transition-colors border border-[#e2ece0] text-xs space-y-1.5"
           >
             <div className="flex items-center justify-between">
-              <span className="font-bold text-[#1f381f] text-[11px] truncate">{item.sport}</span>
+              <span className="font-bold text-[#1f381f] text-xs sm:text-sm truncate">{item.sport}</span>
               {activeTab === 'results' && (
                 <span
-                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                     item.isWin ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'
                   }`}
                 >
@@ -90,18 +92,18 @@ export const GameScheduleCard: React.FC = () => {
               )}
             </div>
 
-            <p className="font-semibold text-stone-700 text-[11px]">{item.matchup}</p>
+            <p className="font-semibold text-stone-700 text-xs">{item.matchup}</p>
 
-            <div className="flex items-center gap-1 text-[10px] text-stone-500 font-mono">
+            <div className="flex items-center gap-1.5 text-[11px] text-stone-500 font-mono pt-0.5">
               {activeTab === 'upcoming' ? (
                 <>
-                  <Clock className="w-3 h-3 text-[#5d8c55]" />
+                  <Clock className="w-3.5 h-3.5 text-[#5d8c55]" />
                   <span>{item.timeOrScore}</span>
                 </>
               ) : (
                 <>
-                  <CheckCircle2 className="w-3 h-3 text-[#5d8c55]" />
-                  <span>Final: {item.timeOrScore}</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#5d8c55]" />
+                  <span>Final Score: {item.timeOrScore}</span>
                 </>
               )}
             </div>

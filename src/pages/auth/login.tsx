@@ -41,17 +41,6 @@ export function Login({ onLoginSuccess }: LoginProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatusMessage(null);
-
-    if (!email.trim()) {
-      setStatusMessage({ type: 'error', text: 'Please enter your email or student ID.' });
-      return;
-    }
-
-    if (!password) {
-      setStatusMessage({ type: 'error', text: 'Please enter your password.' });
-      return;
-    }
-
     setIsLoading(true);
 
     setTimeout(() => {
@@ -62,9 +51,9 @@ export function Login({ onLoginSuccess }: LoginProps) {
       });
 
       if (onLoginSuccess) {
-        setTimeout(onLoginSuccess, 600);
+        setTimeout(onLoginSuccess, 400);
       }
-    }, 1000);
+    }, 600);
   };
 
   return (
@@ -133,7 +122,7 @@ export function Login({ onLoginSuccess }: LoginProps) {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email / Student ID */}
+          {/* Email / Student ID (Optional for immediate login) */}
           <div>
             <label className="block text-xs font-semibold text-[#254225] mb-1.5 flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5 text-[#5d8c55]" />
@@ -141,7 +130,6 @@ export function Login({ onLoginSuccess }: LoginProps) {
             </label>
             <input
               type="text"
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="student@wmsu.edu.ph"
@@ -149,7 +137,7 @@ export function Login({ onLoginSuccess }: LoginProps) {
             />
           </div>
 
-          {/* Password */}
+          {/* Password (Optional for immediate login) */}
           <div>
             <div className="flex items-center justify-between mb-1.5 text-xs">
               <label className="font-semibold text-[#254225] flex items-center gap-1.5">
@@ -168,7 +156,6 @@ export function Login({ onLoginSuccess }: LoginProps) {
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
-                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"

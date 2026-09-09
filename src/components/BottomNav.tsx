@@ -11,7 +11,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onTabChange,
 }) => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#c5d8c3] px-4 py-2 shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#c5d8c3] px-4 py-2 shadow-lg sm:hidden">
       <div className="max-w-md mx-auto flex items-center justify-around">
         {/* Home */}
         <button
