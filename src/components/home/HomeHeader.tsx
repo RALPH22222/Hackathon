@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ccsLogo from '../../assets/CCS.png';
-import { Wifi, WifiOff, Home, ShieldAlert, QrCode } from 'lucide-react';
+import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Download } from 'lucide-react';
+import { useAppInstall } from '../../hooks/useAppInstall';
+import { initOfflineSyncManager } from '../../utils/offlineStorage';
 
 interface HomeHeaderProps {
   activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
@@ -16,6 +18,8 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
   onRoleChange,
 }) => {
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [syncedCount, setSyncedCount] = useState<number | null>(null);
+  const { canInstall, isInstalled, promptInstall } = useAppInstall();
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -24,14 +28,28 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+    // Initialize offline data sync manager
+    const cleanupSync = initOfflineSyncManager((count) => {
+      if (count > 0) {
+        setSyncedCount(count);
+        setTimeout(() => setSyncedCount(null), 4000);
+      }
+    });
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      if (cleanupSync) cleanupSync();
     };
   }, []);
 
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#c5d8c3]/80 px-3 sm:px-8 py-2.5 sm:py-3 shadow-xs">
+      {syncedCount !== null && (
+        <div className="bg-[#1f381f] text-emerald-300 text-center text-xs font-mono py-1 px-3 border-b border-[#355935] flex items-center justify-center gap-2">
+          <span>Synced {syncedCount} offline record{syncedCount > 1 ? 's' : ''} to server.</span>
+        </div>
+      )}
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
         {/* LEFT: Logo & College Department Information */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-initial md:w-1/3">
@@ -89,8 +107,20 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           </button>
         </nav>
 
-        {/* RIGHT: Role Switcher & Online Status */}
+        {/* RIGHT: Role Switcher, Install App Button & Online Status */}
         <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
+          {canInstall && !isInstalled && (
+            <button
+              type="button"
+              onClick={promptInstall}
+              className="hidden lg:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1f381f] hover:bg-[#355935] text-white text-[10.5px] font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
+              title="Add CS Portal App to your Home Screen for offline access"
+            >
+              <Download className="w-3 h-3 text-emerald-400" />
+              <span>Install App</span>
+            </button>
+          )}
+
           {onRoleChange && (
             <div className="inline-flex items-center bg-[#edf5ec] border border-[#c5d8c3] rounded-full p-0.5 text-[9px] sm:text-[10px] font-mono font-bold">
               <button
@@ -124,9 +154,9 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           <div
             className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10.5px] sm:text-xs font-mono font-semibold transition-colors ${isOnline
                 ? 'bg-[#edf5ec] border border-[#5d8c55]/40 text-[#254625]'
-                : 'bg-stone-100 border border-stone-300 text-stone-600'
+                : 'bg-amber-100 border border-amber-300 text-amber-900'
               }`}
-            title={isOnline ? 'Connected to live server' : 'Running in offline cached mode'}
+            title={isOnline ? 'Connected live • Local storage ready' : 'App Running Offline • Saved locally'}
           >
             {isOnline ? (
               <>
@@ -135,8 +165,8 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
               </>
             ) : (
               <>
-                <WifiOff className="w-3.5 h-3.5 text-stone-500" />
-                <span className="hidden sm:inline">OFFLINE</span>
+                <WifiOff className="w-3.5 h-3.5 text-amber-700" />
+                <span className="hidden sm:inline">OFFLINE MODE</span>
               </>
             )}
           </div>
@@ -145,3 +175,4 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
     </header>
   );
 };
+

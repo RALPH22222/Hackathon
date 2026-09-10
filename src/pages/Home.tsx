@@ -7,6 +7,7 @@ import { BottomNav } from '../components/BottomNav';
 import { Attendance } from './Attendance';
 import { AdviserAttendance } from './AdviserAttendance';
 import { BackupRequest } from './BackupRequest';
+import { InstallAppBanner } from '../components/common/InstallAppBanner';
 
 export function Home() {
   const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance'>('home');
@@ -62,9 +63,13 @@ export function Home() {
 
         {/* 3. Bottom Navigation (Mobile Only) */}
         <BottomNav activeTab={activeNav} onTabChange={setActiveNav} userRole={userRole} />
+
+        {/* 4. App Installation Banner */}
+        <InstallAppBanner />
       </div>
     </div>
   );
 }
+
 
 export default Home;
