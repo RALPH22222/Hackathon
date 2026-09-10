@@ -1,5 +1,5 @@
-import React from 'react';
-import { Clock, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck } from 'lucide-react';
 
 interface ScheduleItem {
   id: string;
@@ -40,7 +40,337 @@ const sectionSchedules: ScheduleItem[] = [
   },
 ];
 
-export const SectionScheduleCard: React.FC = () => {
+interface SectionAdviserData {
+  sectionName: string;
+  totalStudents: number;
+  checkedInTotal: number;
+  pendingCount: number;
+  events: {
+    id: string;
+    sport: string;
+    time: string;
+    venue: string;
+    status: 'In Progress' | 'Upcoming' | 'Completed';
+    checkedIn: number;
+    pendingCount: number;
+    note?: string;
+  }[];
+}
+
+const sectionAdviserRecords: Record<string, SectionAdviserData> = {
+  'BSCS 4-B': {
+    sectionName: 'BSCS 4-B',
+    totalStudents: 38,
+    checkedInTotal: 34,
+    pendingCount: 4,
+    events: [
+      {
+        id: '1',
+        sport: 'Basketball Men vs COE',
+        time: '10:00 AM',
+        venue: 'Gymnasium',
+        status: 'In Progress',
+        checkedIn: 34,
+        pendingCount: 2,
+        note: 'Live check-ins streaming',
+      },
+      {
+        id: '2',
+        sport: 'Volleyball Women vs CLA',
+        time: '01:30 PM',
+        venue: 'Court B',
+        status: 'Upcoming',
+        checkedIn: 0,
+        pendingCount: 1,
+        note: '1 proof submitted early',
+      },
+      {
+        id: '3',
+        sport: 'MLBB Esports vs CTE',
+        time: '03:45 PM',
+        venue: 'CCS Lab 3',
+        status: 'Upcoming',
+        checkedIn: 0,
+        pendingCount: 1,
+        note: '1 proof queued',
+      },
+      {
+        id: '4',
+        sport: 'Badminton Doubles vs CCJE',
+        time: '05:00 PM',
+        venue: 'Covered Court',
+        status: 'Upcoming',
+        checkedIn: 0,
+        pendingCount: 0,
+        note: 'Check-in opens 04:30 PM',
+      },
+    ],
+  },
+  'BSIT 3-A': {
+    sectionName: 'BSIT 3-A',
+    totalStudents: 35,
+    checkedInTotal: 29,
+    pendingCount: 2,
+    events: [
+      {
+        id: '1',
+        sport: 'Basketball Men vs COE',
+        time: '10:00 AM',
+        venue: 'Gymnasium',
+        status: 'In Progress',
+        checkedIn: 29,
+        pendingCount: 1,
+        note: 'Live check-ins streaming',
+      },
+      {
+        id: '2',
+        sport: 'Volleyball Women vs CLA',
+        time: '01:30 PM',
+        venue: 'Court B',
+        status: 'Upcoming',
+        checkedIn: 0,
+        pendingCount: 1,
+        note: '1 proof submitted early',
+      },
+      {
+        id: '3',
+        sport: 'MLBB Esports vs CTE',
+        time: '03:45 PM',
+        venue: 'CCS Lab 3',
+        status: 'Upcoming',
+        checkedIn: 0,
+        pendingCount: 0,
+        note: 'Opens 03:15 PM',
+      },
+      {
+        id: '4',
+        sport: 'Badminton Doubles vs CCJE',
+        time: '05:00 PM',
+        venue: 'Covered Court',
+        status: 'Upcoming',
+        checkedIn: 0,
+        pendingCount: 0,
+        note: 'Opens 04:30 PM',
+      },
+    ],
+  },
+};
+
+interface SectionScheduleCardProps {
+  userRole?: 'student' | 'adviser';
+  onNavigateToAttendance?: () => void;
+}
+
+export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
+  userRole = 'student',
+  onNavigateToAttendance,
+}) => {
+  const [selectedSection, setSelectedSection] = useState<'BSCS 4-B' | 'BSIT 3-A'>('BSCS 4-B');
+  const adviserData = sectionAdviserRecords[selectedSection];
+
+  // ADVISER VIEW
+  if (userRole === 'adviser') {
+    const turnoutPercent = Math.round(
+      (adviserData.checkedInTotal / adviserData.totalStudents) * 100
+    );
+
+    return (
+      <div className="bg-white rounded-2xl border border-[#c5d8c3] shadow-xs flex flex-col h-full overflow-hidden">
+        {/* Header */}
+        <div className="px-4 sm:px-5 py-3 sm:py-3.5 flex items-center justify-between min-h-[64px] bg-[#fcfdfc] border-b border-[#eef5ed]">
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-[10px] font-mono text-[#5d8c55] font-bold uppercase tracking-wider">
+                Advisory Attendance Monitor
+              </span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-100/70 border border-emerald-300/60 text-[#1f381f] text-[9px] font-mono font-bold">
+                ADVISER
+              </span>
+            </div>
+
+            {/* Section Switcher Dropdown */}
+            <div className="relative inline-flex items-center">
+              <select
+                value={selectedSection}
+                aria-label="Select Advisory Section"
+                onChange={(e) => setSelectedSection(e.target.value as 'BSCS 4-B' | 'BSIT 3-A')}
+                className="text-sm sm:text-base font-black text-[#142614] tracking-tight leading-none font-display bg-transparent border-none pr-5 py-0.5 focus:outline-hidden cursor-pointer appearance-none"
+              >
+                <option value="BSCS 4-B">BSCS 4-B (Main Advisory)</option>
+                <option value="BSIT 3-A">BSIT 3-A (Assisted)</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-stone-500 absolute right-0 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Pending Reviews Badge */}
+          {adviserData.pendingCount > 0 ? (
+            <button
+              type="button"
+              onClick={onNavigateToAttendance}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-800 hover:bg-amber-100/80 transition-all cursor-pointer shadow-2xs group"
+              title="Click to review pending student submissions"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+              </span>
+              <span className="text-[10.5px] font-mono font-bold uppercase">
+                {adviserData.pendingCount} Pending
+              </span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              <span className="text-[10px] font-mono font-bold uppercase">All Verified</span>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Stats Ribbon */}
+        <div className="grid grid-cols-3 divide-x divide-[#eef5ed] bg-[#f8faf8] border-b border-[#eef5ed] py-2 px-3 sm:px-4 text-center">
+          <div className="px-1">
+            <p className="text-[9.5px] font-mono uppercase text-stone-400 font-medium">Turnout Rate</p>
+            <p className="text-xs sm:text-sm font-black font-display text-[#1f381f] mt-0.5">
+              {turnoutPercent}% <span className="text-[10px] font-mono font-normal text-stone-500">({adviserData.checkedInTotal}/{adviserData.totalStudents})</span>
+            </p>
+          </div>
+          <div className="px-1">
+            <p className="text-[9.5px] font-mono uppercase text-stone-400 font-medium">Pending Review</p>
+            <p className="text-xs sm:text-sm font-black font-display text-amber-700 mt-0.5">
+              {adviserData.pendingCount} <span className="text-[10px] font-mono font-normal text-stone-500">Students</span>
+            </p>
+          </div>
+          <div className="px-1">
+            <p className="text-[9.5px] font-mono uppercase text-stone-400 font-medium">Active Event</p>
+            <p className="text-xs sm:text-sm font-black font-display text-emerald-700 mt-0.5">
+              1 <span className="text-[10px] font-mono font-normal text-stone-500">Live Now</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Event List with Class Attendance Status */}
+        <div className="flex-1 flex flex-col divide-y divide-[#eef5ed]">
+          {adviserData.events.map((item) => {
+            const isLive = item.status === 'In Progress';
+            const progress = Math.round((item.checkedIn / adviserData.totalStudents) * 100);
+
+            return (
+              <div
+                key={item.id}
+                className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-2.5 sm:py-3 transition-colors ${
+                  isLive ? 'bg-amber-50/40' : 'hover:bg-[#f8faf7]'
+                }`}
+              >
+                {/* Status Bar */}
+                <div
+                  className={`w-1 self-stretch rounded-full shrink-0 ${
+                    isLive ? 'bg-amber-500' : 'bg-[#c5d8c3]'
+                  }`}
+                />
+
+                {/* Event & Class Stats */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <p
+                      className={`text-[12px] sm:text-[13px] font-bold leading-snug truncate font-display ${
+                        isLive ? 'text-amber-950' : 'text-[#1a2f1a]'
+                      }`}
+                    >
+                      {item.sport}
+                    </p>
+                  </div>
+
+                  {/* Venue and note */}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] text-stone-400 font-mono mt-0.5">
+                    <span className="flex items-center gap-1 text-stone-500">
+                      <MapPin className="w-2.5 h-2.5 text-[#5d8c55] shrink-0" />
+                      {item.venue}
+                    </span>
+                    {item.pendingCount > 0 && (
+                      <span className="inline-flex items-center gap-0.5 text-amber-700 font-semibold">
+                        • {item.pendingCount} to verify
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Mini Progress Bar for Live / Active Event */}
+                  {isLive && (
+                    <div className="mt-1.5 space-y-0.5">
+                      <div className="flex items-center justify-between text-[9.5px] font-mono">
+                        <span className="text-amber-900 font-bold">
+                          {item.checkedIn}/{adviserData.totalStudents} Present ({progress}%)
+                        </span>
+                        <span className="text-stone-400">Class Progress</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-amber-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-emerald-600 rounded-full transition-all duration-500"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Time & Badge */}
+                <div className="shrink-0 text-right font-mono">
+                  <div
+                    className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border font-semibold text-[10.5px] sm:text-xs shadow-2xs ${
+                      isLive ? 'border-amber-300' : 'border-[#c5d8c3]'
+                    }`}
+                  >
+                    <Clock
+                      className={`w-3 h-3 shrink-0 ${
+                        isLive ? 'text-amber-600' : 'text-[#355935]'
+                      }`}
+                    />
+                    <span className={isLive ? 'text-amber-950 font-bold' : 'text-[#1f381f]'}>
+                      {item.time}
+                    </span>
+                    <span
+                      className={`ml-0.5 text-[8.5px] font-bold uppercase px-1.5 py-0.2 rounded-full ${
+                        isLive
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-[#edf5ec] text-[#355935]'
+                      }`}
+                    >
+                      {isLive ? 'LIVE' : 'SOON'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer with Quick Review Action */}
+        <div className="px-4 sm:px-5 py-2.5 border-t border-[#e5efe4] bg-[#fcfdfc] flex items-center justify-between gap-2 min-h-[42px]">
+          {onNavigateToAttendance ? (
+            <button
+              type="button"
+              onClick={onNavigateToAttendance}
+              className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#254625] hover:text-emerald-700 transition-colors group cursor-pointer"
+            >
+              <UserCheck className="w-3.5 h-3.5 text-[#5d8c55] group-hover:scale-110 transition-transform" />
+              <span>Review Submissions ({adviserData.pendingCount})</span>
+              <ArrowRight className="w-3 h-3 text-[#5d8c55] group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          ) : (
+            <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider">
+              {adviserData.totalStudents} Enrolled in {selectedSection}
+            </span>
+          )}
+
+          <span className="text-[10px] font-mono text-[#5d8c55] font-semibold">
+            PALARO 2026
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // STUDENT VIEW (Original)
   return (
     <div className="bg-white rounded-2xl border border-[#c5d8c3] shadow-xs flex flex-col h-full overflow-hidden">
       {/* Header */}

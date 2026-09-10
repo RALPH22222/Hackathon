@@ -5,11 +5,15 @@ import { Wifi, WifiOff, Home, ShieldAlert, QrCode } from 'lucide-react';
 interface HomeHeaderProps {
   activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
   onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
+  userRole?: 'student' | 'adviser';
+  onRoleChange?: (role: 'student' | 'adviser') => void;
 }
 
 export const HomeHeader: React.FC<HomeHeaderProps> = ({
   activeTab = 'home',
   onTabChange,
+  userRole = 'student',
+  onRoleChange,
 }) => {
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
 
@@ -27,21 +31,21 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#c5d8c3]/80 px-4 sm:px-8 py-3 shadow-xs">
-      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-3 md:gap-4">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#c5d8c3]/80 px-3 sm:px-8 py-2.5 sm:py-3 shadow-xs">
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
         {/* LEFT: Logo & College Department Information */}
-        <div className="flex items-center gap-3 min-w-0 md:w-1/3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-initial md:w-1/3">
           <img
             src={ccsLogo}
             alt="CCS Logo"
-            className="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-xs shrink-0"
+            className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-xs shrink-0"
           />
-          <div className="truncate">
-            <h1 className="text-sm sm:text-base font-bold text-[#1f381f] leading-tight font-display truncate">
+          <div className="truncate min-w-0">
+            <h1 className="text-xs sm:text-base font-bold text-[#1f381f] leading-tight font-display truncate">
               College of Computing Studies
             </h1>
-            <p className="text-[11px] sm:text-xs font-semibold text-[#3d6e35]">
-              Palaro 2026 Attendance Tracker
+            <p className="text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
+              {userRole === 'adviser' ? 'Palaro 2026 • Adviser Portal' : 'Palaro 2026 Attendance Tracker'}
             </p>
           </div>
         </div>
@@ -81,15 +85,44 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
               }`}
           >
             <QrCode className="w-4 h-4 text-[#355935]" />
-            <span>Attendance</span>
+            <span>{userRole === 'adviser' ? 'Student Verification' : 'Attendance'}</span>
           </button>
         </nav>
 
-        {/* RIGHT: Online Status */}
-        <div className="flex items-center justify-end gap-2 md:w-1/3 shrink-0">
+        {/* RIGHT: Role Switcher & Online Status */}
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
+          {onRoleChange && (
+            <div className="inline-flex items-center bg-[#edf5ec] border border-[#c5d8c3] rounded-full p-0.5 text-[9px] sm:text-[10px] font-mono font-bold">
+              <button
+                type="button"
+                onClick={() => onRoleChange('student')}
+                className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all cursor-pointer ${
+                  userRole === 'student'
+                    ? 'bg-[#1f381f] text-white shadow-2xs'
+                    : 'text-stone-500 hover:text-[#1f381f]'
+                }`}
+              >
+                STUDENT
+              </button>
+              <button
+                type="button"
+                onClick={() => onRoleChange('adviser')}
+                className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all cursor-pointer flex items-center gap-1 ${
+                  userRole === 'adviser'
+                    ? 'bg-[#355935] text-white shadow-2xs'
+                    : 'text-stone-500 hover:text-[#1f381f]'
+                }`}
+              >
+                <span>ADVISER</span>
+                {userRole === 'adviser' && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                )}
+              </button>
+            </div>
+          )}
 
           <div
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-colors ${isOnline
+            className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10.5px] sm:text-xs font-mono font-semibold transition-colors ${isOnline
                 ? 'bg-[#edf5ec] border border-[#5d8c55]/40 text-[#254625]'
                 : 'bg-stone-100 border border-stone-300 text-stone-600'
               }`}
