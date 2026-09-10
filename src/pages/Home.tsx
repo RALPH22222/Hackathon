@@ -6,7 +6,6 @@ import { MedalTallyCard } from '../components/home/MedalTallyCard';
 import { BottomNav } from '../components/BottomNav';
 import { AttendanceHub } from '../components/attendance/AttendanceHub';
 import { BackupRequest } from './BackupRequest';
-import { QrCode } from 'lucide-react';
 
 export function Home() {
   const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance'>('home');
@@ -18,9 +17,7 @@ export function Home() {
 
       {/* 2. Main Dashboard Content */}
       <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
-        {activeNav === 'attendance' || activeNav === 'qr' ? (
-          <AttendanceHub />
-        ) : (
+        {activeNav === 'home' && (
           <>
             {/* Top Row: 2 Cards (Assigned Schedule & Venom Upcoming/Results) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -31,45 +28,11 @@ export function Home() {
             {/* Big Leaderboard Card: Palaro Medal Tally */}
             <MedalTallyCard />
           </>
-      {/* 2. Main Mobile Content */}
-      <main className="max-w-md mx-auto p-3.5 space-y-3.5">
-        {activeNav === 'home' && (
-          <>
-            {/* Top Row: 2 Cards (Assigned Schedule by Section & Venom Upcoming/Results) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <SectionScheduleCard />
-              <GameScheduleCard />
-            </div>
-
-            {/* Big Box: Medal Tally Leaderboard */}
-            <MedalTallyCard />
-          </>
         )}
 
-        {/* Request Backup Page View */}
         {activeNav === 'backup' && <BackupRequest />}
 
-        {/* QR Code Tab View */}
-        {activeNav === 'qr' && (
-          <div className="bg-white rounded-2xl border border-[#c5d8c3] p-6 text-center shadow-xs space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-[#edf5ec] text-[#355935] flex items-center justify-center mx-auto border border-[#c5d8c3]">
-              <QrCode className="w-8 h-8" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-[#1f381f] font-display">Palaro Attendance Scanner</h2>
-              <p className="text-xs text-stone-500 mt-1 max-w-xs mx-auto">
-                Scan section marshals or match venue QR codes to confirm your crowd attendance.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setActiveNav('home')}
-              className="py-2.5 px-5 bg-[#355935] hover:bg-[#2a482a] text-white font-semibold rounded-xl text-xs shadow-sm cursor-pointer"
-            >
-              Back to Dashboard
-            </button>
-          </div>
-        )}
+        {(activeNav === 'qr' || activeNav === 'attendance') && <AttendanceHub />}
       </main>
 
       {/* 3. Bottom Navigation (Mobile Only) */}
@@ -79,4 +42,3 @@ export function Home() {
 }
 
 export default Home;
-
