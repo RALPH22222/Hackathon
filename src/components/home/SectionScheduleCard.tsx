@@ -229,7 +229,7 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
               onClick={onNavigateToAttendance}
               className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1b4332] text-white hover:bg-[#122e22] text-[10.5px] font-mono font-bold transition-all cursor-pointer shadow-2xs"
             >
-              <span>Manage Desk</span>
+              <span>Manage</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           )}
