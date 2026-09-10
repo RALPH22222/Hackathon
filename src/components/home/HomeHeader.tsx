@@ -41,7 +41,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
               College of Computing Studies
             </h1>
             <p className="text-[11px] sm:text-xs font-semibold text-[#3d6e35]">
-              Venom Hub • Palaro 2026
+              Palaro 2026 Attendance Tracker
             </p>
           </div>
         </div>
