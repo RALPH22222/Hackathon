@@ -35,11 +35,7 @@ export function Adviser({ onNavigateToStudent }: AdviserProps = {}) {
           activeTab={activeNav}
           onTabChange={setActiveNav}
           userRole="adviser"
-          onRoleChange={(role) => {
-            if (role === 'student' && onNavigateToStudent) {
-              onNavigateToStudent();
-            }
-          }}
+          onLogout={onNavigateToStudent}
         />
 
         {/* 2. Main Adviser Content */}

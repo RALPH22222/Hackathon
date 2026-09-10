@@ -5,9 +5,15 @@ import Home from './pages/Home';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'login' | 'signup' | 'home'>('login');
+  const [userRole, setUserRole] = useState<'student' | 'adviser'>('student');
 
   if (currentPage === 'home') {
-    return <Home />;
+    return (
+      <Home
+        userRole={userRole}
+        onLogout={() => setCurrentPage('login')}
+      />
+    );
   }
 
   if (currentPage === 'signup') {
@@ -16,7 +22,11 @@ export default function App() {
 
   return (
     <Login
-      onLoginSuccess={() => setCurrentPage('home')}
+      initialRole={userRole}
+      onLoginSuccess={(role) => {
+        setUserRole(role);
+        setCurrentPage('home');
+      }}
       onNavigateToSignup={() => setCurrentPage('signup')}
     />
   );

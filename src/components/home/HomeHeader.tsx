@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ccsLogo from '../../assets/CCS.png';
-import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Download } from 'lucide-react';
+import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Download, LogOut } from 'lucide-react';
 import { useAppInstall } from '../../hooks/useAppInstall';
 import { initOfflineSyncManager } from '../../utils/offlineStorage';
 
@@ -9,6 +9,7 @@ interface HomeHeaderProps {
   onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
   userRole?: 'student' | 'adviser';
   onRoleChange?: (role: 'student' | 'adviser') => void;
+  onLogout?: () => void;
 }
 
 export const HomeHeader: React.FC<HomeHeaderProps> = ({
@@ -16,6 +17,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
   onTabChange,
   userRole = 'student',
   onRoleChange,
+  onLogout,
 }) => {
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [syncedCount, setSyncedCount] = useState<number | null>(null);
@@ -68,15 +70,16 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           </div>
         </div>
 
-        {/* MIDDLE: Clean Navbar Buttons (No outer background) */}
+        {/* MIDDLE: Clean Navbar Buttons */}
         <nav className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2 xl:gap-3 min-w-0 flex-shrink-0 whitespace-nowrap">
           <button
             type="button"
             onClick={() => onTabChange?.('home')}
-            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === 'home'
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'home'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
-              }`}
+            }`}
           >
             <Home className="w-4 h-4 text-[#355935]" />
             <span>Home</span>
@@ -85,10 +88,11 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           <button
             type="button"
             onClick={() => onTabChange?.('backup')}
-            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === 'backup'
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'backup'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
-              }`}
+            }`}
           >
             <ShieldAlert className="w-4 h-4 text-amber-600" />
             <span>Request Backup</span>
@@ -97,17 +101,18 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           <button
             type="button"
             onClick={() => onTabChange?.('attendance')}
-            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === 'qr' || activeTab === 'attendance'
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'qr' || activeTab === 'attendance'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
-              }`}
+            }`}
           >
             <QrCode className="w-4 h-4 text-[#355935]" />
             <span>{userRole === 'adviser' ? 'Student Verification' : 'Attendance'}</span>
           </button>
         </nav>
 
-        {/* RIGHT: Role Switcher, Install App Button & Online Status */}
+        {/* RIGHT: Install App, Role Switcher, Logout & Online Status */}
         <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
           {canInstall && !isInstalled && (
             <button
@@ -151,12 +156,25 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
             </div>
           )}
 
+          {onLogout && (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="p-1.5 rounded-full text-stone-500 hover:text-[#1f381f] hover:bg-[#edf5ec] transition-all cursor-pointer"
+              title="Log out"
+            >
+              <LogOut className="w-4 h-4 text-stone-600" />
+            </button>
+          )}
+
+          {/* Online/Offline Status */}
           <div
-            className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10.5px] sm:text-xs font-mono font-semibold transition-colors ${isOnline
+            className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10.5px] sm:text-xs font-mono font-semibold transition-colors ${
+              isOnline
                 ? 'bg-[#edf5ec] border border-[#5d8c55]/40 text-[#254625]'
                 : 'bg-amber-100 border border-amber-300 text-amber-900'
               }`}
-            title={isOnline ? 'Connected live • Local storage ready' : 'App Running Offline • Saved locally'}
+            title={isOnline ? 'Connected to live server' : 'Running in offline cached mode'}
           >
             {isOnline ? (
               <>
@@ -175,4 +193,5 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
     </header>
   );
 };
+
 
