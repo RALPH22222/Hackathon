@@ -167,18 +167,16 @@ export const GameScheduleCard: React.FC = () => {
         {list.map((item) => (
           <div
             key={item.id}
-            onClick={() => activeTab === 'upcoming' && setSelectedGame(item)}
+            onClick={() => setSelectedGame(item)}
             onKeyDown={(event) => {
-              if (activeTab === 'upcoming' && (event.key === 'Enter' || event.key === ' ')) {
+              if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 setSelectedGame(item);
               }
             }}
-            role={activeTab === 'upcoming' ? 'button' : undefined}
-            tabIndex={activeTab === 'upcoming' ? 0 : undefined}
-            className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors ${
-              activeTab === 'upcoming' ? 'cursor-pointer' : ''
-            }`}
+            role="button"
+            tabIndex={0}
+            className="flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors cursor-pointer"
           >
             {/* Left: accent bar */}
             <div
@@ -263,7 +261,7 @@ export const GameScheduleCard: React.FC = () => {
             <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[#e5efe4]">
               <div>
                 <p className="text-[10px] font-mono font-semibold uppercase tracking-widest text-[#5d8c55]">
-                  Game Information
+                  {activeTab === 'upcoming' ? 'Game Information' : 'Official Game Result'}
                 </p>
                 <h3 id="game-info-title" className="mt-1 text-lg font-black text-[#142614] font-display">
                   {selectedGame.sport} vs {selectedGame.opponent}
@@ -289,13 +287,13 @@ export const GameScheduleCard: React.FC = () => {
                 </div>
                 <div className="rounded-xl bg-[#f8faf8] border border-[#e5efe4] p-3">
                   <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase text-stone-400">
-                    <Clock className="w-3 h-3 text-[#5d8c55]" /> Schedule
+                    {activeTab === 'upcoming' ? <Clock className="w-3 h-3 text-[#5d8c55]" /> : <CheckCircle2 className={`w-3 h-3 ${selectedGame.isWin ? 'text-emerald-600' : 'text-rose-600'}`} />} {activeTab === 'upcoming' ? 'Schedule' : 'Final Score'}
                   </div>
-                  <p className="mt-1 font-semibold text-[#1f381f]">{selectedGame.timeOrScore}</p>
+                  <p className={`mt-1 font-semibold ${activeTab === 'upcoming' ? 'text-[#1f381f]' : selectedGame.isWin ? 'text-emerald-800' : 'text-rose-800'}`}>{selectedGame.timeOrScore}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              {activeTab === 'upcoming' ? <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="flex items-start gap-2">
                   <Clock className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
                   <div><p className="text-[10px] font-mono uppercase text-stone-400">Start / End</p><p className="font-semibold text-[#1f381f]">{selectedGame.startTime} - {selectedGame.endTime}</p></div>
@@ -308,9 +306,19 @@ export const GameScheduleCard: React.FC = () => {
                   <UserRound className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
                   <div><p className="text-[10px] font-mono uppercase text-stone-400">Coach</p><p className="font-semibold text-[#1f381f]">{selectedGame.coach}</p></div>
                 </div>
-              </div>
+              </div> : (
+                <div className="rounded-xl border border-[#dce9da] bg-[#f8fbf7] p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${selectedGame.isWin ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'}`}>
+                      {selectedGame.isWin ? 'Victory' : 'Defeat'}
+                    </span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-stone-400">Player credit</span>
+                  </div>
+                  <p className="mt-2 text-sm font-bold text-[#1f381f]">{selectedGame.credit}</p>
+                </div>
+              )}
 
-              <div>
+              {activeTab === 'upcoming' && <div>
                 <div className="flex items-center gap-1.5 mb-2">
                   <Users className="w-4 h-4 text-[#5d8c55]" />
                   <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">Players</h4>
@@ -322,7 +330,7 @@ export const GameScheduleCard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div>}
             </div>
           </div>
         </div>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck, MessageCircle, X, Users, UserRound, ShieldCheck } from 'lucide-react';
+import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck, X, Users, UserRound, ShieldCheck } from 'lucide-react';
+
+import messengerLogo from '../../assets/messenger.png';
 
 interface ScheduleItem {
   id: string;
@@ -632,8 +634,8 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
               role="button"
               tabIndex={0}
               className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors ${
-                isLive ? 'bg-amber-50/50' : ''
-              }`}
+                isLive ? 'bg-amber-50/50 ' : ''
+              } cursor-pointer`}
             >
               {/* Left: status bar */}
               <div
@@ -661,11 +663,12 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                     href="https://m.me/ccspythons"
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(event) => event.stopPropagation()}
                     aria-label={`Message ${item.facilitator}`}
                     title="Message facilitator on Facebook Messenger"
-                    className="inline-flex items-center justify-center text-[#1877f2] hover:text-[#0d5dcc] transition-colors shrink-0"
+                    className="inline-flex cursor-pointer items-center justify-center transition-transform hover:scale-110 shrink-0"
                   >
-                    <MessageCircle className="w-3.5 h-3.5" />
+                    <img src={messengerLogo} alt="" aria-hidden="true" className="h-3.5 w-3.5 object-contain" />
                   </a>
                 </div>
               </div>

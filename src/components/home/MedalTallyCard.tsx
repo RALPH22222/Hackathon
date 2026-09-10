@@ -1,5 +1,5 @@
-import React from 'react';
-import { ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, Trophy, X } from 'lucide-react';
 import { GoldMedalIcon, SilverMedalIcon, BronzeMedalIcon } from './MedalIcons';
 
 import ccsLogo from '../../assets/ccs-whitie.png';
@@ -21,6 +21,12 @@ interface CollegeTally {
   silver: number;
   bronze: number;
   total: number;
+  medalsByGame: {
+    game: string;
+    gold: number;
+    silver: number;
+    bronze: number;
+  }[];
   isCCS?: boolean;
 }
 
@@ -37,6 +43,12 @@ const collegeTallies: CollegeTally[] = [
     silver: 8,
     bronze: 6,
     total: 28,
+    medalsByGame: [
+      { game: 'Basketball Men', gold: 5, silver: 2, bronze: 1 },
+      { game: 'Volleyball Women', gold: 3, silver: 2, bronze: 2 },
+      { game: 'MLBB Esports', gold: 4, silver: 2, bronze: 1 },
+      { game: 'Badminton Doubles', gold: 2, silver: 2, bronze: 2 },
+    ],
     isCCS: true,
   },
   {
@@ -51,6 +63,12 @@ const collegeTallies: CollegeTally[] = [
     silver: 9,
     bronze: 5,
     total: 25,
+    medalsByGame: [
+      { game: 'Basketball Men', gold: 4, silver: 3, bronze: 1 },
+      { game: 'Volleyball Men', gold: 3, silver: 2, bronze: 2 },
+      { game: 'Chess Team', gold: 2, silver: 2, bronze: 1 },
+      { game: 'Athletics', gold: 2, silver: 2, bronze: 1 },
+    ],
   },
   {
     rank: 3,
@@ -64,6 +82,12 @@ const collegeTallies: CollegeTally[] = [
     silver: 7,
     bronze: 8,
     total: 24,
+    medalsByGame: [
+      { game: 'Sepak Takraw', gold: 3, silver: 2, bronze: 2 },
+      { game: 'Table Tennis', gold: 2, silver: 2, bronze: 2 },
+      { game: 'Badminton Singles', gold: 2, silver: 1, bronze: 3 },
+      { game: 'Debate', gold: 2, silver: 2, bronze: 1 },
+    ],
   },
   {
     rank: 4,
@@ -77,6 +101,12 @@ const collegeTallies: CollegeTally[] = [
     silver: 10,
     bronze: 6,
     total: 23,
+    medalsByGame: [
+      { game: 'Volleyball Women', gold: 3, silver: 3, bronze: 2 },
+      { game: 'Basketball Women', gold: 2, silver: 2, bronze: 1 },
+      { game: 'Chess Team', gold: 1, silver: 3, bronze: 2 },
+      { game: 'Athletics', gold: 1, silver: 2, bronze: 1 },
+    ],
   },
   {
     rank: 5,
@@ -90,6 +120,12 @@ const collegeTallies: CollegeTally[] = [
     silver: 4,
     bronze: 7,
     total: 17,
+    medalsByGame: [
+      { game: 'Arnis', gold: 3, silver: 1, bronze: 2 },
+      { game: 'Boxing', gold: 2, silver: 1, bronze: 2 },
+      { game: 'Basketball Men', gold: 1, silver: 1, bronze: 2 },
+      { game: 'Darts', gold: 0, silver: 1, bronze: 1 },
+    ],
   },
   {
     rank: 6,
@@ -103,12 +139,20 @@ const collegeTallies: CollegeTally[] = [
     silver: 5,
     bronze: 3,
     total: 12,
+    medalsByGame: [
+      { game: 'Volleyball Men', gold: 2, silver: 2, bronze: 1 },
+      { game: 'Chess Team', gold: 1, silver: 1, bronze: 1 },
+      { game: 'Badminton Doubles', gold: 1, silver: 2, bronze: 1 },
+    ],
   },
 ];
 
 export const MedalTallyCard: React.FC = () => {
+  const [selectedCollege, setSelectedCollege] = useState<CollegeTally | null>(null);
+
   return (
-    <div className="bg-white rounded-2xl border border-[#c5d8c3] shadow-xs overflow-hidden">
+    <>
+      <div className="bg-white rounded-2xl border border-[#c5d8c3] shadow-xs overflow-hidden">
       <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 flex items-start sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-1.5 mb-0.5">
@@ -171,9 +215,12 @@ export const MedalTallyCard: React.FC = () => {
 
         <div className="space-y-2.5 overflow-y-auto max-h-[340px] sm:max-h-[380px] pr-1">
           {collegeTallies.map((item) => (
-            <div
+            <button
               key={item.code}
-              className={`relative flex items-center justify-between p-3 sm:p-3.5 rounded-xl border ${item.bgGradient} ${item.borderColor} text-white shadow-sm overflow-hidden transition-transform duration-150`}
+              type="button"
+              onClick={() => setSelectedCollege(item)}
+              aria-label={`View ${item.name} medal details`}
+              className={`relative w-full flex items-center justify-between p-3 sm:p-3.5 rounded-xl border ${item.bgGradient} ${item.borderColor} text-white shadow-sm overflow-hidden transition-transform duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d6a3f] focus-visible:ring-offset-2 text-left`}
             >
               {item.isCCS && (
                 <div className="absolute right-0 top-0 bottom-0 w-44 bg-gradient-to-l from-emerald-400/20 via-emerald-500/10 to-transparent pointer-events-none" />
@@ -207,10 +254,108 @@ export const MedalTallyCard: React.FC = () => {
                 <span className="text-[#fed7aa] drop-shadow-2xs">{item.bronze}</span>
                 <span className="text-white font-extrabold text-sm sm:text-lg drop-shadow-2xs">{item.total}</span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
-    </div>
+      </div>
+
+      {selectedCollege && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#142614]/55 px-3 py-5 backdrop-blur-sm"
+          role="presentation"
+          onClick={() => setSelectedCollege(null)}
+        >
+          <div
+            className="w-full max-w-2xl overflow-hidden rounded-2xl border border-[#c5d8c3] bg-[#f8fbf7] shadow-2xl animate-in fade-in zoom-in-95 duration-150"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="college-standing-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className={`relative overflow-hidden px-5 pb-4 pt-4 text-white sm:px-8 ${selectedCollege.bgGradient}`}>
+              <img
+                src={selectedCollege.logo}
+                alt=""
+                aria-hidden="true"
+                className={`absolute right-5 top-1/2 h-32 w-32 -translate-y-1/2 object-contain filter drop-shadow-lg ${selectedCollege.logoOpacity}`}
+              />
+              <div className="relative z-10 flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/20 font-mono text-lg font-bold backdrop-blur-xs">
+                    {selectedCollege.rank}
+                  </span>
+                  <div>
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
+                      Official standing
+                    </p>
+                    <h3 id="college-standing-title" className="mt-1 max-w-[320px] text-lg font-black leading-tight tracking-tight sm:text-xl">
+                      {selectedCollege.name}
+                    </h3>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCollege(null)}
+                  aria-label="Close medal details"
+                  className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/25 bg-black/10 text-white/80 transition-colors hover:bg-white/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="relative z-10 mt-4 grid grid-cols-4 divide-x divide-white/20 rounded-xl border border-white/15 bg-black/10 py-2.5 text-center backdrop-blur-xs">
+                <div>
+                  <GoldMedalIcon className="mx-auto h-5 w-5" />
+                  <p className="mt-1 font-mono text-lg font-black">{selectedCollege.gold}</p>
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-white/65">Gold</p>
+                </div>
+                <div>
+                  <SilverMedalIcon className="mx-auto h-5 w-5" />
+                  <p className="mt-1 font-mono text-lg font-black">{selectedCollege.silver}</p>
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-white/65">Silver</p>
+                </div>
+                <div>
+                  <BronzeMedalIcon className="mx-auto h-5 w-5" />
+                  <p className="mt-1 font-mono text-lg font-black">{selectedCollege.bronze}</p>
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-white/65">Bronze</p>
+                </div>
+                <div>
+                  <Trophy className="mx-auto h-5 w-5 text-amber-300" aria-hidden="true" />
+                  <p className="mt-1 font-mono text-lg font-black">{selectedCollege.total}</p>
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-white/65">Total</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="max-h-[45vh] overflow-y-auto px-5 py-5 sm:px-7">
+              <div className="mb-3 flex items-end justify-between gap-3">
+                <div>
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5d8c55]">Medal breakdown</p>
+                  <h4 className="mt-1 text-base font-black uppercase tracking-tight text-[#142614]">Results by game</h4>
+                </div>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-stone-400">{selectedCollege.total} medals</span>
+              </div>
+
+              <div className="space-y-2">
+                {selectedCollege.medalsByGame.map((result) => (
+                  <div key={result.game} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce9da] bg-white px-3 py-3 shadow-xs">
+                    <span className="min-w-0 text-sm font-bold text-[#263c27]">{result.game}</span>
+                    <div className="grid shrink-0 grid-cols-3 gap-2 text-center font-mono text-xs font-bold">
+                      <span className="flex min-w-8 flex-col items-center gap-0.5 text-amber-600"><GoldMedalIcon className="h-4 w-4" />{result.gold}</span>
+                      <span className="flex min-w-8 flex-col items-center gap-0.5 text-slate-500"><SilverMedalIcon className="h-4 w-4" />{result.silver}</span>
+                      <span className="flex min-w-8 flex-col items-center gap-0.5 text-orange-700"><BronzeMedalIcon className="h-4 w-4" />{result.bronze}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-[10px] leading-relaxed text-stone-400">
+                Medal counts are based on the official college standings published by The Venom Publication.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
