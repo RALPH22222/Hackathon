@@ -3,8 +3,8 @@ import ccsLogo from '../../assets/CCS.png';
 import { Wifi, WifiOff, Home, ShieldAlert, QrCode } from 'lucide-react';
 
 interface HomeHeaderProps {
-  activeTab?: 'home' | 'backup' | 'qr';
-  onTabChange?: (tab: 'home' | 'backup' | 'qr') => void;
+  activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
+  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
 }
 
 export const HomeHeader: React.FC<HomeHeaderProps> = ({
@@ -79,18 +79,15 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              onTabChange?.('qr');
-              alert('Attendance QR Scanner opened.');
-            }}
+            onClick={() => onTabChange?.('attendance')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-              activeTab === 'qr'
+              activeTab === 'qr' || activeTab === 'attendance'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
             }`}
           >
             <QrCode className="w-4 h-4 text-[#355935]" />
-            <span>QR Code</span>
+            <span>Attendance</span>
           </button>
         </nav>
 

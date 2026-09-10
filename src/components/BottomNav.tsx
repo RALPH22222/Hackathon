@@ -2,15 +2,15 @@ import React from 'react';
 import { Home, ShieldAlert, QrCode } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab?: 'home' | 'backup' | 'qr';
-  onTabChange?: (tab: 'home' | 'backup' | 'qr') => void;
+  activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
+  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
   activeTab = 'home',
   onTabChange,
 }) => {
-  // Map tabs to 0, 1, 2 index for sliding calculation
+  // Map tabs to 0, 1, 2 index for sliding calculation (qr and attendance map to 2)
   const activeIndex = activeTab === 'home' ? 0 : activeTab === 'backup' ? 1 : 2;
 
   return (
@@ -60,13 +60,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 Home
               </span>
             </div>
-
-            {/* Bottom active dot indicator */}
-            <span
-              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
-                activeTab === 'home' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
-              }`}
-            />
           </button>
 
           {/* 2. REQUEST BACKUP TAB */}
@@ -108,28 +101,18 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 Request Backup
               </span>
             </div>
-
-            {/* Bottom active dot indicator */}
-            <span
-              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
-                activeTab === 'backup' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
-              }`}
-            />
           </button>
 
-          {/* 3. QR CODE SCANNER */}
+          {/* 3. ATTENDANCE TAB */}
           <button
             type="button"
-            onClick={() => {
-              onTabChange?.('qr');
-              alert('Attendance QR Scanner opened.');
-            }}
+            onClick={() => onTabChange?.('attendance')}
             className="relative z-10 flex flex-col items-center justify-center py-2 px-2 rounded-2xl transition-all duration-300 cursor-pointer group select-none"
           >
             <div className="flex flex-col items-center gap-1">
               <div
                 className={`p-1.5 rounded-xl transition-all duration-300 group-active:scale-90 ${
-                  activeTab === 'qr'
+                  activeTab === 'qr' || activeTab === 'attendance'
                     ? 'text-white scale-105'
                     : 'text-[#355935] group-hover:text-[#214321]'
                 }`}
@@ -138,19 +121,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               </div>
               <span
                 className={`text-[11px] tracking-tight font-semibold transition-colors duration-300 ${
-                  activeTab === 'qr' ? 'text-white font-bold' : 'text-stone-500'
+                  activeTab === 'qr' || activeTab === 'attendance' ? 'text-white font-bold' : 'text-stone-500'
                 }`}
               >
-                QR Code
+                Attendance
               </span>
             </div>
-
-            {/* Bottom active dot indicator */}
-            <span
-              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
-                activeTab === 'qr' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
-              }`}
-            />
           </button>
 
         </div>
@@ -158,6 +134,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     </nav>
   );
 };
+
 
 
 
