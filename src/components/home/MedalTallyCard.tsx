@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { GoldMedalIcon, SilverMedalIcon, BronzeMedalIcon } from './MedalIcons';
 
 // College Logos from assets
@@ -31,9 +31,9 @@ const collegeTallies: CollegeTally[] = [
     code: 'CCS',
     name: 'College of Computing Studies',
     logo: ccsLogo,
-    bgGradient: 'bg-gradient-to-r from-[#0d2e16] via-[#14421f] to-[#1e5c2d]',
-    borderColor: 'border-[#3f8f53]/70',
-    logoOpacity: 'opacity-35 brightness-150 contrast-125',
+    bgGradient: 'bg-gradient-to-r from-[#092212] via-[#0d341b] to-[#124926]',
+    borderColor: 'border-emerald-500/40 hover:border-emerald-400',
+    logoOpacity: 'opacity-35 brightness-125 contrast-125',
     gold: 14,
     silver: 8,
     bronze: 6,
@@ -45,8 +45,8 @@ const collegeTallies: CollegeTally[] = [
     code: 'COE',
     name: 'College of Engineering',
     logo: coeLogo,
-    bgGradient: 'bg-gradient-to-r from-[#5a0c0c] via-[#751313] to-[#8f1919]',
-    borderColor: 'border-[#b91c1c]/60',
+    bgGradient: 'bg-gradient-to-r from-[#3a0808] via-[#540d0d] to-[#6d1212]',
+    borderColor: 'border-rose-500/40 hover:border-rose-400',
     logoOpacity: 'opacity-25',
     gold: 11,
     silver: 9,
@@ -58,8 +58,8 @@ const collegeTallies: CollegeTally[] = [
     code: 'CLA',
     name: 'College of Liberal Arts',
     logo: claLogo,
-    bgGradient: 'bg-gradient-to-r from-[#854d0e] via-[#ca8a04] to-[#d97706]',
-    borderColor: 'border-[#facc15]/70',
+    bgGradient: 'bg-gradient-to-r from-[#442805] via-[#633a06] to-[#804b08]',
+    borderColor: 'border-amber-500/40 hover:border-amber-400',
     logoOpacity: 'opacity-25 brightness-110',
     gold: 9,
     silver: 7,
@@ -71,8 +71,8 @@ const collegeTallies: CollegeTally[] = [
     code: 'CTE',
     name: 'College of Teacher Education',
     logo: cteLogo,
-    bgGradient: 'bg-gradient-to-r from-[#172554] via-[#1e3a8a] to-[#2563eb]',
-    borderColor: 'border-[#3b82f6]/60',
+    bgGradient: 'bg-gradient-to-r from-[#0a1b42] via-[#102a66] to-[#163a8c]',
+    borderColor: 'border-blue-500/40 hover:border-blue-400',
     logoOpacity: 'opacity-25',
     gold: 7,
     silver: 10,
@@ -84,8 +84,8 @@ const collegeTallies: CollegeTally[] = [
     code: 'CCJE',
     name: 'College of Criminal Justice Education',
     logo: crimLogo,
-    bgGradient: 'bg-gradient-to-r from-[#881337] via-[#be123c] to-[#6e102b]',
-    borderColor: 'border-[#f43f5e]/50',
+    bgGradient: 'bg-gradient-to-r from-[#3a0818] via-[#540d23] to-[#6f112e]',
+    borderColor: 'border-rose-500/40 hover:border-rose-400',
     logoOpacity: 'opacity-25',
     gold: 6,
     silver: 4,
@@ -97,8 +97,8 @@ const collegeTallies: CollegeTally[] = [
     code: 'CSWCD',
     name: 'College of Social Work and Community Development',
     logo: swLogo,
-    bgGradient: 'bg-gradient-to-r from-[#0f4642] via-[#115e59] to-[#0d9488]',
-    borderColor: 'border-[#14b8a6]/60',
+    bgGradient: 'bg-gradient-to-r from-[#05211f] via-[#093532] to-[#0e4844]',
+    borderColor: 'border-teal-500/40 hover:border-teal-400',
     logoOpacity: 'opacity-25',
     gold: 4,
     silver: 5,
@@ -109,104 +109,134 @@ const collegeTallies: CollegeTally[] = [
 
 export const MedalTallyCard: React.FC = () => {
   return (
-    <div className="bg-white rounded-2xl border border-[#c5d8c3] p-4 sm:p-6 shadow-xs">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-[#e2ece0] gap-3">
+    <div className="bg-white rounded-2xl border border-[#c5d8c3] shadow-xs overflow-hidden">
+      {/* Header */}
+      <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 flex items-start sm:items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#edf5ec] flex items-center justify-center border border-[#c5d8c3]">
-              <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-[#355935]" />
-            </div>
-            <div>
-              <h2 className="text-xs sm:text-base font-bold text-[#1f381f] uppercase tracking-wide font-display">
-                Palaro Medal Tally
-              </h2>
-              <p className="text-[11px] text-stone-500 font-mono">Official College Standings</p>
-            </div>
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <span className="text-[10px] font-mono text-[#5d8c55] font-semibold uppercase tracking-widest">
+              SYS.STANDINGS // PALARO 2026
+            </span>
           </div>
-
-          {/* Source Link directly below subtitle */}
-          <div className="mt-1.5 ml-10.5">
+          <h2 className="text-sm sm:text-base font-black text-[#142614] tracking-tight uppercase font-display leading-none">
+            Official Medal Tally
+          </h2>
+          {/* Phone View: Link positioned cleanly below the title */}
+          <div className="sm:hidden mt-2">
             <a
               href="https://www.facebook.com/thevenompub"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#edf5ec] hover:bg-[#ddeadc] border border-[#5d8c55]/40 text-[#254625] text-[10.5px] font-mono font-semibold transition-all group shadow-2xs cursor-pointer"
+              className="inline-flex items-center gap-1 text-[10px] font-mono text-stone-400 hover:text-[#355935] transition-colors group whitespace-nowrap"
             >
-              <span>Source: The Venom Publication</span>
-              <ExternalLink className="w-3 h-3 text-[#355935] opacity-75 group-hover:opacity-100 transition-opacity" />
+              <span>FEED // The Venom Pub</span>
+              <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />
             </a>
           </div>
         </div>
 
-        {/* Medal Legend Column Headers */}
-        <div className="self-end sm:self-center pr-4 sm:pr-4.5">
-          <div className="grid grid-cols-4 w-[136px] sm:w-[240px] text-center text-xs font-mono font-bold text-stone-600">
-            <div className="flex items-center justify-center gap-1">
-              <GoldMedalIcon className="w-[18px] h-[18px] sm:w-4 sm:h-4" />
-              <span className="sm:hidden font-sans text-[9px] leading-none">G</span>
-              <span className="hidden sm:inline font-sans text-xs">Gold</span>
-            </div>
-            <div className="flex items-center justify-center gap-1">
-              <SilverMedalIcon className="w-[18px] h-[18px] sm:w-4 sm:h-4" />
-              <span className="sm:hidden font-sans text-[9px] leading-none">S</span>
-              <span className="hidden sm:inline font-sans text-xs">Silver</span>
-            </div>
-            <div className="flex items-center justify-center gap-1">
-              <BronzeMedalIcon className="w-[18px] h-[18px] sm:w-4 sm:h-4" />
-              <span className="sm:hidden font-sans text-[9px] leading-none">B</span>
-              <span className="hidden sm:inline font-sans text-xs">Bronze</span>
-            </div>
+        {/* Desktop View: Link on the right side */}
+        <a
+          href="https://www.facebook.com/thevenompub"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-stone-400 hover:text-[#355935] transition-colors group shrink-0 whitespace-nowrap"
+        >
+          <span>FEED // The Venom Pub</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />
+        </a>
+      </div>
+
+      {/* Thin divider */}
+      <div className="mx-4 sm:mx-6 h-px bg-[#e5efe4] mb-2" />
+
+      {/* College Leaderboard Rows Container */}
+      <div className="px-4 sm:px-6 pb-4 sm:pb-5 space-y-2.5 overflow-y-auto max-h-[380px] sm:max-h-[420px] pr-2 sm:pr-3 card-scrollbar">
+        {/* Table Column Headers (Directly matching row layout for exact alignment) */}
+        <div className="flex items-center justify-between px-2.5 sm:px-3 text-[10px] font-mono font-bold text-stone-400">
+          <span className="uppercase tracking-widest text-[9.5px] sm:text-[10px]">RANK // COLLEGE UNIT</span>
+
+          {/* Right: Exact same grid structure as rows */}
+          <div className="grid grid-cols-4 w-[136px] sm:w-[230px] text-center font-mono font-bold shrink-0 items-center">
+            {/* Gold */}
             <div className="flex items-center justify-center">
-              <span className="font-sans text-xs font-bold text-stone-700">Total</span>
+              <GoldMedalIcon className="w-5 h-5 sm:w-5.5 sm:h-5.5 filter drop-shadow-xs" />
+            </div>
+
+            {/* Silver */}
+            <div className="flex items-center justify-center">
+              <SilverMedalIcon className="w-5 h-5 sm:w-5.5 sm:h-5.5 filter drop-shadow-xs" />
+            </div>
+
+            {/* Bronze */}
+            <div className="flex items-center justify-center">
+              <BronzeMedalIcon className="w-5 h-5 sm:w-5.5 sm:h-5.5 filter drop-shadow-xs" />
+            </div>
+
+            {/* Total */}
+            <div className="flex items-center justify-center">
+              <span className="text-[10px] sm:text-xs font-mono font-black text-stone-600 uppercase tracking-wider">
+                TOTAL
+              </span>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* College Leaderboard Rows */}
-      <div className="space-y-2.5 overflow-y-auto max-h-[340px] sm:max-h-[380px] pr-1">
         {collegeTallies.map((item) => (
           <div
             key={item.code}
-            className={`relative flex items-center justify-between p-3 sm:p-3.5 rounded-xl border ${item.bgGradient} ${item.borderColor} text-white shadow-sm overflow-hidden transition-transform duration-150`}
+            className={`relative flex items-center justify-between p-2.5 sm:p-3 rounded-xl border ${item.bgGradient} ${item.borderColor} text-white shadow-xs overflow-hidden transition-all duration-150 hover:brightness-110`}
           >
-            {/* Right Side Watermark Emblem Logo with Ambient Radial Highlights for CCS */}
-            {item.isCCS && (
-              <div className="absolute right-0 top-0 bottom-0 w-44 bg-gradient-to-l from-emerald-400/20 via-emerald-500/10 to-transparent pointer-events-none" />
-            )}
+            {/* Subtle Right-side Ambient Contrast Glow */}
+            <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-black/20 via-transparent to-transparent pointer-events-none" />
 
+            {/* Right Side College Logo in the color layout */}
             <img
               src={item.logo}
               alt=""
               aria-hidden="true"
-              className={`absolute -right-3 -bottom-5 w-28 h-28 sm:w-32 sm:h-32 object-contain pointer-events-none filter drop-shadow-md ${item.logoOpacity}`}
+              className={`absolute right-1 -bottom-3.5 w-24 h-24 sm:w-28 sm:h-28 object-contain pointer-events-none filter drop-shadow-md ${item.logoOpacity}`}
             />
 
-            {/* Left: Rank & College Name (Naturally wrapping on mobile) */}
-            <div className="relative z-10 flex items-center gap-2 sm:gap-3 min-w-0 pr-1 sm:pr-2">
-              {/* Rank Number Badge */}
-              <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-xs font-bold font-mono text-white shrink-0 border border-white/30 shadow-2xs">
-                {item.rank}
+            {/* Left: Terminal Rank & College Name */}
+            <div className="relative z-10 flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
+              {/* Computerish Minimalist Rank Badge */}
+              <span
+                className={`font-mono text-[10px] sm:text-xs font-bold px-2 py-1 rounded-md flex items-center justify-center shrink-0 border ${
+                  item.isCCS
+                    ? 'bg-emerald-400/20 text-emerald-300 border-emerald-400/50 shadow-2xs'
+                    : item.rank === 2
+                    ? 'bg-slate-200/20 text-slate-200 border-slate-300/40'
+                    : item.rank === 3
+                    ? 'bg-amber-400/20 text-amber-300 border-amber-400/40'
+                    : 'bg-black/30 text-white/80 border-white/20'
+                }`}
+              >
+                #{String(item.rank).padStart(2, '0')}
               </span>
 
-              {/* Mobile shows the college code above its full name. */}
+              {/* College Code Prefix & Name */}
               <div className="min-w-0">
-                <span className="sm:hidden font-bold text-[15px] leading-none tracking-wide text-white block mb-0.5">
-                  {item.code}
-                </span>
-                <span className="font-semibold text-[9.5px] sm:text-[14.5px] leading-[1.05] sm:leading-tight text-white/90 sm:text-white block break-words">
-                  {item.name}
-                </span>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="font-mono font-bold text-[11px] sm:text-xs text-white/60 tracking-wider">
+                    {item.code} //
+                  </span>
+                  <span className="font-sans sm:font-mono font-bold text-xs sm:text-[13.5px] text-white tracking-wide truncate">
+                    {item.name}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Right: Medals Count & Total */}
-            <div className="relative z-10 grid grid-cols-4 w-[136px] sm:w-[240px] text-center font-mono font-bold text-xs sm:text-base shrink-0 items-center">
-              <span className="text-amber-200 drop-shadow-2xs">{item.gold}</span>
-              <span className="text-slate-100 drop-shadow-2xs">{item.silver}</span>
-              <span className="text-orange-200 drop-shadow-2xs">{item.bronze}</span>
-              <span className="text-white font-extrabold text-sm sm:text-lg drop-shadow-2xs">{item.total}</span>
+            {/* Right: Monospace Medals Count & Terminal Total Box */}
+            <div className="relative z-10 grid grid-cols-4 w-[136px] sm:w-[230px] text-center font-mono font-bold text-xs sm:text-sm shrink-0 items-center">
+              <span className="text-amber-300 drop-shadow-2xs">{item.gold}</span>
+              <span className="text-slate-200 drop-shadow-2xs">{item.silver}</span>
+              <span className="text-amber-500 drop-shadow-2xs">{item.bronze}</span>
+              <div className="flex justify-center">
+                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/25 font-mono font-extrabold text-white text-xs sm:text-sm shadow-inner drop-shadow-2xs">
+                  {item.total}
+                </span>
+              </div>
             </div>
           </div>
         ))}

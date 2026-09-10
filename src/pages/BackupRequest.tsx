@@ -337,19 +337,7 @@ export function BackupRequest() {
   };
 
   return (
-    <div className="relative space-y-3 sm:space-y-4 max-w-4xl mx-auto pb-28 sm:pb-12">
-      {/* Computer Science Grid Background (like in the Login page) */}
-      <div 
-        className="fixed inset-0 pointer-events-none z-0 select-none" 
-        aria-hidden="true"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(53, 89, 53, 0.08) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(53, 89, 53, 0.08) 1px, transparent 1px)
-          `,
-          backgroundSize: '45px 45px',
-        }}
-      />
+    <div className="relative space-y-4 sm:space-y-6 w-full">
 
       {/* Scoped Keyframes for Auto-Sliding Text Overflow */}
       <style>{`
@@ -852,8 +840,8 @@ export function BackupRequest() {
 
       {/* MODAL 1: Call For Backup & Type Reason (Mobile Bottom-Sheet Style) */}
       {isBackupModalOpen && selectedGame && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl border border-[#c5d8c3] shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/75">
+          <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col">
             {/* Header */}
             <div className="bg-[#142614] text-white p-3.5 sm:p-4 border-b border-[#355935] flex items-center justify-between shrink-0">
               <div>
@@ -992,8 +980,8 @@ export function BackupRequest() {
 
       {/* MODAL 2: Create a New Match Dispatch (Mobile Bottom-Sheet Style) */}
       {isNewMatchModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl border border-[#c5d8c3] shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/75">
+          <div className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col">
             {/* Header */}
             <div className="bg-[#142614] text-white p-3.5 sm:p-4 border-b border-[#355935] flex items-center justify-between shrink-0">
               <div>

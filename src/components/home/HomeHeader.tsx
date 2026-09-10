@@ -51,11 +51,10 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           <button
             type="button"
             onClick={() => onTabChange?.('home')}
-            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'home'
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === 'home'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
-            }`}
+              }`}
           >
             <Home className="w-4 h-4 text-[#355935]" />
             <span>Home</span>
@@ -63,15 +62,11 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              onTabChange?.('backup');
-              alert('Backup request dispatched to CCS marshals.');
-            }}
-            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'backup'
+            onClick={() => onTabChange?.('backup')}
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === 'backup'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
-            }`}
+              }`}
           >
             <ShieldAlert className="w-4 h-4 text-amber-600" />
             <span>Request Backup</span>
@@ -80,36 +75,35 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           <button
             type="button"
             onClick={() => onTabChange?.('attendance')}
-            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'qr' || activeTab === 'attendance'
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === 'qr' || activeTab === 'attendance'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
-            }`}
+              }`}
           >
             <QrCode className="w-4 h-4 text-[#355935]" />
             <span>Attendance</span>
           </button>
         </nav>
 
-        {/* RIGHT: Live Online / Offline Status Badge */}
-        <div className="flex items-center justify-end md:w-1/3 shrink-0">
+        {/* RIGHT: Online Status */}
+        <div className="flex items-center justify-end gap-2 md:w-1/3 shrink-0">
+
           <div
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-colors ${
-              isOnline
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold transition-colors ${isOnline
                 ? 'bg-[#edf5ec] border border-[#5d8c55]/40 text-[#254625]'
                 : 'bg-stone-100 border border-stone-300 text-stone-600'
-            }`}
+              }`}
             title={isOnline ? 'Connected to live server' : 'Running in offline cached mode'}
           >
             {isOnline ? (
               <>
                 <Wifi className="w-3.5 h-3.5 text-[#355935] animate-pulse" />
-                <span>ONLINE</span>
+                <span className="hidden sm:inline">ONLINE</span>
               </>
             ) : (
               <>
                 <WifiOff className="w-3.5 h-3.5 text-stone-500" />
-                <span>OFFLINE</span>
+                <span className="hidden sm:inline">OFFLINE</span>
               </>
             )}
           </div>
