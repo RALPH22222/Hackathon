@@ -28,7 +28,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#c5d8c3]/80 px-4 sm:px-8 py-3 shadow-xs">
-      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-3 md:gap-4">
         {/* LEFT: Logo & College Department Information */}
         <div className="flex items-center gap-3 min-w-0 md:w-1/3">
           <img
@@ -47,11 +47,11 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         </div>
 
         {/* MIDDLE: Clean Navbar Buttons (No outer background) */}
-        <nav className="hidden md:flex items-center justify-center gap-2 lg:gap-4">
+        <nav className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2 xl:gap-3 min-w-0 flex-shrink-0 whitespace-nowrap">
           <button
             type="button"
             onClick={() => onTabChange?.('home')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'home'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
@@ -67,7 +67,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
               onTabChange?.('backup');
               alert('Backup request dispatched to CCS marshals.');
             }}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'backup'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
@@ -80,7 +80,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           <button
             type="button"
             onClick={() => onTabChange?.('attendance')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'qr' || activeTab === 'attendance'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
