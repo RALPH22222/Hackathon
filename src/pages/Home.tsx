@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { HomeHeader } from '../components/home/HomeHeader';
 import { SectionScheduleCard } from '../components/home/SectionScheduleCard';
 import { GameScheduleCard } from '../components/home/GameScheduleCard';
+import { CampusMatchMapCard } from '../components/home/CampusMatchMapCard';
 import { MedalTallyCard } from '../components/home/MedalTallyCard';
 import { BottomNav } from '../components/BottomNav';
 import { Attendance } from './Attendance';
@@ -59,6 +60,9 @@ export function Home({ userRole: initialRole = 'student', onLogout }: HomeProps 
                 />
                 <GameScheduleCard />
               </div>
+
+              {/* Match Locations & Venues Map (Pinpoints WMSU Palaro matches) */}
+              <CampusMatchMapCard />
 
               {/* Big Leaderboard Card: Palaro Medal Tally */}
               <MedalTallyCard />
