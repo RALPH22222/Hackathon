@@ -61,13 +61,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 Home
               </span>
             </div>
-
-            {/* Bottom active dot indicator */}
-            <span
-              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
-                activeTab === 'home' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
-              }`}
-            />
           </button>
 
           {/* 2. REQUEST BACKUP TAB */}
@@ -106,13 +99,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 Request Backup
               </span>
             </div>
-
-            {/* Bottom active dot indicator */}
-            <span
-              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
-                activeTab === 'backup' ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
-              }`}
-            />
           </button>
 
           {/* 3. ATTENDANCE TAB */}
@@ -139,13 +125,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 Attendance
               </span>
             </div>
-
-            {/* Bottom active dot indicator */}
-            <span
-              className={`absolute bottom-1 w-1 h-1 bg-white rounded-full transition-all duration-300 ${
-                isAttendanceActive ? 'opacity-100 scale-100 animate-pulse' : 'opacity-0 scale-50'
-              }`}
-            />
           </button>
 
         </div>
