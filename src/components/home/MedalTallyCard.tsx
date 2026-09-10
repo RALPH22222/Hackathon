@@ -146,12 +146,12 @@ export const MedalTallyCard: React.FC = () => {
       <div className="mx-4 sm:mx-6 h-px bg-[#e5efe4] mb-2" />
 
       <div className="px-4 sm:px-6 pb-4 sm:pb-5">
-        <div className="flex items-center justify-between mb-2.5 text-[10px] font-mono font-bold text-stone-400 pr-1">
+        <div className="flex items-center justify-between mt-3 mb-3 text-[10px] font-mono font-bold text-stone-400 pr-1">
           <span className="uppercase tracking-widest text-[9.5px] sm:text-[10px] ml-3 sm:ml-3.5">
             Rank
           </span>
 
-          <div className="grid grid-cols-4 w-[136px] sm:w-[240px] text-center font-mono font-bold shrink-0 items-center mr-3 sm:mr-[25px]">
+          <div className="grid grid-cols-4 w-[136px] sm:w-[240px] text-center font-mono font-bold shrink-0 items-center mr-3 sm:mr-[26px]">
             <div className="flex items-center justify-center">
               <GoldMedalIcon className="w-5 h-5 sm:w-5.5 sm:h-5.5 filter drop-shadow-xs" />
             </div>
