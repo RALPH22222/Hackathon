@@ -81,7 +81,7 @@ export const PhotoProofSection: React.FC<PhotoProofSectionProps> = ({
               className="w-full minimal-input px-3.5 py-2.5 rounded-xl text-xs font-semibold"
             >
               <option value="Palaro 2026 Opening & Athletics">Palaro 2026 Opening & Athletics</option>
-              <option value="Venom Men's Basketball vs Titans">Venom Men's Basketball vs Titans</option>
+              <option value="CCS Basketball vs Titans">CCS Basketball vs Titans</option>
               <option value="Women's Volleyball Semi-Finals">Women's Volleyball Semi-Finals</option>
               <option value="CCS Esports Tournament - Valorant">CCS Esports Tournament - Valorant</option>
               <option value="Swimming & Aquatics Championship">Swimming & Aquatics Championship</option>

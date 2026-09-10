@@ -12,12 +12,12 @@ export const AttendanceHistoryLog: React.FC<AttendanceHistoryLogProps> = ({ reco
 
   return (
     <div className="minimal-card rounded-3xl p-6 bg-white border border-[#c5d8c3]/60 space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
-          <h3 className="font-bold text-[#1f381f] text-base">My Attendance History</h3>
-          <p className="text-xs text-stone-500">Verified record log for Palaro 2026 student participation</p>
+      <div className="flex items-center justify-between gap-2 flex-nowrap">
+        <div className="space-y-0.5 min-w-0">
+          <h3 className="font-bold text-[#1f381f] text-base truncate">My Attendance History</h3>
+          <p className="text-xs text-stone-500 truncate">Verified record log for Palaro 2026 student participation</p>
         </div>
-        <span className="text-xs font-mono font-bold text-[#355935] bg-[#edf5ec] px-3 py-1 rounded-full border border-[#c5d8c3]">
+        <span className="text-xs font-mono font-bold text-[#355935] bg-[#edf5ec] px-2.5 py-1 rounded-md border border-[#c5d8c3] whitespace-nowrap shrink-0">
           {records.length} Recorded
         </span>
       </div>
@@ -69,8 +69,8 @@ export const AttendanceHistoryLog: React.FC<AttendanceHistoryLogProps> = ({ reco
 
             {/* Status Badge & Action */}
             <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                <CheckCircle2 className="w-3 h-3" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                 <span>{rec.status}</span>
               </span>
 
