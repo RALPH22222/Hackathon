@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HomeHeader } from '../components/home/HomeHeader';
 import { SectionScheduleCard } from '../components/home/SectionScheduleCard';
 import { GameScheduleCard } from '../components/home/GameScheduleCard';
@@ -8,9 +8,18 @@ import { Attendance } from './Attendance';
 import { AdviserAttendance } from './AdviserAttendance';
 import { BackupRequest } from './BackupRequest';
 
-export function Home() {
+interface HomeProps {
+  userRole?: 'student' | 'adviser';
+  onLogout?: () => void;
+}
+
+export function Home({ userRole: initialRole = 'student', onLogout }: HomeProps = {}) {
   const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance'>('home');
-  const [userRole, setUserRole] = useState<'student' | 'adviser'>('student');
+  const [userRole, setUserRole] = useState<'student' | 'adviser'>(initialRole);
+
+  useEffect(() => {
+    setUserRole(initialRole);
+  }, [initialRole]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#edf4ee] text-slate-800 font-sans pb-24 md:pb-10 select-none">
@@ -28,12 +37,12 @@ export function Home() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(93,140,85,0.12),_transparent_45%)] z-0" />
 
       <div className="relative z-10">
-        {/* 1. Header Bar: Left (Logo), Middle (Nav Buttons), Right (Live Status & Role Switcher) */}
+        {/* 1. Header Bar: Logo, Tabs, Active Role Badge & Logout */}
         <HomeHeader
           activeTab={activeNav}
           onTabChange={setActiveNav}
           userRole={userRole}
-          onRoleChange={setUserRole}
+          onLogout={onLogout}
         />
 
         {/* 2. Main Dashboard Content */}
