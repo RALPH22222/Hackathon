@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Clock, CheckCircle2, ChevronRight, X, MapPin, Users, UserRound, ShieldCheck } from 'lucide-react';
 
 interface GameItem {
   id: string;
@@ -7,6 +7,12 @@ interface GameItem {
   opponent: string;
   venue: string;
   timeOrScore: string;
+  players?: string[];
+  facilitator?: string;
+  facilitatorProgram?: 'BSIT' | 'BSCS' | 'ACT';
+  coach?: string;
+  startTime?: string;
+  endTime?: string;
   isWin?: boolean;
   credit?: string;
 }
@@ -18,6 +24,12 @@ const upcomingGames: GameItem[] = [
     opponent: 'COE Titans',
     venue: 'WMSU Gym • Court A',
     timeOrScore: 'Today • 2:00 PM',
+    players: ['Ramos Alyssa', 'Abubakar Jamal', 'Santos Michael', 'Tan Paolo', 'Garcia Luis'],
+    facilitator: 'Santos Michael',
+    facilitatorProgram: 'BSCS',
+    coach: 'Coach Villanueva Rafael',
+    startTime: '2:00 PM',
+    endTime: '3:30 PM',
   },
   {
     id: '2',
@@ -25,6 +37,12 @@ const upcomingGames: GameItem[] = [
     opponent: 'CLA Phoenix',
     venue: 'Covered Court B',
     timeOrScore: 'Today • 4:30 PM',
+    players: ['Flores Nina', 'Dela Cruz Carla', 'Malik Sara', 'Navarro Kara', 'Lim Daniel'],
+    facilitator: 'Ramos Alyssa',
+    facilitatorProgram: 'BSIT',
+    coach: 'Coach Bautista Elena',
+    startTime: '4:30 PM',
+    endTime: '6:00 PM',
   },
   {
     id: '3',
@@ -32,6 +50,12 @@ const upcomingGames: GameItem[] = [
     opponent: 'CTE Scorpions',
     venue: 'Grandstand Field',
     timeOrScore: 'Tomorrow • 9:00 AM',
+    players: ['Tan Paolo', 'Garcia Rosa', 'Ahmed Tariq', 'Cruz Juan', 'Flores Bea'],
+    facilitator: 'Abubakar Jamal',
+    facilitatorProgram: 'ACT',
+    coach: 'Coach Santiago Marco',
+    startTime: '9:00 AM',
+    endTime: '11:00 AM',
   },
   {
     id: '4',
@@ -39,6 +63,12 @@ const upcomingGames: GameItem[] = [
     opponent: 'CSWCD Knights',
     venue: 'Student Pavilion',
     timeOrScore: 'Tomorrow • 1:00 PM',
+    players: ['Tan Liam', 'Reyes Miguel', 'Karim Amir', 'Santos Fiona'],
+    facilitator: 'Garcia Luis',
+    facilitatorProgram: 'BSCS',
+    coach: 'Coach Navarro Carlos',
+    startTime: '1:00 PM',
+    endTime: '3:00 PM',
   },
 ];
 
@@ -50,7 +80,7 @@ const ccsResults: GameItem[] = [
     venue: 'WMSU Gym',
     timeOrScore: '84 – 72',
     isWin: true,
-    credit: 'J. Abubakar',
+    credit: 'Jamal Abubakar',
   },
   {
     id: '2',
@@ -59,7 +89,7 @@ const ccsResults: GameItem[] = [
     venue: 'Covered Court',
     timeOrScore: '2 – 0',
     isWin: true,
-    credit: 'A. Ramos',
+    credit: 'Alyssa Ramos',
   },
   {
     id: '3',
@@ -68,7 +98,7 @@ const ccsResults: GameItem[] = [
     venue: 'Activity Center',
     timeOrScore: '1 – 3',
     isWin: false,
-    credit: 'M. Reyes',
+    credit: 'Miguel Reyes',
   },
   {
     id: '4',
@@ -77,12 +107,13 @@ const ccsResults: GameItem[] = [
     venue: 'CCS Lab 3',
     timeOrScore: '2 – 0',
     isWin: true,
-    credit: 'P. Tan',
+    credit: 'Paolo Tan',
   },
 ];
 
 export const GameScheduleCard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'results'>('upcoming');
+  const [selectedGame, setSelectedGame] = useState<GameItem | null>(null);
   const list = activeTab === 'upcoming' ? upcomingGames : ccsResults;
 
   const wins = ccsResults.filter(g => g.isWin).length;
@@ -112,7 +143,7 @@ export const GameScheduleCard: React.FC = () => {
                 : 'text-stone-500 hover:text-[#355935]'
             }`}
           >
-            Next
+            Upcoming
           </button>
           <button
             type="button"
@@ -136,7 +167,18 @@ export const GameScheduleCard: React.FC = () => {
         {list.map((item) => (
           <div
             key={item.id}
-            className="flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors"
+            onClick={() => activeTab === 'upcoming' && setSelectedGame(item)}
+            onKeyDown={(event) => {
+              if (activeTab === 'upcoming' && (event.key === 'Enter' || event.key === ' ')) {
+                event.preventDefault();
+                setSelectedGame(item);
+              }
+            }}
+            role={activeTab === 'upcoming' ? 'button' : undefined}
+            tabIndex={activeTab === 'upcoming' ? 0 : undefined}
+            className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors ${
+              activeTab === 'upcoming' ? 'cursor-pointer' : ''
+            }`}
           >
             {/* Left: accent bar */}
             <div
@@ -158,7 +200,7 @@ export const GameScheduleCard: React.FC = () => {
             </div>
 
             {/* Right: time/score */}
-            <div className="shrink-0 text-right font-mono">
+            <div className="shrink-0 flex flex-col items-end gap-1 text-right font-mono">
               {activeTab === 'upcoming' ? (
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#c5d8c3] text-[#1f381f] font-semibold text-[11px] sm:text-xs shadow-2xs">
                   <Clock className="w-3.5 h-3.5 text-[#355935] shrink-0" />
@@ -185,6 +227,11 @@ export const GameScheduleCard: React.FC = () => {
                   </span>
                 </div>
               )}
+              {activeTab === 'results' && item.credit && (
+                <p className="inline-flex self-end translate-y-1 rounded-md border border-[#b8d1b3] bg-[#e5f0e3] px-1.5 py-0.5 text-[8.6px] text-[#355935] whitespace-nowrap">
+                  Credits: {item.credit}
+                </p>
+              )}
             </div>
           </div>
         ))}
@@ -199,6 +246,87 @@ export const GameScheduleCard: React.FC = () => {
         </span>
         <ChevronRight className="w-3.5 h-3.5 text-stone-300" />
       </div>
+
+      {selectedGame && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#142614]/45 px-4 py-6 backdrop-blur-sm"
+          role="presentation"
+          onClick={() => setSelectedGame(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="game-info-title"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-white border border-[#c5d8c3] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[#e5efe4]">
+              <div>
+                <p className="text-[10px] font-mono font-semibold uppercase tracking-widest text-[#5d8c55]">
+                  Game Information
+                </p>
+                <h3 id="game-info-title" className="mt-1 text-lg font-black text-[#142614] font-display">
+                  {selectedGame.sport} vs {selectedGame.opponent}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedGame(null)}
+                aria-label="Close game information"
+                className="rounded-full p-1.5 text-stone-500 hover:bg-[#edf5ec] hover:text-[#1f381f] transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4 px-5 py-5">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="rounded-xl bg-[#f8faf8] border border-[#e5efe4] p-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase text-stone-400">
+                    <MapPin className="w-3 h-3 text-[#5d8c55]" /> Venue
+                  </div>
+                  <p className="mt-1 font-semibold text-[#1f381f]">{selectedGame.venue}</p>
+                </div>
+                <div className="rounded-xl bg-[#f8faf8] border border-[#e5efe4] p-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase text-stone-400">
+                    <Clock className="w-3 h-3 text-[#5d8c55]" /> Schedule
+                  </div>
+                  <p className="mt-1 font-semibold text-[#1f381f]">{selectedGame.timeOrScore}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="flex items-start gap-2">
+                  <Clock className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Start / End</p><p className="font-semibold text-[#1f381f]">{selectedGame.startTime} - {selectedGame.endTime}</p></div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ShieldCheck className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Facilitator</p><p className="flex flex-wrap items-center gap-1.5 font-semibold text-[#1f381f]"><span className="inline-flex rounded-md border border-amber-300 bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-800">PROF · {selectedGame.facilitatorProgram}</span>{selectedGame.facilitator}</p></div>
+                </div>
+                <div className="flex items-start gap-2 col-span-2">
+                  <UserRound className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Coach</p><p className="font-semibold text-[#1f381f]">{selectedGame.coach}</p></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Users className="w-4 h-4 text-[#5d8c55]" />
+                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">Players</h4>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {selectedGame.players?.map((player, index) => (
+                    <div key={player} className="rounded-lg border border-[#e5efe4] bg-[#fcfdfc] px-3 py-2 text-sm font-semibold text-[#1f381f]">
+                      <span className="mr-1.5 inline-flex rounded-md border border-[#c5d8c3] bg-[#edf5ec] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#355935]">{['BSIT', 'BSCS', 'ACT'][index % 3]}</span>{player}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

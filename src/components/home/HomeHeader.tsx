@@ -53,25 +53,32 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         </div>
       )}
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
-        {/* LEFT: Logo & College Department Information */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-initial md:w-1/3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-none md:w-[28%]">
           <img
             src={ccsLogo}
             alt="CCS Logo"
             className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-xs shrink-0"
           />
           <div className="truncate min-w-0">
-            <h1 className="text-xs sm:text-base font-bold text-[#1f381f] leading-tight font-display truncate">
+            <div className="block sm:hidden">
+              
+              <div className="text-[14px] font-bold text-[#3d6e35] leading-tight truncate">
+                College of Computing Studies
+              </div>
+              <div className="text-[11px] font-semibold text-[#5d8c55] leading-tight truncate">
+                Palaro 2026 Attendance Tracker
+              </div>
+            </div>
+            <h1 className="hidden sm:block text-sm sm:text-lg font-black text-[#1f381f] leading-tight tracking-tight font-display truncate">
               College of Computing Studies
             </h1>
-            <p className="text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
+            <p className="hidden sm:block text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
               {userRole === 'adviser' ? 'Palaro 2026 • Adviser Portal' : 'Palaro 2026 Attendance Tracker'}
             </p>
           </div>
         </div>
 
-        {/* MIDDLE: Clean Navbar Buttons */}
-        <nav className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2 xl:gap-3 min-w-0 flex-shrink-0 whitespace-nowrap">
+        <nav className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2 xl:gap-3 min-w-0 flex-1 whitespace-nowrap mx-auto">
           <button
             type="button"
             onClick={() => onTabChange?.('home')}
@@ -112,8 +119,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           </button>
         </nav>
 
-        {/* RIGHT: Install App, Role Switcher, Logout & Online Status */}
-        <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0 md:w-[28%]">
           {canInstall && !isInstalled && (
             <button
               type="button"
@@ -127,7 +133,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           )}
 
           {onRoleChange && (
-            <div className="inline-flex items-center bg-[#edf5ec] border border-[#c5d8c3] rounded-full p-0.5 text-[9px] sm:text-[10px] font-mono font-bold">
+            <div className="hidden sm:inline-flex items-center bg-[#edf5ec] border border-[#c5d8c3] rounded-full p-0.5 text-[9px] sm:text-[10px] font-mono font-bold">
               <button
                 type="button"
                 onClick={() => onRoleChange('student')}
@@ -156,24 +162,12 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
             </div>
           )}
 
-          {onLogout && (
-            <button
-              type="button"
-              onClick={onLogout}
-              className="p-1.5 rounded-full text-stone-500 hover:text-[#1f381f] hover:bg-[#edf5ec] transition-all cursor-pointer"
-              title="Log out"
-            >
-              <LogOut className="w-4 h-4 text-stone-600" />
-            </button>
-          )}
-
-          {/* Online/Offline Status */}
           <div
             className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10.5px] sm:text-xs font-mono font-semibold transition-colors ${
               isOnline
                 ? 'bg-[#edf5ec] border border-[#5d8c55]/40 text-[#254625]'
                 : 'bg-amber-100 border border-amber-300 text-amber-900'
-              }`}
+            }`}
             title={isOnline ? 'Connected to live server' : 'Running in offline cached mode'}
           >
             {isOnline ? (
@@ -188,6 +182,17 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
               </>
             )}
           </div>
+
+          {onLogout && (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="p-1.5 rounded-full text-stone-500 hover:text-[#1f381f] hover:bg-[#edf5ec] transition-all cursor-pointer"
+              title="Log out"
+            >
+              <LogOut className="w-4 h-4 text-stone-600" />
+            </button>
+          )}
         </div>
       </div>
     </header>

@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck } from 'lucide-react';
+import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck, MessageCircle, X, Users, UserRound, ShieldCheck } from 'lucide-react';
 
 interface ScheduleItem {
   id: string;
   sport: string;
   time: string;
   venue: string;
+  facilitator: string;
+  facilitatorProgram: 'BSIT' | 'BSCS' | 'ACT';
+  players: string[];
+  coach: string;
+  startTime: string;
+  endTime: string;
   status: 'In Progress' | 'Upcoming' | 'Completed';
 }
 
@@ -15,6 +21,12 @@ const sectionSchedules: ScheduleItem[] = [
     sport: 'Basketball Men vs COE',
     time: '10:00 AM',
     venue: 'Gymnasium',
+    facilitator: 'Facilitator: Santos Michael',
+    facilitatorProgram: 'BSCS',
+    players: ['Ramos Alyssa', 'Abubakar Jamal', 'Santos Michael', 'Tan Paolo', 'Garcia Luis'],
+    coach: 'Coach Villanueva Rafael',
+    startTime: '10:00 AM',
+    endTime: '11:30 AM',
     status: 'In Progress',
   },
   {
@@ -22,6 +34,12 @@ const sectionSchedules: ScheduleItem[] = [
     sport: 'Volleyball Women vs CLA',
     time: '01:30 PM',
     venue: 'Court B',
+    facilitator: 'Facilitator: Ramos Alyssa',
+    facilitatorProgram: 'BSIT',
+    players: ['Flores Nina', 'Dela Cruz Carla', 'Malik Sara', 'Navarro Kara', 'Lim Daniel'],
+    coach: 'Coach Bautista Elena',
+    startTime: '1:30 PM',
+    endTime: '3:00 PM',
     status: 'Upcoming',
   },
   {
@@ -29,6 +47,12 @@ const sectionSchedules: ScheduleItem[] = [
     sport: 'MLBB Esports vs CTE',
     time: '03:45 PM',
     venue: 'CCS Lab 3',
+    facilitator: 'Facilitator: Abubakar Jamal',
+    facilitatorProgram: 'ACT',
+    players: ['Tan Paolo', 'Garcia Rosa', 'Ahmed Tariq', 'Cruz Juan', 'Flores Bea'],
+    coach: 'Coach Santiago Marco',
+    startTime: '3:45 PM',
+    endTime: '5:15 PM',
     status: 'Upcoming',
   },
   {
@@ -36,6 +60,12 @@ const sectionSchedules: ScheduleItem[] = [
     sport: 'Badminton Doubles vs CCJE',
     time: '05:00 PM',
     venue: 'Covered Court',
+    facilitator: 'Facilitator: Garcia Luis',
+    facilitatorProgram: 'BSCS',
+    players: ['Tan Liam', 'Reyes Miguel', 'Karim Amir', 'Santos Fiona'],
+    coach: 'Coach Navarro Carlos',
+    startTime: '5:00 PM',
+    endTime: '6:30 PM',
     status: 'Upcoming',
   },
 ];
@@ -166,6 +196,7 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
   onNavigateToAttendance,
 }) => {
   const [selectedSection, setSelectedSection] = useState<'BSCS 4-B' | 'BSIT 3-A'>('BSCS 4-B');
+  const [selectedAttendance, setSelectedAttendance] = useState<ScheduleItem | null>(null);
   const adviserData = sectionAdviserRecords[selectedSection];
 
   // ADVISER VIEW
@@ -402,6 +433,15 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
           return (
             <div
               key={item.id}
+              onClick={() => setSelectedAttendance(item)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setSelectedAttendance(item);
+                }
+              }}
+              role="button"
+              tabIndex={0}
               className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors ${
                 isLive ? 'bg-amber-50/50' : ''
               }`}
@@ -426,6 +466,19 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                   <MapPin className="w-2.5 h-2.5 text-[#5d8c55] shrink-0" />
                   {item.venue}
                 </span>
+                <div className="flex items-center gap-2 mt-1 text-[9.5px] font-mono">
+                  <span className="text-stone-500 truncate">{item.facilitator}</span>
+                  <a
+                    href="https://m.me/ccspythons"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Message ${item.facilitator}`}
+                    title="Message facilitator on Facebook Messenger"
+                    className="inline-flex items-center justify-center text-[#1877f2] hover:text-[#0d5dcc] transition-colors shrink-0"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
 
               {/* Right: time + badge */}
@@ -466,6 +519,87 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
         </span>
         <span className="text-[10px] font-mono text-[#5d8c55] font-semibold">PALARO 2026</span>
       </div>
+
+      {selectedAttendance && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#142614]/45 px-4 py-6 backdrop-blur-sm"
+          role="presentation"
+          onClick={() => setSelectedAttendance(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="attendance-info-title"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-white border border-[#c5d8c3] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[#e5efe4]">
+              <div>
+                <p className="text-[10px] font-mono font-semibold uppercase tracking-widest text-[#5d8c55]">
+                  Attendance Information
+                </p>
+                <h3 id="attendance-info-title" className="mt-1 text-lg font-black text-[#142614] font-display">
+                  {selectedAttendance.sport}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedAttendance(null)}
+                aria-label="Close attendance information"
+                className="rounded-full p-1.5 text-stone-500 hover:bg-[#edf5ec] hover:text-[#1f381f] transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4 px-5 py-5">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="rounded-xl bg-[#f8faf8] border border-[#e5efe4] p-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase text-stone-400">
+                    <MapPin className="w-3 h-3 text-[#5d8c55]" /> Venue
+                  </div>
+                  <p className="mt-1 font-semibold text-[#1f381f]">{selectedAttendance.venue}</p>
+                </div>
+                <div className="rounded-xl bg-[#f8faf8] border border-[#e5efe4] p-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase text-stone-400">
+                    <Clock className="w-3 h-3 text-[#5d8c55]" /> Schedule
+                  </div>
+                  <p className="mt-1 font-semibold text-[#1f381f]">{selectedAttendance.time}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="flex items-start gap-2">
+                  <Clock className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Start / End</p><p className="font-semibold text-[#1f381f]">{selectedAttendance.startTime} - {selectedAttendance.endTime}</p></div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ShieldCheck className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Facilitator</p><p className="flex flex-wrap items-center gap-1.5 font-semibold text-[#1f381f]"><span className="inline-flex rounded-md border border-amber-300 bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-800">PROF · {selectedAttendance.facilitatorProgram}</span>{selectedAttendance.facilitator.replace('Facilitator: ', '')}</p></div>
+                </div>
+                <div className="flex items-start gap-2 col-span-2">
+                  <UserRound className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Coach</p><p className="font-semibold text-[#1f381f]">{selectedAttendance.coach}</p></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Users className="w-4 h-4 text-[#5d8c55]" />
+                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">Players</h4>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {selectedAttendance.players.map((player, index) => (
+                    <div key={player} className="rounded-lg border border-[#e5efe4] bg-[#fcfdfc] px-3 py-2 text-sm font-semibold text-[#1f381f]">
+                      <span className="mr-1.5 inline-flex rounded-md border border-[#c5d8c3] bg-[#edf5ec] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#355935]">{['BSIT', 'BSCS', 'ACT'][index % 3]}</span>{player}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

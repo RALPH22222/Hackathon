@@ -129,11 +129,7 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
           </h1>
         </div>
 
-        {/* ROLE SELECTION TOGGLE (Student vs Adviser) */}
         <div className="relative z-10 mb-4">
-          <p className="text-[10px] font-mono uppercase text-stone-500 font-semibold mb-1 text-center">
-            Select User Role to Log In
-          </p>
           <div className="bg-[#edf5ec] border border-[#c5d8c3] rounded-2xl p-1 grid grid-cols-2 gap-1 shadow-inner">
             <button
               type="button"
