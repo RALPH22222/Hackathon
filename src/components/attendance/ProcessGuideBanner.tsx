@@ -37,9 +37,9 @@ export const ProcessGuideBanner: React.FC = () => {
           <div className="min-w-0">
             <h4 className="text-xs font-bold text-[#1f381f] flex items-center gap-1 truncate">
               <Camera className="w-3.5 h-3.5 text-[#355935]" />
-              <span>Snap Selfie / Scan</span>
+              <span>Snap Photo / Scan</span>
             </h4>
-            <p className="text-[10px] text-stone-500 truncate">Camera selfie or Event QR Code</p>
+            <p className="text-[10px] text-stone-500 truncate">Camera photo or Event QR Code</p>
           </div>
         </div>
 

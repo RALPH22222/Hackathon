@@ -139,11 +139,11 @@ export function Attendance() {
     });
   };
 
-  const handleOpenSelfieCamera = (event: PalaroEventItem) => {
+  const handleOpenPhotoCamera = (event: PalaroEventItem) => {
     setSelectedEventForCamera(event);
   };
 
-  const handleConfirmWatermarkedSelfie = (photoUrl: string) => {
+  const handleConfirmWatermarkedPhoto = (photoUrl: string) => {
     if (!selectedEventForCamera) return;
 
     const newRec: AttendanceRecord = {
@@ -233,12 +233,12 @@ export function Attendance() {
       {/* 3. Mode Selector Navigation Tabs */}
       <AttendanceTabSelector activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* 4. Mode A: Event List & Camera Selfie Mode (Default) */}
+      {/* 4. Mode A: Event List & Camera Photo Mode (Default) */}
       {activeTab === 'photo' && (
         <EventAttendanceList
           events={MOCK_PALARO_EVENTS}
           attendedEventIds={attendedEventTitles}
-          onOpenSelfieCamera={handleOpenSelfieCamera}
+          onOpenSelfieCamera={handleOpenPhotoCamera}
           onOpenQRScanner={handleOpenQRScanner}
         />
       )}
@@ -264,7 +264,7 @@ export function Attendance() {
           currentTime={currentTime}
           gpsLocation={gpsLocation}
           onClose={() => setSelectedEventForCamera(null)}
-          onConfirmAttendance={handleConfirmWatermarkedSelfie}
+          onConfirmAttendance={handleConfirmWatermarkedPhoto}
         />
       )}
     </div>
@@ -272,3 +272,4 @@ export function Attendance() {
 }
 
 export default Attendance;
+

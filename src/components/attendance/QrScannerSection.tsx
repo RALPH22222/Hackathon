@@ -181,7 +181,7 @@ export const QrScannerSection: React.FC<QrScannerSectionProps> = ({
               <span>Event QR Code Guidelines</span>
             </h4>
             <ul className="text-xs text-stone-600 space-y-2 list-disc list-inside leading-relaxed">
-              <li>Designed for fast verification without taking camera selfies.</li>
+              <li>Designed for fast verification without taking camera photos.</li>
               <li>Scan the scannable code displayed at section entrances.</li>
               <li>Timestamps and GPS location are recorded automatically upon scan.</li>
             </ul>

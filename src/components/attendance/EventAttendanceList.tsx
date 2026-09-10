@@ -20,7 +20,7 @@ export const EventAttendanceList: React.FC<EventAttendanceListProps> = ({
       <div className="flex items-center justify-between gap-2 flex-nowrap">
         <div className="min-w-0">
           <h3 className="font-bold text-[#1f381f] text-base font-display truncate">Active & Upcoming Palaro Events</h3>
-          <p className="text-xs text-stone-500 truncate">Select an event below to snap your selfie attendance or scan the QR code</p>
+          <p className="text-xs text-stone-500 truncate">Select an event below to snap your photo proof attendance or scan the QR code</p>
         </div>
         <span className="text-xs font-mono font-bold text-[#355935] bg-[#edf5ec] px-2.5 py-1 rounded-md border border-[#c5d8c3] whitespace-nowrap shrink-0">
           {events.length} Events
@@ -94,7 +94,7 @@ export const EventAttendanceList: React.FC<EventAttendanceListProps> = ({
                   }`}
                 >
                   <Camera className="w-3.5 h-3.5" />
-                  <span>{isAttended ? 'Retake Selfie' : 'Snap Selfie'}</span>
+                  <span>{isAttended ? 'Retake Photo' : 'Snap Photo'}</span>
                 </button>
 
                 <button

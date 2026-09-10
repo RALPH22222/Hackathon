@@ -45,7 +45,7 @@ export const PhotoProofSection: React.FC<PhotoProofSectionProps> = ({
       <div className="space-y-1">
         <h3 className="font-bold text-[#1f381f] text-lg">Upload Event Attendance Photo Proof</h3>
         <p className="text-xs text-stone-500">
-          Take or select a clear photo of yourself at the Palaro venue with the event backdrop or marshals visible.
+          Take or upload a clear photo of the Palaro event venue, court, game action, or stage. The automatic watermark records your location, time, and venue.
         </p>
       </div>
 
@@ -109,7 +109,7 @@ export const PhotoProofSection: React.FC<PhotoProofSectionProps> = ({
         {/* Drag & Drop Photo Area */}
         <div>
           <label className="block text-xs font-bold text-stone-700 mb-1.5">
-            Event Selfie / Venue Photo
+            Venue & Event Photo Proof
           </label>
 
           {uploadedImage ? (

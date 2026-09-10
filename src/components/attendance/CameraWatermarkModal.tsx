@@ -55,7 +55,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
   }, []);
 
   // Capture snapshot and apply HTML5 Canvas Watermark in bottom-right corner
-  const handleSnapSelfie = () => {
+  const handleSnapPhoto = () => {
     setIsCapturing(true);
 
     setTimeout(() => {
@@ -74,7 +74,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
           ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
           ctx.restore();
         } else {
-          // Simulated selfie background
+          // Simulated photo background
           const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
           grad.addColorStop(0, '#1f381f');
           grad.addColorStop(0.5, '#355935');
@@ -82,7 +82,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
           ctx.fillStyle = grad;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Simulated Avatar Silhouette
+          // Simulated Venue Silhouette
           ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
           ctx.beginPath();
           ctx.arc(400, 250, 90, 0, Math.PI * 2);
@@ -94,7 +94,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
           ctx.fillStyle = '#ffffff';
           ctx.font = 'bold 20px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('PALARO 2026 SELFIE CAPTURE', 400, 370);
+          ctx.fillText('PALARO 2026 LIVE PHOTO CAPTURE', 400, 370);
         }
 
         // 2. BURN WATERMARK BADGE IN BOTTOM RIGHT CORNER
@@ -200,7 +200,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
             <div className="relative w-full h-full">
               <img
                 src={watermarkedPhoto}
-                alt="Watermarked Selfie Preview"
+                alt="Watermarked Photo Preview"
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-3 left-3 bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 px-3 py-1 rounded-full text-xs font-mono font-bold flex items-center gap-1.5 shadow-md">
@@ -230,7 +230,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
                   </span>
                 </div>
                 <div className="text-center bg-black/60 backdrop-blur-xs p-2 rounded-xl border border-white/10 max-w-xs mx-auto">
-                  <p className="text-xs text-white font-medium">Position your face in the frame</p>
+                  <p className="text-xs text-white font-medium">Capture the venue, court, or game action</p>
                   <p className="text-[10px] text-stone-400">Timestamp & location will be burned in bottom right</p>
                 </div>
               </div>
@@ -266,7 +266,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
           ) : (
             <button
               type="button"
-              onClick={handleSnapSelfie}
+              onClick={handleSnapPhoto}
               disabled={isCapturing}
               className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#1f381f] to-[#355935] hover:from-[#2a482a] hover:to-[#436e43] text-white text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg active:scale-98 border border-[#5d8c55]/40"
             >
@@ -278,7 +278,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
               ) : (
                 <>
                   <Camera className="w-5 h-5 text-emerald-400" />
-                  <span>Snap Attendance Selfie Now</span>
+                  <span>Snap Photo Proof Now</span>
                 </>
               )}
             </button>

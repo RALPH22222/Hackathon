@@ -25,7 +25,7 @@ export const AttendanceHeader: React.FC<AttendanceHeaderProps> = ({
             Student Attendance Hub
           </h2>
           <p className="text-sm text-stone-600 max-w-xl leading-relaxed">
-            Verify mandatory Palaro crowd participation by capturing a live watermarked camera selfie or scanning official event QR codes presented at your section.
+            Verify mandatory Palaro crowd participation by capturing a live watermarked venue photo or scanning official event QR codes presented at your section.
           </p>
         </div>
 
