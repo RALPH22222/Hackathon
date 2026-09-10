@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck, X, Users, UserRound, ShieldCheck } from 'lucide-react';
+import { MatchupTeams, SportIcon, SportName } from './MatchupVisuals';
 
 import messengerLogo from '../../assets/messenger.png';
 
@@ -311,16 +312,20 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                 />
 
                 {/* Middle: Match & Assigned Section */}
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#edf5ec] text-[#355935]">
+                  <SportIcon sport={item.sport} className="h-5 w-5" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <p
                     className={`text-[12px] sm:text-[13px] font-bold leading-snug truncate font-display ${
                       isLive ? 'text-amber-950' : 'text-[#1a2f1a]'
                     }`}
                   >
-                    {item.sport}
+                    <SportName sport={item.sport} />
                   </p>
 
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] font-mono mt-0.5">
+                    <MatchupTeams opponent={item.sport} className="text-[#355935] font-bold" />
                     <span className="flex items-center gap-0.5 text-stone-500">
                       <MapPin className="w-2.5 h-2.5 text-[#5d8c55] shrink-0" />
                       {item.venue}
@@ -492,6 +497,9 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                 />
 
                 {/* Event & Class Stats */}
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#edf5ec] text-[#355935]">
+                  <SportIcon sport={item.sport} className="h-5 w-5" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1.5">
                     <p
@@ -499,12 +507,13 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                         isLive ? 'text-amber-950' : 'text-[#1a2f1a]'
                       }`}
                     >
-                      {item.sport}
+                      <SportName sport={item.sport} />
                     </p>
                   </div>
 
                   {/* Venue and note */}
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] text-stone-400 font-mono mt-0.5">
+                    <MatchupTeams opponent={item.sport} className="text-[#355935] font-bold" />
                     <span className="flex items-center gap-1 text-stone-500">
                       <MapPin className="w-2.5 h-2.5 text-[#5d8c55] shrink-0" />
                       {item.venue}
@@ -618,7 +627,7 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
       <div className="mx-4 sm:mx-5 h-px bg-[#e5efe4]" />
 
       {/* List */}
-      <div className="flex-1 flex flex-col divide-y divide-[#eef5ed]">
+      <div className="flex-1 flex flex-col gap-1.5">
         {sectionSchedules.map((item) => {
           const isLive = item.status === 'In Progress';
           return (
@@ -633,8 +642,10 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
               }}
               role="button"
               tabIndex={0}
-              className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors ${
-                isLive ? 'bg-amber-50/50 ' : ''
+              className={`flex-1 flex items-center gap-2 sm:gap-3 mx-2 sm:mx-3 my-1.5 px-3 sm:px-5 py-3 rounded-xl transition-colors ${
+                isLive
+                  ? 'bg-amber-50/50 hover:bg-amber-100/50'
+                  : 'bg-[#f8faf8] hover:bg-[#edf5ec]'
               } cursor-pointer`}
             >
               {/* Left: status bar */}
@@ -645,14 +656,20 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
               />
 
               {/* Middle: Name & venue */}
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-[#edf5ec] text-[#355935]">
+                <SportIcon sport={item.sport} className="h-5 w-5" />
+              </div>
               <div className="flex-1 min-w-0">
                 <p
                   className={`text-[12px] sm:text-[13px] font-bold leading-snug truncate font-display ${
                     isLive ? 'text-amber-900' : 'text-[#1a2f1a]'
                   }`}
                 >
-                  {item.sport}
+                  <SportName sport={item.sport} />
                 </p>
+                <div className="mt-0.5 flex items-center gap-1 text-[10px] font-mono font-bold text-[#355935]">
+                  <MatchupTeams opponent={item.sport} className="text-[#355935]" />
+                </div>
                 <span className="flex items-center gap-1 text-[10px] text-stone-400 font-mono mt-0.5">
                   <MapPin className="w-2.5 h-2.5 text-[#5d8c55] shrink-0" />
                   {item.venue}
@@ -676,7 +693,7 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
               {/* Right: time + badge */}
               <div className="shrink-0 text-right font-mono">
                 <div
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border font-semibold text-[11px] sm:text-xs shadow-2xs ${
+                  className={`inline-flex items-center gap-1 px-2 py-1 sm:gap-1.5 sm:px-2.5 rounded-lg bg-white border font-semibold text-[10px] sm:text-xs shadow-2xs whitespace-nowrap ${
                     isLive ? 'border-amber-300' : 'border-[#c5d8c3]'
                   }`}
                 >
@@ -726,13 +743,23 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-[#e5efe4]">
-              <div>
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#edf5ec] text-[#355935]">
+                  <SportIcon sport={selectedAttendance.sport} className="h-6 w-6" />
+                </div>
+                <div className="min-w-0">
                 <p className="text-[10px] font-mono font-semibold uppercase tracking-widest text-[#5d8c55]">
                   Attendance Information
                 </p>
                 <h3 id="attendance-info-title" className="mt-1 text-lg font-black text-[#142614] font-display">
-                  {selectedAttendance.sport}
+                  <SportName sport={selectedAttendance.sport} />
                 </h3>
+                <MatchupTeams
+                  opponent={selectedAttendance.sport.split(/\s+vs\s+/i).pop() ?? selectedAttendance.sport}
+                  fullTeamNames
+                  className="mt-1 text-[11px] font-mono text-stone-500"
+                />
+                </div>
               </div>
               <button
                 type="button"
@@ -761,17 +788,23 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="flex items-start gap-2">
-                  <Clock className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
-                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Start / End</p><p className="font-semibold text-[#1f381f]">{selectedAttendance.startTime} - {selectedAttendance.endTime}</p></div>
+                <div className="self-start rounded-xl border border-[#e5efe4] bg-[#f8fbf7] p-2.5">
+                  <div className="flex items-start gap-2">
+                    <Clock className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                    <div><p className="text-[10px] font-mono uppercase text-stone-400">Start / End</p><p className="font-semibold text-[#1f381f]">{selectedAttendance.startTime} - {selectedAttendance.endTime}</p></div>
+                  </div>
                 </div>
-                <div className="flex items-start gap-2">
-                  <ShieldCheck className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
-                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Facilitator</p><p className="flex flex-wrap items-center gap-1.5 font-semibold text-[#1f381f]"><span className="inline-flex rounded-md border border-amber-300 bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-800">PROF · {selectedAttendance.facilitatorProgram}</span>{selectedAttendance.facilitator.replace('Facilitator: ', '')}</p></div>
+                <div className="order-2 rounded-xl border border-[#e5efe4] bg-[#f8fbf7] p-2.5 sm:col-span-2 sm:w-fit sm:max-w-full">
+                  <div className="flex items-start gap-2">
+                    <ShieldCheck className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                    <div><p className="text-[10px] font-mono uppercase text-stone-400">Facilitator</p><p className="flex flex-wrap items-center gap-1.5 font-semibold text-[#1f381f] sm:flex-nowrap sm:whitespace-nowrap"><span className="inline-flex rounded-md border border-amber-300 bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-800">PROF {selectedAttendance.facilitatorProgram}</span>{selectedAttendance.facilitator.replace('Facilitator: ', '')}</p></div>
+                  </div>
                 </div>
-                <div className="flex items-start gap-2 col-span-2">
-                  <UserRound className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
-                  <div><p className="text-[10px] font-mono uppercase text-stone-400">Coach</p><p className="font-semibold text-[#1f381f]">{selectedAttendance.coach}</p></div>
+                <div className="order-1 self-start rounded-xl border border-[#e5efe4] bg-[#f8fbf7] p-2.5">
+                  <div className="flex items-start gap-2">
+                    <UserRound className="mt-0.5 w-4 h-4 text-[#5d8c55] shrink-0" />
+                    <div><p className="text-[10px] font-mono uppercase text-stone-400">Coach</p><p className="font-semibold text-[#1f381f]">{selectedAttendance.coach}</p></div>
+                  </div>
                 </div>
               </div>
 
@@ -780,10 +813,17 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                   <Users className="w-4 h-4 text-[#5d8c55]" />
                   <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">Players</h4>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {selectedAttendance.players.map((player, index) => (
-                    <div key={player} className="rounded-lg border border-[#e5efe4] bg-[#fcfdfc] px-3 py-2 text-sm font-semibold text-[#1f381f]">
-                      <span className="mr-1.5 inline-flex rounded-md border border-[#c5d8c3] bg-[#edf5ec] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#355935]">{['BSIT', 'BSCS', 'ACT'][index % 3]}</span>{player}
+                <div className="flex items-start gap-2">
+                  {[0, 1].map((column) => (
+                    <div key={column} className="min-w-0 flex-1 space-y-1">
+                      {selectedAttendance.players.filter((_, index) => index % 2 === column).map((player, index) => {
+                        const playerIndex = index * 2 + column;
+                        return (
+                          <div key={player} className="min-w-0 rounded-lg border border-[#e5efe4] bg-[#fcfdfc] px-2.5 py-1.5 text-sm font-semibold leading-tight text-[#1f381f]">
+                            <span className="mr-1.5 inline-flex rounded-md border border-[#c5d8c3] bg-[#edf5ec] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#355935]">{['BSIT', 'BSCS', 'ACT'][playerIndex % 3]}</span>{player}
+                          </div>
+                        );
+                      })}
                     </div>
                   ))}
                 </div>

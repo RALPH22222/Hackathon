@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import nodeshotsLogo from '../../assets/nodeshots.png';
 import { useAppInstall } from '../../hooks/useAppInstall';
-import { Download, X, Share, PlusSquare, Smartphone, CheckCircle2} from 'lucide-react';
-
-const RE_SHOW_INTERVAL_MS = 120000; // 2 minute re-display interval if not installed
+import { Download, X, Share, PlusSquare, CheckCircle2} from 'lucide-react';
 
 export const InstallAppBanner: React.FC = () => {
   const { canInstall, isInstalled, isIOS, promptInstall } = useAppInstall();
@@ -10,39 +9,12 @@ export const InstallAppBanner: React.FC = () => {
   const [showIOSModal, setShowIOSModal] = useState<boolean>(false);
   const [installedToast, setInstalledToast] = useState<boolean>(false);
 
-  // Effect to check dismissal timestamp and re-show every 1 minute
-  useEffect(() => {
-    if (isInstalled) return;
-
-    const checkDismissal = () => {
-      const dismissedTimeStr = localStorage.getItem('ccs_app_install_dismissed_time');
-      if (dismissedTimeStr) {
-        const dismissedTime = parseInt(dismissedTimeStr, 10);
-        const elapsed = Date.now() - dismissedTime;
-        if (elapsed < RE_SHOW_INTERVAL_MS) {
-          setIsDismissed(true);
-        } else {
-          setIsDismissed(false);
-          localStorage.removeItem('ccs_app_install_dismissed_time');
-        }
-      } else {
-        setIsDismissed(false);
-      }
-    };
-
-    checkDismissal();
-    const intervalId = setInterval(checkDismissal, 5000);
-
-    return () => clearInterval(intervalId);
-  }, [isInstalled]);
-
   if (isInstalled || isDismissed) {
     return null;
   }
 
   const handleDismiss = () => {
     setIsDismissed(true);
-    localStorage.setItem('ccs_app_install_dismissed_time', Date.now().toString());
   };
 
   const handleInstallClick = async () => {
@@ -74,8 +46,12 @@ export const InstallAppBanner: React.FC = () => {
         <div className="flex items-center justify-between gap-2.5 sm:gap-4">
           {/* Left Icon & Text Details */}
           <div className="flex items-start sm:items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#254625] flex items-center justify-center shrink-0 text-emerald-300 border border-emerald-500/30 shadow-inner mt-0.5 sm:mt-0">
-              <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-300" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#254625] flex items-center justify-center shrink-0 border border-emerald-500/30 shadow-inner mt-0.5 sm:mt-0 overflow-hidden">
+              <img
+                src={nodeshotsLogo}
+                alt="NodeShots App Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div className="min-w-0 space-y-0.5">
@@ -108,7 +84,6 @@ export const InstallAppBanner: React.FC = () => {
               type="button"
               onClick={handleDismiss}
               aria-label="Dismiss App Installation Prompt"
-              title="Dismiss for 1 minute"
               className="p-1.5 text-emerald-200/70 hover:text-white rounded-lg hover:bg-white/10 transition-colors cursor-pointer shrink-0"
             >
               <X className="w-4 h-4" />
@@ -123,7 +98,7 @@ export const InstallAppBanner: React.FC = () => {
           <div className="bg-white rounded-2xl p-4 sm:p-5 max-w-sm w-full space-y-4 text-stone-800 shadow-2xl animate-in fade-in zoom-in-95 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-[#254625]" />
+                <img src={nodeshotsLogo} alt="NodeShots App Logo" className="w-6 h-6 object-contain" />
                 <h3 className="font-bold text-sm sm:text-base text-[#122412]">Add App to Home Screen</h3>
               </div>
               <button
