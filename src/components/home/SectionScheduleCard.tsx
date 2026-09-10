@@ -186,8 +186,43 @@ const sectionAdviserRecords: Record<string, SectionAdviserData> = {
   },
 };
 
+const facilitatorHandledMatches = [
+  {
+    id: 'f1',
+    sport: 'Basketball Men vs COE',
+    assignedSection: 'BSCS 4-B',
+    time: '10:00 AM',
+    venue: 'WMSU Main Gymnasium',
+    status: 'In Progress',
+  },
+  {
+    id: 'f2',
+    sport: 'Volleyball Women vs CLA',
+    assignedSection: 'BSIT 3-A',
+    time: '01:30 PM',
+    venue: 'Covered Court B',
+    status: 'Upcoming',
+  },
+  {
+    id: 'f3',
+    sport: 'MLBB Esports vs CTE',
+    assignedSection: 'BSCS 3-A',
+    time: '03:45 PM',
+    venue: 'CCS Lab 3',
+    status: 'Upcoming',
+  },
+  {
+    id: 'f4',
+    sport: 'Sepak Takraw vs CCJE',
+    assignedSection: 'BSIT 4-B',
+    time: '08:00 AM',
+    venue: 'Quadrangle Grounds',
+    status: 'Completed',
+  },
+];
+
 interface SectionScheduleCardProps {
-  userRole?: 'student' | 'adviser';
+  userRole?: 'student' | 'adviser' | 'facilitator';
   onNavigateToAttendance?: () => void;
 }
 
@@ -198,6 +233,160 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
   const [selectedSection, setSelectedSection] = useState<'BSCS 4-B' | 'BSIT 3-A'>('BSCS 4-B');
   const [selectedAttendance, setSelectedAttendance] = useState<ScheduleItem | null>(null);
   const adviserData = sectionAdviserRecords[selectedSection];
+
+  // FACILITATOR VIEW
+  if (userRole === 'facilitator') {
+    return (
+      <div className="bg-white rounded-2xl border border-[#c5d8c3] shadow-xs flex flex-col h-full overflow-hidden">
+        {/* Header */}
+        <div className="px-4 sm:px-5 py-3 sm:py-3.5 flex items-center justify-between min-h-[64px] bg-[#fcfdfc] border-b border-[#eef5ed]">
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-[10px] font-mono text-[#5d8c55] font-bold uppercase tracking-wider">
+                Matches Handled & Supervised
+              </span>
+              <span className="px-1.5 py-0.2 rounded bg-[#1b4332] text-white text-[9px] font-mono font-bold">
+                FACILITATOR
+              </span>
+            </div>
+            <h2 className="text-sm sm:text-base font-black text-[#142614] tracking-tight leading-none font-display">
+              Palaro Sports Matches
+            </h2>
+          </div>
+
+          {onNavigateToAttendance && (
+            <button
+              type="button"
+              onClick={onNavigateToAttendance}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1b4332] text-white hover:bg-[#122e22] text-[10.5px] font-mono font-bold transition-all cursor-pointer shadow-2xs"
+            >
+              <span>Manage</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+
+        {/* Quick Stats Ribbon */}
+        <div className="grid grid-cols-3 divide-x divide-[#eef5ed] bg-[#f8faf8] border-b border-[#eef5ed] py-2 px-3 sm:px-4 text-center">
+          <div className="px-1">
+            <p className="text-[9.5px] font-mono uppercase text-stone-400 font-medium">Handled Matches</p>
+            <p className="text-xs sm:text-sm font-black font-display text-[#1f381f] mt-0.5">
+              {facilitatorHandledMatches.length} <span className="text-[10px] font-mono font-normal text-stone-500">Events</span>
+            </p>
+          </div>
+          <div className="px-1">
+            <p className="text-[9.5px] font-mono uppercase text-stone-400 font-medium">Assigned Sections</p>
+            <p className="text-xs sm:text-sm font-black font-display text-[#355935] mt-0.5">
+              4 <span className="text-[10px] font-mono font-normal text-stone-500">Classes</span>
+            </p>
+          </div>
+          <div className="px-1">
+            <p className="text-[9.5px] font-mono uppercase text-stone-400 font-medium">Active Status</p>
+            <p className="text-xs sm:text-sm font-black font-display text-amber-700 mt-0.5">
+              1 <span className="text-[10px] font-mono font-normal text-stone-500">Live Game</span>
+            </p>
+          </div>
+        </div>
+
+        {/* List of Handled Matches */}
+        <div className="flex-1 flex flex-col divide-y divide-[#eef5ed]">
+          {facilitatorHandledMatches.map((item) => {
+            const isLive = item.status === 'In Progress';
+            const isCompleted = item.status === 'Completed';
+
+            return (
+              <div
+                key={item.id}
+                className={`flex-1 flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-[#f8faf7] transition-colors ${
+                  isLive ? 'bg-amber-50/50' : ''
+                }`}
+              >
+                {/* Left status bar */}
+                <div
+                  className={`w-1 self-stretch rounded-full shrink-0 ${
+                    isLive ? 'bg-amber-500' : isCompleted ? 'bg-emerald-500' : 'bg-[#c5d8c3]'
+                  }`}
+                />
+
+                {/* Middle: Match & Assigned Section */}
+                <div className="flex-1 min-w-0">
+                  <p
+                    className={`text-[12px] sm:text-[13px] font-bold leading-snug truncate font-display ${
+                      isLive ? 'text-amber-950' : 'text-[#1a2f1a]'
+                    }`}
+                  >
+                    {item.sport}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] font-mono mt-0.5">
+                    <span className="flex items-center gap-0.5 text-stone-500">
+                      <MapPin className="w-2.5 h-2.5 text-[#5d8c55] shrink-0" />
+                      {item.venue}
+                    </span>
+                    <span className="px-1.5 py-0.2 rounded bg-[#edf5ec] text-[#1f381f] font-bold border border-[#c5d8c3]">
+                      Sec: {item.assignedSection}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right: time / status */}
+                <div className="shrink-0 text-right font-mono">
+                  <div
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border font-semibold text-[11px] sm:text-xs shadow-2xs ${
+                      isLive ? 'border-amber-300' : 'border-[#c5d8c3]'
+                    }`}
+                  >
+                    <Clock
+                      className={`w-3.5 h-3.5 shrink-0 ${
+                        isLive ? 'text-amber-600' : 'text-[#355935]'
+                      }`}
+                    />
+                    <span className={isLive ? 'text-amber-950 font-bold' : 'text-[#1f381f]'}>
+                      {item.time}
+                    </span>
+                    <span
+                      className={`ml-0.5 text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-full ${
+                        isLive
+                          ? 'bg-amber-100 text-amber-800'
+                          : isCompleted
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-[#edf5ec] text-[#355935]'
+                      }`}
+                    >
+                      {isLive ? 'LIVE' : isCompleted ? 'DONE' : 'SOON'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="px-4 sm:px-5 py-2.5 border-t border-[#e5efe4] bg-[#fcfdfc] flex items-center justify-between min-h-[42px]">
+          {onNavigateToAttendance ? (
+            <button
+              type="button"
+              onClick={onNavigateToAttendance}
+              className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#254625] hover:text-emerald-700 transition-colors group cursor-pointer"
+            >
+              <UserCheck className="w-3.5 h-3.5 text-[#5d8c55] group-hover:scale-110 transition-transform" />
+              <span>Control Desk & Venue Updates</span>
+              <ArrowRight className="w-3 h-3 text-[#5d8c55] group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          ) : (
+            <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider">
+              {facilitatorHandledMatches.length} Matches Supervised
+            </span>
+          )}
+
+          <span className="text-[10px] font-mono text-[#5d8c55] font-semibold">
+            PALARO 2026
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   // ADVISER VIEW
   if (userRole === 'adviser') {

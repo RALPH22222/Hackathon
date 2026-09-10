@@ -1,7 +1,7 @@
 {
-  "name": "WMSU College of Computing Studies Portal",
-  "short_name": "CS Portal App",
-  "description": "Offline-first attendance tracker, event verification, and student management app for WMSU College of Computing Studies",
+  "name": "NodeShots - Palaro 2026 Attendance App",
+  "short_name": "NodeShots",
+  "description": "Got proof? Send NodeShots. Offline-first Palaro 2026 crowd attendance tracker for WMSU College of Computing Studies",
   "start_url": "/",
   "id": "/",
   "scope": "/",

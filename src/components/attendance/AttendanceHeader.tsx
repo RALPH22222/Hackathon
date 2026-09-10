@@ -15,17 +15,18 @@ export const AttendanceHeader: React.FC<AttendanceHeaderProps> = ({
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#edf5ec] border border-[#5d8c55]/30 text-[#1f381f] text-xs font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#355935]" />
-              <span>Official Palaro 2026 Check-in System</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#1f381f] text-emerald-300 text-xs font-mono font-bold border border-[#5d8c55]/30">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>NodeShots Verification Engine • Palaro 2026</span>
             </div>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1f381f] font-display tracking-tight">
-            Student Attendance Hub
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1f381f] font-display tracking-tight flex items-center gap-2">
+            <span>NodeShots Hub</span>
+            <span className="text-[#355935] text-sm font-bold font-mono">"Got proof? Send NodeShots."</span>
           </h2>
           <p className="text-sm text-stone-600 max-w-xl leading-relaxed">
-            Verify mandatory Palaro crowd participation by capturing a live watermarked venue photo or scanning official event QR codes presented at your section.
+            Official WMSU College of Computing Studies attendance system. Verify Palaro crowd participation by capturing live watermarked venue photos or scanning event QR codes.
           </p>
         </div>
 

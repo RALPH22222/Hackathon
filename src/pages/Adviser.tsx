@@ -12,7 +12,7 @@ interface AdviserProps {
 }
 
 export function Adviser({ onNavigateToStudent }: AdviserProps = {}) {
-  const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance'>('attendance');
+  const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance' | 'events'>('attendance');
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#edf4ee] text-slate-800 font-sans pb-24 md:pb-10 select-none">

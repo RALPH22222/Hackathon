@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ccsLogo from '../../assets/CCS.png';
-import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Download, LogOut } from 'lucide-react';
+import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Trophy, Download, LogOut } from 'lucide-react';
 import { useAppInstall } from '../../hooks/useAppInstall';
 import { initOfflineSyncManager } from '../../utils/offlineStorage';
 
 interface HomeHeaderProps {
-  activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
-  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
-  userRole?: 'student' | 'adviser';
-  onRoleChange?: (role: 'student' | 'adviser') => void;
+  activeTab?: 'home' | 'backup' | 'qr' | 'attendance' | 'events';
+  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance' | 'events') => void;
+  userRole?: 'student' | 'adviser' | 'facilitator';
+  onRoleChange?: (role: 'student' | 'adviser' | 'facilitator') => void;
   onLogout?: () => void;
 }
 
@@ -53,27 +53,24 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         </div>
       )}
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-none md:w-[28%]">
+  {/* LEFT: Logo & Brand Information */}
+  <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-none md:w-[28%]">
           <img
             src={ccsLogo}
             alt="CCS Logo"
             className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-xs shrink-0"
           />
           <div className="truncate min-w-0">
-            <div className="block sm:hidden">
-              
-              <div className="text-[14px] font-bold text-[#3d6e35] leading-tight truncate">
-                College of Computing Studies
-              </div>
-              <div className="text-[11px] font-semibold text-[#5d8c55] leading-tight truncate">
-                Palaro 2026 Attendance Tracker
-              </div>
+            <div className="flex items-center gap-1.5 truncate">
+              <h1 className="text-xs sm:text-base font-bold text-[#1f381f] leading-tight font-display truncate">
+                NodeShots
+              </h1>
+              <span className="px-1.5 py-0.2 rounded bg-[#1f381f] text-emerald-300 text-[9.5px] font-mono font-bold uppercase tracking-wider shrink-0">
+                Palaro 2026
+              </span>
             </div>
-            <h1 className="hidden sm:block text-sm sm:text-lg font-black text-[#1f381f] leading-tight tracking-tight font-display truncate">
-              College of Computing Studies
-            </h1>
-            <p className="hidden sm:block text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
-              {userRole === 'adviser' ? 'Palaro 2026 • Adviser Portal' : 'Palaro 2026 Attendance Tracker'}
+            <p className="text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
+              College of Computing Studies • {userRole === 'adviser' ? 'Adviser Portal' : userRole === 'facilitator' ? 'Facilitator Desk' : 'Attendance App'}
             </p>
           </div>
         </div>
@@ -107,15 +104,25 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
           <button
             type="button"
-            onClick={() => onTabChange?.('attendance')}
+            onClick={() => onTabChange?.(userRole === 'facilitator' ? 'events' : 'attendance')}
             className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'qr' || activeTab === 'attendance'
+              activeTab === 'qr' || activeTab === 'attendance' || activeTab === 'events'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
             }`}
           >
-            <QrCode className="w-4 h-4 text-[#355935]" />
-            <span>{userRole === 'adviser' ? 'Student Verification' : 'Attendance'}</span>
+            {userRole === 'facilitator' ? (
+              <Trophy className="w-4 h-4 text-amber-600" />
+            ) : (
+              <QrCode className="w-4 h-4 text-[#355935]" />
+            )}
+            <span>
+              {userRole === 'adviser'
+                ? 'Student Verification'
+                : userRole === 'facilitator'
+                ? 'Manage Events'
+                : 'Attendance'}
+            </span>
           </button>
         </nav>
 
@@ -158,6 +165,17 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
                 {userRole === 'adviser' && (
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 )}
+              </button>
+              <button
+                type="button"
+                onClick={() => onRoleChange('facilitator')}
+                className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all cursor-pointer flex items-center gap-1 ${
+                  userRole === 'facilitator'
+                    ? 'bg-[#1b4332] text-white shadow-2xs'
+                    : 'text-stone-500 hover:text-[#1f381f]'
+                }`}
+              >
+                <span>FACILITATOR</span>
               </button>
             </div>
           )}
