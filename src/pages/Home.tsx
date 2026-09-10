@@ -5,7 +5,7 @@ import { SectionScheduleCard } from '../components/home/SectionScheduleCard';
 import { GameScheduleCard } from '../components/home/GameScheduleCard';
 import { MedalTallyCard } from '../components/home/MedalTallyCard';
 import { BottomNav } from '../components/BottomNav';
-import { AttendanceHub } from '../components/attendance/AttendanceHub';
+import { Attendance } from './Attendance';
 import { BackupRequest } from './BackupRequest';
 
 export function Home() {
@@ -104,7 +104,7 @@ export function Home() {
 
           {activeNav === 'backup' && <BackupRequest />}
 
-          {(activeNav === 'qr' || activeNav === 'attendance') && <AttendanceHub />}
+          {(activeNav === 'qr' || activeNav === 'attendance') && <Attendance />}
         </main>
 
         {/* 3. Bottom Navigation (Mobile Only) */}
