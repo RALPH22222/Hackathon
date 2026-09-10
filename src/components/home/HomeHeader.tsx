@@ -53,7 +53,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         </div>
       )}
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
-        {/* LEFT: Logo & College Department Information */}
+        {/* LEFT: Logo & Brand Information */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-initial md:w-1/3">
           <img
             src={ccsLogo}
@@ -61,15 +61,16 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
             className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-xs shrink-0"
           />
           <div className="truncate min-w-0">
-            <h1 className="text-xs sm:text-base font-bold text-[#1f381f] leading-tight font-display truncate">
-              College of Computing Studies
-            </h1>
+            <div className="flex items-center gap-1.5 truncate">
+              <h1 className="text-xs sm:text-base font-bold text-[#1f381f] leading-tight font-display truncate">
+                NodeShots
+              </h1>
+              <span className="px-1.5 py-0.2 rounded bg-[#1f381f] text-emerald-300 text-[9.5px] font-mono font-bold uppercase tracking-wider shrink-0">
+                Palaro 2026
+              </span>
+            </div>
             <p className="text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
-              {userRole === 'adviser'
-                ? 'Palaro 2026 • Adviser Portal'
-                : userRole === 'facilitator'
-                ? 'Palaro 2026 • Facilitator Desk'
-                : 'Palaro 2026 Attendance Tracker'}
+              College of Computing Studies • {userRole === 'adviser' ? 'Adviser Portal' : userRole === 'facilitator' ? 'Facilitator Desk' : 'Attendance App'}
             </p>
           </div>
         </div>

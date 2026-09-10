@@ -81,14 +81,14 @@ export const InstallAppBanner: React.FC = () => {
             <div className="min-w-0 space-y-0.5">
               <div className="flex items-center flex-wrap gap-1.5">
                 <h4 className="text-xs sm:text-sm font-bold text-white tracking-tight leading-tight">
-                  Install CS Portal App
+                  Install NodeShots App
                 </h4>
                 <span className="inline-flex items-center gap-1 bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[9.5px] sm:text-[10px] px-1.5 py-0.2 rounded font-mono font-medium whitespace-nowrap">
                   Offline Ready
                 </span>
               </div>
               <p className="text-[10.5px] sm:text-xs text-emerald-100/90 leading-snug line-clamp-2 sm:line-clamp-1">
-                Add to Home Screen for fast, offline access.
+                Got proof? Add NodeShots to Home Screen.
               </p>
             </div>
           </div>

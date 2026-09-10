@@ -135,7 +135,7 @@ export const CameraWatermarkModal: React.FC<CameraWatermarkModalProps> = ({
         // Header
         ctx.fillStyle = '#4ade80';
         ctx.font = 'bold 12px sans-serif';
-        ctx.fillText('OFFICIAL PALARO 2026 VERIFIED PROOF', x + 26, y + 30);
+        ctx.fillText('NODESHOTS • PALARO 2026 VERIFIED PROOF', x + 26, y + 30);
 
         // Event Title
         ctx.fillStyle = '#ffffff';

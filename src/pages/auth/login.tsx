@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, Trophy, GraduationCap, ShieldCheck, UserCheck } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, GraduationCap, ShieldCheck, UserCheck } from 'lucide-react';
 import { CyberBackground } from '../../components/auth/CyberBackground';
 import ccsLogo from '../../assets/CCS.png';
 
@@ -119,17 +119,15 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
               className="w-16 h-16 sm:w-20 sm:h-20 object-contain mx-auto drop-shadow-sm"
             />
           </div>
-
-          <div className="flex justify-center mb-1">
-            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#355935]/10 text-[#254625] text-[10px] font-mono font-bold tracking-wider border border-[#5d8c55]/30">
-              <Trophy className="w-3 h-3 text-[#5d8c55]" />
-              <span>PALARO 2026 ATTENDANCE</span>
-            </span>
-          </div>
-
-          <h1 className="text-base sm:text-lg font-bold font-display text-[#1f381f] tracking-tight leading-tight">
-            College of Computing Studies
+          <h1 className="text-xl sm:text-2xl font-black font-display text-[#1f381f] tracking-tight leading-none mb-0.5">
+            NodeShots
           </h1>
+          <p className="text-[11px] font-bold text-[#355935]">
+            "Got proof? Send NodeShots."
+          </p>
+          <p className="text-[10px] text-stone-500 font-mono mt-0.5">
+            WMSU College of Computing Studies Palaro Attendance
+          </p>
         </div>
 
         {/* ROLE SELECTION TOGGLE (Student vs Adviser vs Facilitator) */}
