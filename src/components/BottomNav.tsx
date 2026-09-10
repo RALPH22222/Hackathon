@@ -4,11 +4,13 @@ import { Home, ShieldAlert, QrCode } from 'lucide-react';
 interface BottomNavProps {
   activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
   onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
+  userRole?: 'student' | 'adviser';
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
   activeTab = 'home',
   onTabChange,
+  userRole = 'student',
 }) => {
   // Map tabs to 0, 1, 2 index for sliding calculation (qr and attendance map to 2)
   const activeIndex = activeTab === 'home' ? 0 : activeTab === 'backup' ? 1 : 2;
@@ -122,7 +124,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   isAttendanceActive ? 'text-white font-bold' : 'text-stone-500'
                 }`}
               >
-                Attendance
+                {userRole === 'adviser' ? 'Verification' : 'Attendance'}
               </span>
             </div>
           </button>
