@@ -1,10 +1,10 @@
 import React from 'react';
-import { Home, ShieldAlert, QrCode } from 'lucide-react';
+import { Home, ShieldAlert, QrCode, Trophy } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
-  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
-  userRole?: 'student' | 'adviser';
+  activeTab?: 'home' | 'backup' | 'qr' | 'attendance' | 'events';
+  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance' | 'events') => void;
+  userRole?: 'student' | 'adviser' | 'facilitator';
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
@@ -12,9 +12,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onTabChange,
   userRole = 'student',
 }) => {
-  // Map tabs to 0, 1, 2 index for sliding calculation (qr and attendance map to 2)
+  // Map tabs to 0, 1, 2 index for sliding calculation (qr, attendance, events map to 2)
   const activeIndex = activeTab === 'home' ? 0 : activeTab === 'backup' ? 1 : 2;
-  const isAttendanceActive = activeTab === 'qr' || activeTab === 'attendance';
+  const isTab3Active = activeTab === 'qr' || activeTab === 'attendance' || activeTab === 'events';
 
   return (
     <nav
@@ -103,28 +103,32 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             </div>
           </button>
 
-          {/* 3. ATTENDANCE TAB */}
+          {/* 3. ATTENDANCE / EVENTS TAB */}
           <button
             type="button"
-            onClick={() => onTabChange?.('attendance')}
+            onClick={() => onTabChange?.(userRole === 'facilitator' ? 'events' : 'attendance')}
             className="relative z-10 flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all duration-300 cursor-pointer group select-none min-w-0"
           >
             <div className="flex flex-col items-center gap-0.5 w-full min-w-0">
               <div
                 className={`p-1 rounded-lg transition-all duration-300 group-active:scale-90 ${
-                  isAttendanceActive
+                  isTab3Active
                     ? 'text-white scale-105'
                     : 'text-[#355935] group-hover:text-[#214321]'
                 }`}
               >
-                <QrCode className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                {userRole === 'facilitator' ? (
+                  <Trophy className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                ) : (
+                  <QrCode className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                )}
               </div>
               <span
                 className={`text-[10px] sm:text-[11px] tracking-tight transition-colors duration-300 whitespace-nowrap truncate max-w-full ${
-                  isAttendanceActive ? 'text-white font-bold' : 'text-stone-500 font-medium'
+                  isTab3Active ? 'text-white font-bold' : 'text-stone-500 font-medium'
                 }`}
               >
-                {userRole === 'adviser' ? 'Verification' : 'Attendance'}
+                {userRole === 'adviser' ? 'Verification' : userRole === 'facilitator' ? 'Events' : 'Attendance'}
               </span>
             </div>
           </button>

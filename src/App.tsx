@@ -5,7 +5,7 @@ import Home from './pages/Home';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'login' | 'signup' | 'home'>('login');
-  const [userRole, setUserRole] = useState<'student' | 'adviser'>('student');
+  const [userRole, setUserRole] = useState<'student' | 'adviser' | 'facilitator'>('student');
 
   if (currentPage === 'home') {
     return (

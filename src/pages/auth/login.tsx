@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, Trophy, GraduationCap, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, Trophy, GraduationCap, ShieldCheck, UserCheck } from 'lucide-react';
 import { CyberBackground } from '../../components/auth/CyberBackground';
 import ccsLogo from '../../assets/CCS.png';
 
@@ -18,13 +18,13 @@ import img10 from '../../assets/571398943_1299215352219602_3843302549433566862_n
 const backgroundSlides = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
 
 interface LoginProps {
-  initialRole?: 'student' | 'adviser';
-  onLoginSuccess?: (role: 'student' | 'adviser') => void;
+  initialRole?: 'student' | 'adviser' | 'facilitator';
+  onLoginSuccess?: (role: 'student' | 'adviser' | 'facilitator') => void;
   onNavigateToSignup?: () => void;
 }
 
 export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSignup }: LoginProps = {}) {
-  const [role, setRole] = useState<'student' | 'adviser'>(initialRole);
+  const [role, setRole] = useState<'student' | 'adviser' | 'facilitator'>(initialRole);
   const [email, setEmail] = useState('student@wmsu.edu.ph');
   const [password, setPassword] = useState('••••••••••••');
   const [showPassword, setShowPassword] = useState(false);
@@ -41,10 +41,12 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
     return () => clearInterval(timer);
   }, []);
 
-  const handleRoleSelect = (newRole: 'student' | 'adviser') => {
+  const handleRoleSelect = (newRole: 'student' | 'adviser' | 'facilitator') => {
     setRole(newRole);
     if (newRole === 'adviser') {
       setEmail('adviser@wmsu.edu.ph');
+    } else if (newRole === 'facilitator') {
+      setEmail('facilitator@wmsu.edu.ph');
     } else {
       setEmail('student@wmsu.edu.ph');
     }
@@ -58,9 +60,10 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
 
     setTimeout(() => {
       setIsLoading(false);
+      const roleName = role === 'adviser' ? 'Class Adviser' : role === 'facilitator' ? 'Event Facilitator' : 'Student';
       setStatusMessage({
         type: 'success',
-        text: `Logged in successfully as ${role === 'adviser' ? 'Class Adviser' : 'Student'}!`,
+        text: `Logged in successfully as ${roleName}!`,
       });
 
       if (onLoginSuccess) {
@@ -95,7 +98,7 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
       </div>
 
       {/* 4. LOGIN CARD - PALARO 2026 EDITION */}
-      <div className="relative z-20 w-full max-w-[370px] sm:max-w-[400px] max-h-[calc(100dvh-1.5rem)] overflow-y-auto overflow-x-hidden rounded-3xl bg-white/95 backdrop-blur-md border border-white/50 p-5 sm:p-7 shadow-2xl shadow-black/40 card-scrollbar">
+      <div className="relative z-20 w-full max-w-[390px] sm:max-w-[420px] max-h-[calc(100dvh-1.5rem)] overflow-y-auto overflow-x-hidden rounded-3xl bg-white/95 backdrop-blur-md border border-white/50 p-5 sm:p-7 shadow-2xl shadow-black/40 card-scrollbar">
         
         {/* Camera Viewfinder Layer */}
         <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden z-0">
@@ -129,36 +132,49 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
           </h1>
         </div>
 
-        {/* ROLE SELECTION TOGGLE (Student vs Adviser) */}
+        {/* ROLE SELECTION TOGGLE (Student vs Adviser vs Facilitator) */}
         <div className="relative z-10 mb-4">
           <p className="text-[10px] font-mono uppercase text-stone-500 font-semibold mb-1 text-center">
             Select User Role to Log In
           </p>
-          <div className="bg-[#edf5ec] border border-[#c5d8c3] rounded-2xl p-1 grid grid-cols-2 gap-1 shadow-inner">
+          <div className="bg-[#edf5ec] border border-[#c5d8c3] rounded-2xl p-1 grid grid-cols-3 gap-1 shadow-inner">
             <button
               type="button"
               onClick={() => handleRoleSelect('student')}
-              className={`py-2 px-2.5 rounded-xl font-mono text-[11px] font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 ${
+              className={`py-2 px-1 rounded-xl font-mono text-[10px] font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 ${
                 role === 'student'
                   ? 'bg-[#1f381f] text-white shadow-md'
                   : 'text-stone-600 hover:text-[#1f381f]'
               }`}
             >
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>STUDENT</span>
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">STUDENT</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleRoleSelect('adviser')}
-              className={`py-2 px-2.5 rounded-xl font-mono text-[11px] font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 ${
+              className={`py-2 px-1 rounded-xl font-mono text-[10px] font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 ${
                 role === 'adviser'
                   ? 'bg-[#355935] text-white shadow-md'
                   : 'text-stone-600 hover:text-[#1f381f]'
               }`}
             >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>ADVISER</span>
+              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">ADVISER</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleSelect('facilitator')}
+              className={`py-2 px-1 rounded-xl font-mono text-[10px] font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 ${
+                role === 'facilitator'
+                  ? 'bg-[#1b4332] text-white shadow-md'
+                  : 'text-stone-600 hover:text-[#1f381f]'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">FACILITATOR</span>
             </button>
           </div>
         </div>
@@ -188,17 +204,33 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
             <label className="block text-xs font-semibold text-[#254225] mb-1 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-[#5d8c55]" />
-                <span>{role === 'adviser' ? 'Faculty / Adviser Email' : 'Student ID or Email'}</span>
+                <span>
+                  {role === 'adviser'
+                    ? 'Faculty / Adviser Email'
+                    : role === 'facilitator'
+                    ? 'Facilitator Email'
+                    : 'Student ID or Email'}
+                </span>
               </span>
               <span className="text-[9.5px] font-mono text-[#5d8c55] font-normal uppercase">
-                {role === 'adviser' ? 'Adviser Portal' : 'BSCS 4-B'}
+                {role === 'adviser'
+                  ? 'Adviser Portal'
+                  : role === 'facilitator'
+                  ? 'Facilitator Desk'
+                  : 'BSCS 4-B'}
               </span>
             </label>
             <input
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder={role === 'adviser' ? 'adviser@wmsu.edu.ph' : 'student@wmsu.edu.ph'}
+              placeholder={
+                role === 'adviser'
+                  ? 'adviser@wmsu.edu.ph'
+                  : role === 'facilitator'
+                  ? 'facilitator@wmsu.edu.ph'
+                  : 'student@wmsu.edu.ph'
+              }
               className="w-full bg-white border border-[#c5d8c3] focus:border-[#355935] text-[#1a2f1a] focus:ring-2 focus:ring-[#5d8c55]/20 outline-none transition-all px-3.5 py-2.5 rounded-xl text-sm placeholder:text-stone-400 font-mono shadow-sm"
             />
           </div>
@@ -260,11 +292,15 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Logging in as {role === 'adviser' ? 'Adviser' : 'Student'}...</span>
+                <span>
+                  Logging in as {role === 'adviser' ? 'Adviser' : role === 'facilitator' ? 'Facilitator' : 'Student'}...
+                </span>
               </div>
             ) : (
               <>
-                <span>Login as {role === 'adviser' ? 'Class Adviser' : 'Student'}</span>
+                <span>
+                  Login as {role === 'adviser' ? 'Class Adviser' : role === 'facilitator' ? 'Event Facilitator' : 'Student'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

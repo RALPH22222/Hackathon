@@ -6,17 +6,18 @@ import { MedalTallyCard } from '../components/home/MedalTallyCard';
 import { BottomNav } from '../components/BottomNav';
 import { Attendance } from './Attendance';
 import { AdviserAttendance } from './AdviserAttendance';
+import { FacilitatorEventManagement } from './FacilitatorEventManagement';
 import { BackupRequest } from './BackupRequest';
 import { InstallAppBanner } from '../components/common/InstallAppBanner';
 
 interface HomeProps {
-  userRole?: 'student' | 'adviser';
+  userRole?: 'student' | 'adviser' | 'facilitator';
   onLogout?: () => void;
 }
 
 export function Home({ userRole: initialRole = 'student', onLogout }: HomeProps = {}) {
-  const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance'>('home');
-  const [userRole, setUserRole] = useState<'student' | 'adviser'>(initialRole);
+  const [activeNav, setActiveNav] = useState<'home' | 'backup' | 'qr' | 'attendance' | 'events'>('home');
+  const [userRole, setUserRole] = useState<'student' | 'adviser' | 'facilitator'>(initialRole);
 
   useEffect(() => {
     setUserRole(initialRole);
@@ -54,7 +55,7 @@ export function Home({ userRole: initialRole = 'student', onLogout }: HomeProps 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <SectionScheduleCard
                   userRole={userRole}
-                  onNavigateToAttendance={() => setActiveNav('attendance')}
+                  onNavigateToAttendance={() => setActiveNav(userRole === 'facilitator' ? 'events' : 'attendance')}
                 />
                 <GameScheduleCard />
               </div>
@@ -66,8 +67,14 @@ export function Home({ userRole: initialRole = 'student', onLogout }: HomeProps 
 
           {activeNav === 'backup' && <BackupRequest />}
 
-          {(activeNav === 'qr' || activeNav === 'attendance') &&
-            (userRole === 'adviser' ? <AdviserAttendance /> : <Attendance />)}
+          {(activeNav === 'qr' || activeNav === 'attendance' || activeNav === 'events') &&
+            (userRole === 'facilitator' ? (
+              <FacilitatorEventManagement />
+            ) : userRole === 'adviser' ? (
+              <AdviserAttendance />
+            ) : (
+              <Attendance />
+            ))}
         </main>
 
         {/* 3. Bottom Navigation (Mobile Only) */}

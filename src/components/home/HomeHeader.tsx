@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ccsLogo from '../../assets/CCS.png';
-import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Download, LogOut } from 'lucide-react';
+import { Wifi, WifiOff, Home, ShieldAlert, QrCode, Trophy, Download, LogOut } from 'lucide-react';
 import { useAppInstall } from '../../hooks/useAppInstall';
 import { initOfflineSyncManager } from '../../utils/offlineStorage';
 
 interface HomeHeaderProps {
-  activeTab?: 'home' | 'backup' | 'qr' | 'attendance';
-  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance') => void;
-  userRole?: 'student' | 'adviser';
-  onRoleChange?: (role: 'student' | 'adviser') => void;
+  activeTab?: 'home' | 'backup' | 'qr' | 'attendance' | 'events';
+  onTabChange?: (tab: 'home' | 'backup' | 'qr' | 'attendance' | 'events') => void;
+  userRole?: 'student' | 'adviser' | 'facilitator';
+  onRoleChange?: (role: 'student' | 'adviser' | 'facilitator') => void;
   onLogout?: () => void;
 }
 
@@ -65,7 +65,11 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
               College of Computing Studies
             </h1>
             <p className="text-[10px] sm:text-xs font-semibold text-[#3d6e35] truncate">
-              {userRole === 'adviser' ? 'Palaro 2026 • Adviser Portal' : 'Palaro 2026 Attendance Tracker'}
+              {userRole === 'adviser'
+                ? 'Palaro 2026 • Adviser Portal'
+                : userRole === 'facilitator'
+                ? 'Palaro 2026 • Facilitator Desk'
+                : 'Palaro 2026 Attendance Tracker'}
             </p>
           </div>
         </div>
@@ -100,15 +104,25 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
           <button
             type="button"
-            onClick={() => onTabChange?.('attendance')}
+            onClick={() => onTabChange?.(userRole === 'facilitator' ? 'events' : 'attendance')}
             className={`flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-[11px] lg:text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'qr' || activeTab === 'attendance'
+              activeTab === 'qr' || activeTab === 'attendance' || activeTab === 'events'
                 ? 'text-[#1f381f] font-bold border-b-2 border-[#355935] rounded-b-none'
                 : 'text-stone-600 hover:text-[#1f381f] hover:bg-[#edf5ec]/60'
             }`}
           >
-            <QrCode className="w-4 h-4 text-[#355935]" />
-            <span>{userRole === 'adviser' ? 'Student Verification' : 'Attendance'}</span>
+            {userRole === 'facilitator' ? (
+              <Trophy className="w-4 h-4 text-amber-600" />
+            ) : (
+              <QrCode className="w-4 h-4 text-[#355935]" />
+            )}
+            <span>
+              {userRole === 'adviser'
+                ? 'Student Verification'
+                : userRole === 'facilitator'
+                ? 'Manage Events'
+                : 'Attendance'}
+            </span>
           </button>
         </nav>
 
@@ -152,6 +166,17 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
                 {userRole === 'adviser' && (
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 )}
+              </button>
+              <button
+                type="button"
+                onClick={() => onRoleChange('facilitator')}
+                className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all cursor-pointer flex items-center gap-1 ${
+                  userRole === 'facilitator'
+                    ? 'bg-[#1b4332] text-white shadow-2xs'
+                    : 'text-stone-500 hover:text-[#1f381f]'
+                }`}
+              >
+                <span>FACILITATOR</span>
               </button>
             </div>
           )}
