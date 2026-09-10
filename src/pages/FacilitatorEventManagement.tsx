@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
 import { 
   Trophy, 
   MapPin, 
@@ -10,7 +11,18 @@ import {
   Megaphone,
   X,
   Users,
-  Award
+  Award,
+  QrCode,
+  Power,
+  Copy,
+  RotateCw,
+  Eye,
+  EyeOff,
+  ShieldAlert,
+  Smartphone,
+  Sparkles,
+  Radio,
+  Check
 } from 'lucide-react';
 
 export interface FacilitatorEvent {
@@ -30,6 +42,8 @@ export interface FacilitatorEvent {
     mvp?: string;
     announcedAt?: string;
   };
+  secretCode: string;
+  isScanDisabled: boolean;
 }
 
 const INITIAL_EVENTS: FacilitatorEvent[] = [
@@ -43,6 +57,8 @@ const INITIAL_EVENTS: FacilitatorEvent[] = [
     isVenueChanged: false,
     time: '10:00 AM Today',
     status: 'In Progress',
+    secretCode: 'BSK-9482',
+    isScanDisabled: false,
   },
   {
     id: 'evt-2',
@@ -55,6 +71,8 @@ const INITIAL_EVENTS: FacilitatorEvent[] = [
     venueChangeReason: 'Moved to Court B due to rain on Field A',
     time: '01:30 PM Today',
     status: 'Upcoming',
+    secretCode: 'VOL-3105',
+    isScanDisabled: false,
   },
   {
     id: 'evt-3',
@@ -66,6 +84,8 @@ const INITIAL_EVENTS: FacilitatorEvent[] = [
     isVenueChanged: false,
     time: '03:45 PM Today',
     status: 'Upcoming',
+    secretCode: 'MLB-7294',
+    isScanDisabled: false,
   },
   {
     id: 'evt-4',
@@ -83,6 +103,8 @@ const INITIAL_EVENTS: FacilitatorEvent[] = [
       mvp: 'A. Ramos (BSIT 4-B)',
       announcedAt: '09:45 AM',
     },
+    secretCode: 'TAK-1084',
+    isScanDisabled: false,
   },
   {
     id: 'evt-5',
@@ -100,6 +122,8 @@ const INITIAL_EVENTS: FacilitatorEvent[] = [
       mvp: 'M. Reyes (BSEMC 2-A)',
       announcedAt: 'Yesterday 04:15 PM',
     },
+    secretCode: 'TTN-5521',
+    isScanDisabled: false,
   },
 ];
 
@@ -119,10 +143,18 @@ export function FacilitatorEventManagement() {
   const [filterTab, setFilterTab] = useState<'all' | 'live' | 'upcoming' | 'completed'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Global Scan Switch across all events handled by facilitator
+  const [globalScanEnabled, setGlobalScanEnabled] = useState(true);
+
   // Active editing modal state
   const [editingSectionEvent, setEditingSectionEvent] = useState<FacilitatorEvent | null>(null);
   const [editingVenueEvent, setEditingVenueEvent] = useState<FacilitatorEvent | null>(null);
   const [announcingResultEvent, setAnnouncingResultEvent] = useState<FacilitatorEvent | null>(null);
+
+  // QR Code & Secret Code Modal state
+  const [selectedQrEvent, setSelectedQrEvent] = useState<FacilitatorEvent | null>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string>('');
+  const [copiedCode, setCopiedCode] = useState(false);
 
   // Form states for modals
   const [selectedSection, setSelectedSection] = useState('');
@@ -142,6 +174,94 @@ export function FacilitatorEventManagement() {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  // Generate QR Code data URL when selectedQrEvent changes
+  useEffect(() => {
+    if (selectedQrEvent) {
+      const payload = `PALARO2026:ATTENDANCE:${selectedQrEvent.id}:${selectedQrEvent.sport}:${selectedQrEvent.secretCode}`;
+      QRCode.toDataURL(payload, {
+        width: 320,
+        margin: 2,
+        color: {
+          dark: '#142614',
+          light: '#ffffff',
+        },
+      })
+        .then((url) => setQrDataUrl(url))
+        .catch((err) => {
+          console.error('Failed to generate QR code:', err);
+          setQrDataUrl('');
+        });
+    } else {
+      setQrDataUrl('');
+    }
+  }, [selectedQrEvent]);
+
+  // Keep selectedQrEvent in sync with events state updates
+  useEffect(() => {
+    if (selectedQrEvent) {
+      const updated = events.find((e) => e.id === selectedQrEvent.id);
+      if (updated) {
+        setSelectedQrEvent(updated);
+      }
+    }
+  }, [events]);
+
+  // Toggle QR Scan option for a specific event
+  const handleToggleEventScan = (eventId: string) => {
+    setEvents((prev) =>
+      prev.map((e) => {
+        if (e.id === eventId) {
+          const nextDisabled = !e.isScanDisabled;
+          showToast(
+            nextDisabled
+              ? `QR Scanning TURNED OFF for ${e.sport}. Facilitator set to Busy Mode.`
+              : `QR Scanning ENABLED for ${e.sport}. Students can scan now!`
+          );
+          return { ...e, isScanDisabled: nextDisabled };
+        }
+        return e;
+      })
+    );
+  };
+
+  // Toggle Global Scan switch for facilitator account
+  const handleToggleGlobalScan = () => {
+    const nextState = !globalScanEnabled;
+    setGlobalScanEnabled(nextState);
+    setEvents((prev) =>
+      prev.map((e) => ({
+        ...e,
+        isScanDisabled: !nextState,
+      }))
+    );
+    showToast(
+      nextState
+        ? 'GLOBAL SCANNERS ENABLED: All sports QR scanners are active.'
+        : 'GLOBAL BUSY MODE ACTIVATED: All sport QR scanners paused!'
+    );
+  };
+
+  // Regenerate secret attendance code
+  const handleRegenerateCode = (eventId: string) => {
+    const prefix = events.find((e) => e.id === eventId)?.sport.substring(0, 3).toUpperCase() || 'PAL';
+    const randNum = Math.floor(1000 + Math.random() * 9000);
+    const newCode = `${prefix}-${randNum}`;
+
+    setEvents((prev) =>
+      prev.map((e) => (e.id === eventId ? { ...e, secretCode: newCode } : e))
+    );
+
+    showToast(`New Secret Passcode generated: ${newCode}`);
+  };
+
+  // Copy secret code to clipboard
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(true);
+    showToast(`Passcode "${code}" copied to clipboard!`);
+    setTimeout(() => setCopiedCode(false), 2000);
+  };
+
   // Filter events based on tab & search query
   const filteredEvents = events.filter((evt) => {
     const matchesFilter =
@@ -158,7 +278,8 @@ export function FacilitatorEventManagement() {
       evt.sport.toLowerCase().includes(q) ||
       evt.opponent.toLowerCase().includes(q) ||
       evt.venue.toLowerCase().includes(q) ||
-      evt.assignedSection.toLowerCase().includes(q);
+      evt.assignedSection.toLowerCase().includes(q) ||
+      evt.secretCode.toLowerCase().includes(q);
 
     return matchesFilter && matchesSearch;
   });
@@ -233,8 +354,8 @@ export function FacilitatorEventManagement() {
     <div className="space-y-4 sm:space-y-6">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 max-w-md w-full px-4 animate-bounce">
-          <div className="bg-[#1f381f] text-white px-4 py-3 rounded-2xl shadow-xl border border-emerald-400/40 flex items-center gap-3 text-xs sm:text-sm font-mono font-semibold">
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 max-w-md w-full px-4 animate-bounce pointer-events-none">
+          <div className="bg-[#1f381f] text-white px-4 py-3 rounded-2xl shadow-2xl border border-emerald-400/40 flex items-center gap-3 text-xs sm:text-sm font-mono font-semibold">
             <Megaphone className="w-5 h-5 text-emerald-400 shrink-0" />
             <span className="flex-1">{toastMessage}</span>
           </div>
@@ -246,7 +367,7 @@ export function FacilitatorEventManagement() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 text-[10px] sm:text-xs font-mono font-bold tracking-wider border border-emerald-400/30 flex items-center gap-1.5">
                 <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>FACILITATOR OPERATIONS</span>
@@ -257,25 +378,46 @@ export function FacilitatorEventManagement() {
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-black font-display tracking-tight text-white">
-              Event & Venue Control Desk
+              Event & QR Attendance Control Desk
             </h1>
             <p className="text-emerald-100/80 text-xs sm:text-sm mt-1 max-w-xl font-sans">
-              Assign class section attendance, manage sudden venue changes, and broadcast official win/loss match scores for Palaro 2026.
+              Display live sport QR codes, manage secret passcodes, toggle scanning mode when busy, and update match results.
             </p>
           </div>
 
-          {/* Quick Counter Badges */}
-          <div className="flex items-center gap-2 sm:gap-3 bg-black/25 backdrop-blur-md border border-white/10 p-2.5 rounded-2xl shrink-0 self-start md:self-auto">
-            <div className="px-3 py-1.5 text-center">
-              <p className="text-[10px] font-mono uppercase text-emerald-200/70">Total Events</p>
-              <p className="text-lg font-black font-mono text-white">{events.length}</p>
+          {/* Facilitator Global Scan Status & Controls Pill Container - Strictly One Line Only */}
+          <div className="flex items-center gap-2 sm:gap-3 bg-black/30 backdrop-blur-md border border-white/15 p-2.5 sm:p-3 rounded-2xl shrink-0 self-start md:self-auto flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-none max-w-full">
+            {/* Global Scan Switch */}
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleToggleGlobalScan}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer shadow-xs border whitespace-nowrap ${
+                  globalScanEnabled
+                    ? 'bg-emerald-600/90 hover:bg-emerald-600 text-white border-emerald-400/50'
+                    : 'bg-amber-600/90 hover:bg-amber-600 text-white border-amber-400/50'
+                }`}
+                title="Toggle QR scanning on/off for all your handled sports"
+              >
+                <Power className={`w-3.5 h-3.5 ${globalScanEnabled ? 'text-emerald-200' : 'text-amber-200'}`} />
+                <span>{globalScanEnabled ? 'QR SCANS: ACTIVE' : 'BUSY MODE: SCANS PAUSED'}</span>
+              </button>
             </div>
-            <div className="w-px h-8 bg-white/15" />
-            <div className="px-3 py-1.5 text-center">
-              <p className="text-[10px] font-mono uppercase text-amber-300">Live Games</p>
-              <p className="text-lg font-black font-mono text-amber-300">
-                {events.filter((e) => e.status === 'In Progress').length}
-              </p>
+
+            <div className="w-px h-7 bg-white/15 shrink-0" />
+
+            {/* Quick Counter Badges */}
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="px-2 py-0.5 text-center">
+                <p className="text-[9px] font-mono uppercase text-emerald-200/70 leading-none">Total</p>
+                <p className="text-sm sm:text-base font-black font-mono text-white leading-tight">{events.length}</p>
+              </div>
+              <div className="px-2 py-0.5 text-center">
+                <p className="text-[9px] font-mono uppercase text-amber-300 leading-none">Live</p>
+                <p className="text-sm sm:text-base font-black font-mono text-amber-300 leading-tight">
+                  {events.filter((e) => e.status === 'In Progress').length}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -339,14 +481,14 @@ export function FacilitatorEventManagement() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search sport, venue, section..."
+            placeholder="Search sport, code, venue..."
             className="w-full bg-[#f8faf8] border border-[#c5d8c3] focus:border-[#355935] focus:bg-white text-xs font-mono px-3 py-2 pl-9 rounded-xl outline-none transition-all placeholder:text-stone-400"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -366,6 +508,7 @@ export function FacilitatorEventManagement() {
           filteredEvents.map((evt) => {
             const isLive = evt.status === 'In Progress';
             const isCompleted = evt.status === 'Completed';
+            const isScanOff = evt.isScanDisabled || !globalScanEnabled;
 
             return (
               <div
@@ -407,7 +550,7 @@ export function FacilitatorEventManagement() {
                     </div>
 
                     {/* Status Badge */}
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex flex-col items-end gap-1">
                       {isLive ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[10px] font-mono font-bold animate-pulse">
                           <span className="w-2 h-2 rounded-full bg-amber-500" />
@@ -420,8 +563,21 @@ export function FacilitatorEventManagement() {
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#edf5ec] border border-[#c5d8c3] text-[#355935] text-[10px] font-mono font-bold">
-                          <Clock className="w-3 h-3" />
+                          <Clock className="w-3.5 h-3.5" />
                           <span>{evt.time}</span>
+                        </span>
+                      )}
+
+                      {/* Scanner Status Badge on Card */}
+                      {isScanOff ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-800 text-[9px] font-mono font-bold">
+                          <ShieldAlert className="w-3 h-3 text-amber-600" />
+                          <span>SCANS PAUSED (BUSY)</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 text-[9px] font-mono font-bold">
+                          <Radio className="w-3 h-3 text-emerald-600 animate-pulse" />
+                          <span>SCANNER OPEN</span>
                         </span>
                       )}
                     </div>
@@ -454,6 +610,47 @@ export function FacilitatorEventManagement() {
                       <p className="font-bold text-[#1f381f] truncate mt-0.5">
                         {evt.assignedSection || 'None assigned'}
                       </p>
+                    </div>
+                  </div>
+
+                  {/* Dedicated Facilitator Attendance Bar for this Sport - Strictly One Line */}
+                  <div className="mt-3 bg-[#edf5ec]/80 border border-[#c5d8c3] rounded-xl p-2.5 sm:p-3 flex items-center justify-between gap-2 flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-none">
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="p-1.5 sm:p-2 rounded-lg bg-[#355935] text-emerald-300 shrink-0">
+                        <QrCode className="w-4 h-4" />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-mono font-bold uppercase text-stone-500 hidden xs:inline">Passcode:</span>
+                        <span className="text-xs font-mono font-black text-[#1f381f] bg-white px-2 py-0.5 rounded border border-[#c5d8c3] tracking-wider shrink-0">
+                          {evt.secretCode}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {/* View QR Code Modal Button */}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedQrEvent(evt)}
+                        className="px-2.5 py-1.5 rounded-lg bg-[#1f381f] hover:bg-[#142614] text-white text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-xs whitespace-nowrap"
+                      >
+                        <QrCode className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>QR & Passcode Kiosk</span>
+                      </button>
+
+                      {/* Quick Toggle Scan Switch */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleEventScan(evt.id)}
+                        className={`p-1.5 rounded-lg transition-all cursor-pointer border shrink-0 ${
+                          isScanOff
+                            ? 'bg-amber-100 text-amber-900 border-amber-300 hover:bg-amber-200'
+                            : 'bg-emerald-100 text-emerald-900 border-emerald-300 hover:bg-emerald-200'
+                        }`}
+                        title={isScanOff ? 'Scanning Disabled (Facilitator Busy) - Click to Enable' : 'Scanning Enabled - Click to Disable (Busy Mode)'}
+                      >
+                        {isScanOff ? <EyeOff className="w-4 h-4 text-amber-700" /> : <Eye className="w-4 h-4 text-emerald-700" />}
+                      </button>
                     </div>
                   </div>
 
@@ -540,6 +737,161 @@ export function FacilitatorEventManagement() {
         )}
       </div>
 
+      {/* ================= MODAL: LIVE ATTENDANCE QR & SECRET CODE KIOSK ================= */}
+      {selectedQrEvent && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-[#142614] text-white rounded-2xl sm:rounded-3xl border border-emerald-500/30 max-w-md sm:max-w-lg w-full p-4 sm:p-6 shadow-2xl space-y-3 sm:space-y-4 relative overflow-hidden my-auto max-h-[92vh] flex flex-col justify-between">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="overflow-y-auto pr-1 space-y-3 sm:space-y-4 scrollbar-none">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-emerald-500/20 pb-2.5 relative z-10">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                  <div className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
+                    <QrCode className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase text-emerald-400 bg-emerald-900/50 px-1.5 sm:px-2 py-0.5 rounded border border-emerald-500/30">
+                        ATTENDANCE KIOSK
+                      </span>
+                      {selectedQrEvent.status === 'In Progress' && (
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping shrink-0" />
+                      )}
+                    </div>
+                    <h3 className="text-base sm:text-lg font-black font-display text-white mt-0.5 truncate">{selectedQrEvent.sport}</h3>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedQrEvent(null)}
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 transition-all cursor-pointer shrink-0 ml-2"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Live Scan Mode Status Banner */}
+              <div
+                className={`p-3 rounded-xl sm:rounded-2xl border text-xs font-mono font-bold flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 ${
+                  selectedQrEvent.isScanDisabled || !globalScanEnabled
+                    ? 'bg-amber-950/80 text-amber-200 border-amber-500/40'
+                    : 'bg-emerald-950/80 text-emerald-200 border-emerald-500/40'
+                }`}
+              >
+                <div className="flex items-start sm:items-center gap-2 min-w-0">
+                  {selectedQrEvent.isScanDisabled || !globalScanEnabled ? (
+                    <ShieldAlert className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
+                  ) : (
+                    <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 shrink-0 animate-pulse mt-0.5 sm:mt-0" />
+                  )}
+                  <div className="min-w-0">
+                    <p className="font-bold text-[11px] sm:text-xs leading-tight">
+                      {selectedQrEvent.isScanDisabled || !globalScanEnabled
+                        ? 'SCANNING PAUSED (FACILITATOR BUSY MODE)'
+                        : 'QR SCANNER ACTIVE & READY'}
+                    </p>
+                    <p className="text-[10px] sm:text-[10.5px] opacity-80 font-sans font-normal mt-0.5 leading-snug">
+                      {selectedQrEvent.isScanDisabled || !globalScanEnabled
+                        ? 'Facilitator scanning option is turned off. Students must use Secret Passcode.'
+                        : 'Students can scan this QR code directly with their mobile camera.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Facilitator Busy Toggle Switch */}
+                <button
+                  type="button"
+                  onClick={() => handleToggleEventScan(selectedQrEvent.id)}
+                  className={`px-2.5 py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-mono font-bold shrink-0 transition-all cursor-pointer border self-end sm:self-auto ${
+                    selectedQrEvent.isScanDisabled || !globalScanEnabled
+                      ? 'bg-amber-500 hover:bg-amber-600 text-stone-950 border-amber-400'
+                      : 'bg-rose-600 hover:bg-rose-700 text-white border-rose-400'
+                  }`}
+                >
+                  {selectedQrEvent.isScanDisabled || !globalScanEnabled ? 'Enable Scanning' : 'Turn Off Scanning'}
+                </button>
+              </div>
+
+              {/* QR Code Graphic Display Card */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl text-center space-y-2 sm:space-y-3 shadow-xl border-3 sm:border-4 border-emerald-500/20 relative">
+                <div className="w-44 sm:w-56 max-w-full mx-auto bg-white p-1.5 rounded-xl sm:rounded-2xl border border-stone-200 shadow-inner">
+                  {qrDataUrl ? (
+                    <img src={qrDataUrl} alt="Event QR Code" className="w-full h-auto rounded-lg sm:rounded-xl mx-auto" />
+                  ) : (
+                    <div className="w-40 h-40 sm:w-52 sm:h-52 bg-stone-100 flex items-center justify-center rounded-xl text-stone-400 text-xs font-mono">
+                      Generating QR Code...
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-0.5">
+                  <span className="text-[10px] sm:text-[11px] font-mono text-stone-600 font-semibold uppercase tracking-wider block truncate">
+                    Venue: {selectedQrEvent.venue}
+                  </span>
+                  <p className="text-[11px] sm:text-xs text-stone-600 font-sans truncate">
+                    Assigned Section: <strong className="text-stone-900 font-mono">{selectedQrEvent.assignedSection || 'All Students'}</strong>
+                  </p>
+                </div>
+              </div>
+
+              {/* Secret Passcode Manual Entry Card */}
+              <div className="bg-[#1f381f] border border-emerald-500/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-mono font-bold text-emerald-300">
+                    <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
+                    <span>SECRET ATTENDANCE PASSCODE</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRegenerateCode(selectedQrEvent.id)}
+                    className="text-[10px] sm:text-[11px] font-mono text-emerald-400 hover:text-emerald-300 hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <RotateCw className="w-3 h-3" />
+                    <span>Regenerate</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between bg-black/40 border border-emerald-500/40 rounded-xl p-2.5 sm:p-3 gap-2">
+                  <span className="text-xl sm:text-2xl font-black font-mono tracking-wider sm:tracking-widest text-emerald-300 select-all truncate">
+                    {selectedQrEvent.secretCode}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCopyCode(selectedQrEvent.secretCode)}
+                    className="px-2.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-stone-950 font-mono font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer shrink-0"
+                  >
+                    {copiedCode ? <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                    <span>{copiedCode ? 'Copied!' : 'Copy Code'}</span>
+                  </button>
+                </div>
+
+                <p className="text-[10px] sm:text-[11px] text-emerald-100/70 font-sans leading-tight">
+                  Provide passcode to students for manual entry when mobile QR scanning is turned off.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between pt-2 border-t border-emerald-500/20 shrink-0">
+              <span className="text-[10px] sm:text-[11px] font-mono text-stone-400 flex items-center gap-1 truncate">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span className="truncate">Palaro 2026 Live Facilitator Kiosk</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedQrEvent(null)}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[11px] sm:text-xs font-mono font-bold bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer shrink-0 ml-2"
+              >
+                Close Kiosk
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================= MODAL 1: ASSIGN SECTION ================= */}
       {editingSectionEvent && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
@@ -557,7 +909,7 @@ export function FacilitatorEventManagement() {
               <button
                 type="button"
                 onClick={() => setEditingSectionEvent(null)}
-                className="p-1 rounded-full text-stone-400 hover:text-stone-700"
+                className="p-1 rounded-full text-stone-400 hover:text-stone-700 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -622,7 +974,7 @@ export function FacilitatorEventManagement() {
               <button
                 type="button"
                 onClick={() => setEditingVenueEvent(null)}
-                className="p-1 rounded-full text-stone-400 hover:text-stone-700"
+                className="p-1 rounded-full text-stone-400 hover:text-stone-700 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -695,7 +1047,7 @@ export function FacilitatorEventManagement() {
               <button
                 type="button"
                 onClick={() => setAnnouncingResultEvent(null)}
-                className="p-1 rounded-full text-stone-400 hover:text-stone-700"
+                className="p-1 rounded-full text-stone-400 hover:text-stone-700 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
