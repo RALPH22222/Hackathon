@@ -120,13 +120,25 @@ export function MatchupTeams({
   opponent,
   className = '',
   fullTeamNames = false,
+  opponentOnly = false,
 }: {
   opponent: string;
   className?: string;
   fullTeamNames?: boolean;
+  opponentOnly?: boolean;
 }) {
   const opponentCode = getCollegeCode(opponent);
   const opponentName = teamNames[opponentCode] ?? opponent;
+
+  // Compact mode: just the opponent logo + code, used inline next to "CCS vs"
+  if (opponentOnly) {
+    return (
+      <span className={`inline-flex shrink-0 items-center gap-1 ${className}`}>
+        <CollegeLogo college={opponent} className="h-4 w-4" />
+        <span className="font-semibold text-stone-600">{opponentCode}</span>
+      </span>
+    );
+  }
 
   return (
     <div className={`inline-flex min-w-0 max-w-full items-center gap-1.5 ${fullTeamNames ? 'flex-nowrap whitespace-nowrap' : 'flex-wrap'} ${className}`}>

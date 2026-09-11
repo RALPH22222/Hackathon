@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import nodeshotsLogo from '../../assets/nodeshots.png';
 import { useAppInstall } from '../../hooks/useAppInstall';
 import { Download, X, Share, PlusSquare, Smartphone, CheckCircle2} from 'lucide-react';
 
@@ -46,12 +45,8 @@ export const InstallAppBanner: React.FC = () => {
         <div className="flex items-center justify-between gap-2.5 sm:gap-4">
           {/* Left Icon & Text Details */}
           <div className="flex items-start sm:items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#254625] flex items-center justify-center shrink-0 border border-emerald-500/30 shadow-inner mt-0.5 sm:mt-0 overflow-hidden">
-              <img
-                src={nodeshotsLogo}
-                alt="NodeShots App Logo"
-                className="w-full h-full object-cover"
-              />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl shrink-0 mt-0.5 sm:mt-0 flex items-center justify-center bg-emerald-950 border border-emerald-500/30">
+              <span className="text-emerald-400 font-bold text-base sm:text-lg select-none tracking-tight font-sans">N</span>
             </div>
 
             <div className="min-w-0 space-y-0.5">

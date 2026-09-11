@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, CheckCircle2, ChevronLeft, ChevronRight, X, MapPin, Users, UserRound, ShieldCheck, Award } from 'lucide-react';
-import { MatchupTeams, SportIcon, SportName } from './MatchupVisuals';
+import { MatchupTeams, SportIcon, SportName, CollegeLogo } from './MatchupVisuals';
 
 interface GameItem {
  id: string;
@@ -193,26 +193,68 @@ export const GameScheduleCard: React.FC = () => {
        <SportIcon sport={item.sport} className="h-5 w-5" />
       </div>
 
-      {/* Middle: sport + matchup */}
+      {/* Middle: sport + matchup + time (mobile) */}
       <div className="flex-1 min-w-0">
+       {/* Line 1: Sport name */}
        <p className="text-[12px] sm:text-[13px] font-bold text-[#1a2f1a] font-display truncate leading-snug">
         <SportName sport={item.sport} />
        </p>
-       <p className="text-[11px] text-stone-500 font-mono truncate mt-0.5">
-        <MatchupTeams opponent={item.opponent} />
-       </p>
+       {/* Line 2: Teams inline — no wrap */}
+       <div className="flex items-center gap-1 mt-0.5 text-[11px] text-stone-500 font-mono flex-nowrap min-w-0">
+        <span className="inline-flex shrink-0 items-center gap-1">
+         <CollegeLogo college="CCS" className="h-4 w-4" />
+         <span className="font-semibold text-[#355935]">CCS</span>
+        </span>
+        <span className="text-stone-400 shrink-0">vs</span>
+        <MatchupTeams opponent={item.opponent} opponentOnly />
+       </div>
+       {/* Line 3: Time / score — mobile only */}
+       <div className="mt-1.5 sm:hidden">
+        {activeTab === 'upcoming' ? (
+         <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#c5d8c3] text-[#1f381f] font-semibold text-[10px] shadow-2xs whitespace-nowrap font-mono">
+          <Clock className="w-3 h-3 text-[#355935] shrink-0" />
+          <span>{item.timeOrScore}</span>
+         </div>
+        ) : (
+         <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#c5d8c3] font-semibold text-[10px] shadow-2xs whitespace-nowrap font-mono">
+          <CheckCircle2
+           className={`w-3 h-3 shrink-0 ${
+            item.isWin ? 'text-emerald-600' : 'text-rose-600'
+           }`}
+          />
+          <span className={item.isWin ? 'text-emerald-800' : 'text-rose-800'}>
+           {item.timeOrScore}
+          </span>
+          <span
+           className={`ml-0.5 text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-full ${
+            item.isWin
+             ? 'bg-emerald-100 text-emerald-800'
+             : 'bg-rose-100 text-rose-700'
+           }`}
+          >
+           {item.isWin ? 'WIN' : 'LOSS'}
+          </span>
+         </div>
+        )}
+        {activeTab === 'results' && item.credit && (
+         <p className="inline-flex items-center gap-1 ml-1.5 rounded-md border border-[#b8d1b3] bg-[#e5f0e3] px-1.5 py-0.5 text-[8.6px] text-[#355935] whitespace-nowrap font-mono">
+          <Award className="h-3 w-3 shrink-0" />
+          Credits: {item.credit}
+         </p>
+        )}
+       </div>
       </div>
 
-      {/* Right: time/score + chevron */}
+      {/* Right: time/score (desktop only) + chevron */}
       <div className="shrink-0 flex items-center gap-1.5 font-mono">
-       <div className="flex flex-col items-end gap-1 text-right">
+       <div className="hidden sm:flex flex-col items-end gap-1 text-right">
         {activeTab === 'upcoming' ? (
-         <div className="inline-flex items-center gap-1 px-2 py-1 sm:gap-1.5 sm:px-2.5 rounded-lg bg-white border border-[#c5d8c3] text-[#1f381f] font-semibold text-[10px] sm:text-xs shadow-2xs whitespace-nowrap">
+         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#c5d8c3] text-[#1f381f] font-semibold text-xs shadow-2xs whitespace-nowrap">
           <Clock className="w-3.5 h-3.5 text-[#355935] shrink-0" />
           <span>{item.timeOrScore}</span>
          </div>
         ) : (
-         <div className="inline-flex items-center gap-1 px-2 py-1 sm:gap-1.5 sm:px-2.5 rounded-lg bg-white border border-[#c5d8c3] font-semibold text-[10px] sm:text-xs shadow-2xs whitespace-nowrap">
+         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#c5d8c3] font-semibold text-xs shadow-2xs whitespace-nowrap">
           <CheckCircle2
            className={`w-3.5 h-3.5 shrink-0 ${
             item.isWin ? 'text-emerald-600' : 'text-rose-600'
