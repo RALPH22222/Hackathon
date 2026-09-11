@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Clock, CheckCircle2, ChevronLeft, ChevronRight, X, MapPin, Users, UserRound, ShieldCheck, Award } from 'lucide-react';
+import { Clock, CheckCircle2, ChevronLeft, ChevronRight, MapPin, Users, UserRound, ShieldCheck, Award } from 'lucide-react';
 import { MatchupTeams, SportIcon, SportName, CollegeLogo } from './MatchupVisuals';
+import ccsLogo from '../../assets/ccs-whitie.png';
 
 interface GameItem {
  id: string;
@@ -203,7 +204,8 @@ export const GameScheduleCard: React.FC = () => {
        <div className="flex items-center gap-1 mt-0.5 text-[11px] text-stone-500 font-mono flex-nowrap min-w-0">
         <span className="inline-flex shrink-0 items-center gap-1">
          <CollegeLogo college="CCS" className="h-4 w-4" />
-         <span className="font-semibold text-[#355935]">CCS</span>
+         <span className="font-semibold text-[#355935] md:hidden">CCS</span>
+         <span className="font-semibold text-[#355935] hidden md:inline">CCS Pixels</span>
         </span>
         <span className="text-stone-400 shrink-0">vs</span>
         <MatchupTeams opponent={item.opponent} opponentOnly />
@@ -239,7 +241,7 @@ export const GameScheduleCard: React.FC = () => {
         {activeTab === 'results' && item.credit && (
          <p className="inline-flex items-center gap-1 ml-1.5 rounded-md border border-[#b8d1b3] bg-[#e5f0e3] px-1.5 py-0.5 text-[8.6px] text-[#355935] whitespace-nowrap font-mono">
           <Award className="h-3 w-3 shrink-0" />
-          Credits: {item.credit}
+          Match Reporter: {item.credit}
          </p>
         )}
        </div>
@@ -277,7 +279,7 @@ export const GameScheduleCard: React.FC = () => {
         {activeTab === 'results' && item.credit && (
          <p className="inline-flex self-end translate-y-1 items-center gap-1 rounded-md border border-[#b8d1b3] bg-[#e5f0e3] px-1.5 py-0.5 text-[8.6px] text-[#355935] whitespace-nowrap">
           <Award className="h-3 w-3 shrink-0" />
-          Credits: {item.credit}
+          Match Reporter: {item.credit}
          </p>
         )}
        </div>
@@ -311,23 +313,29 @@ export const GameScheduleCard: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="game-info-title"
-      className="w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col"
+      className="w-full max-w-lg rounded-t-3xl sm:rounded-2xl bg-gradient-to-r from-[#0d2e16] via-[#14421f] to-[#1e5c2d] shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col"
       onClick={(event) => event.stopPropagation()}
      >
       {/* Header */}
-      <div className="bg-[#142614] text-white p-3.5 sm:p-4 border-b border-[#355935] flex items-center justify-between shrink-0">
-       <div className="flex items-center gap-3 min-w-0">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-emerald-300">
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#0d2e16] via-[#14421f] to-[#1e5c2d] text-white p-3.5 sm:p-4 border-b border-[#355935] flex items-center shrink-0">
+       <img
+        src={ccsLogo}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute right-3 top-1/2 h-24 w-24 -translate-y-1/2 object-contain opacity-20 brightness-150 contrast-125"
+       />
+       <div className="relative z-10 flex items-center gap-3 min-w-0">
+        <div className="modal-sport-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#355935] text-emerald-200">
          <SportIcon sport={selectedGame.sport} className="h-5 w-5" />
         </div>
         <div className="min-w-0">
-         <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#22c55e]">
-          <span>{activeTab === 'upcoming' ? 'SYS.MATCH // GAME DISPATCH' : 'SYS.RECORD // FINAL RESULT'}</span>
+         <div className="flex items-center gap-1.5 text-[12px] font-mono text-[#22c55e]">
+          <span>{activeTab === 'upcoming' ? 'Match Details' : 'Match Result'}</span>
           {activeTab === 'results' && (
            <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase border ${
             selectedGame.isWin
-             ? 'bg-emerald-900/50 text-emerald-300 border-emerald-600'
-             : 'bg-rose-900/30 text-rose-300 border-rose-700'
+               ? 'bg-emerald-700 text-white border-emerald-300'
+               : 'bg-red-700 text-white border-red-300'
            }`}>
             {selectedGame.isWin ? 'Victory' : 'Defeat'}
            </span>
@@ -336,23 +344,15 @@ export const GameScheduleCard: React.FC = () => {
          <h3 id="game-info-title" className="text-sm sm:text-base font-bold font-display uppercase tracking-wide mt-0.5 text-white truncate">
           <SportName sport={selectedGame.sport} />
          </h3>
-         <p className="text-[11px] font-mono text-white/60 mt-0.5">
-          <MatchupTeams opponent={selectedGame.opponent} />
+         <p className="text-[11px] font-mono text-white/75 mt-0.5">
+          <MatchupTeams opponent={selectedGame.opponent} fullTeamNames />
          </p>
         </div>
        </div>
-       <button
-        type="button"
-        onClick={() => setSelectedGame(null)}
-        aria-label="Close game information"
-        className="text-stone-400 hover:text-white p-1 rounded-lg hover:bg-white/10 cursor-pointer shrink-0"
-       >
-        <X className="w-5 h-5" />
-       </button>
       </div>
 
       {/* Body */}
-      <div className="p-4 sm:p-5 space-y-3 sm:space-y-4 flex-1 overflow-y-auto">
+      <div className="bg-white p-4 sm:p-5 space-y-3 sm:space-y-4 flex-1 overflow-y-auto">
        {/* Match Details Pill */}
        <div className="bg-[#f6f9f5] border border-[#d6e5d5] rounded-xl p-2.5 sm:p-3 text-xs font-mono">
         <div className="text-stone-700 flex items-center gap-1.5">
@@ -455,7 +455,7 @@ export const GameScheduleCard: React.FC = () => {
            </span>
           </div>
           <div className="mt-2.5 pt-2 border-t border-stone-200/60">
-           <p className="text-[10px] uppercase text-stone-500 font-bold tracking-wider">Player Credit / Highlights</p>
+           <p className="text-[10px] uppercase text-stone-500 font-bold tracking-wider">Match Reporter</p>
            <p className="mt-0.5 text-xs sm:text-sm font-bold text-[#1f381f]">{selectedGame.credit}</p>
           </div>
          </div>
@@ -464,7 +464,7 @@ export const GameScheduleCard: React.FC = () => {
       </div>
 
       {/* Action Buttons Footer */}
-      <div className="flex items-center justify-end gap-2 p-3 sm:px-5 sm:py-3.5 border-t border-stone-200 bg-stone-50/50 shrink-0">
+      <div className="flex items-center justify-end gap-2 p-3 sm:px-5 sm:py-3.5 border-t border-stone-200 bg-white shrink-0">
        <button
         type="button"
         onClick={() => setSelectedGame(null)}

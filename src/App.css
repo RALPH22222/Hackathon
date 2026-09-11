@@ -19,6 +19,10 @@
     filter: brightness(0) saturate(100%) invert(28%) sepia(14%) saturate(1050%) hue-rotate(72deg) brightness(86%) contrast(92%);
   }
 
+  .modal-sport-icon .sport-asset-icon {
+    filter: brightness(0) saturate(100%) invert(87%) sepia(16%) saturate(1150%) hue-rotate(91deg) brightness(104%) contrast(95%);
+  }
+
 }
 
 /* Minimalist Light Card & Inputs using #355935 and #5d8c55 */

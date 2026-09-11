@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck, X, Users, UserRound, ShieldCheck, Calendar } from 'lucide-react';
+import { Clock, MapPin, CheckCircle2, ArrowRight, ChevronDown, UserCheck, Users, UserRound, ShieldCheck, Calendar } from 'lucide-react';
 
 import messengerLogo from '../../assets/messenger.png';
+import ccsLogo from '../../assets/ccs-whitie.png';
 
 interface ScheduleItem {
   id: string;
@@ -704,32 +705,30 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="attendance-info-title"
-            className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col"
+            className="relative w-full max-w-lg rounded-t-3xl sm:rounded-2xl bg-gradient-to-r from-[#0d2e16] via-[#14421f] to-[#1e5c2d] shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col"
             onClick={(event) => event.stopPropagation()}
           >
             {/* Header */}
-            <div className="bg-[#142614] text-white p-3.5 sm:p-4 border-b border-[#355935] flex items-center justify-between shrink-0">
-              <div>
-                <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#22c55e]">
+            <div className="relative overflow-hidden bg-gradient-to-r from-[#0d2e16] via-[#14421f] to-[#1e5c2d] text-white px-3.5 py-4 sm:px-4 sm:py-6 border-b border-[#355935] flex items-center shrink-0">
+              <img
+                src={ccsLogo}
+                alt=""
+                aria-hidden="true"
+                className="pointer-events-none absolute right-3 top-1/2 h-20 w-20 -translate-y-1/2 object-contain opacity-20 brightness-150 contrast-125"
+              />
+              <div className="relative z-10">
+                <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#22c55e]">
                   <Calendar className="w-3 h-3 shrink-0" />
-                  <span>SYS.SCHEDULE // ATTENDANCE DETAILS</span>
+                  <span>ATTENDANCE DETAILS</span>
                 </div>
                 <h3 id="attendance-info-title" className="text-sm sm:text-base font-bold font-display uppercase tracking-wide mt-0.5 text-white">
                   {selectedAttendance.sport}
                 </h3>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedAttendance(null)}
-                aria-label="Close attendance information"
-                className="text-stone-400 hover:text-white p-1 rounded-lg hover:bg-white/10 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
 
             {/* Body */}
-            <div className="p-4 sm:p-5 space-y-3 sm:space-y-4 flex-1 overflow-y-auto">
+            <div className="bg-white p-4 sm:p-5 space-y-3 sm:space-y-4 flex-1 overflow-y-auto">
               {/* Event Match Details Pill (BackupRequest style) */}
               <div className="bg-[#f6f9f5] border border-[#d6e5d5] rounded-xl p-2.5 sm:p-3 text-xs font-mono">
                 <div className="flex items-center justify-between">
@@ -803,7 +802,7 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
             </div>
 
             {/* Action Buttons Footer */}
-            <div className="flex items-center justify-end gap-2 p-3 sm:px-5 sm:py-3.5 border-t border-stone-200 bg-stone-50/50 shrink-0">
+            <div className="flex items-center justify-end gap-2 p-3 sm:px-5 sm:py-3.5 border-t border-stone-200 bg-white shrink-0">
               <button
                 type="button"
                 onClick={() => setSelectedAttendance(null)}
@@ -818,7 +817,7 @@ export const SectionScheduleCard: React.FC<SectionScheduleCardProps> = ({
                     setSelectedAttendance(null);
                     onNavigateToAttendance();
                   }}
-                  className="px-5 py-2 rounded-xl text-xs font-mono font-bold bg-[#142614] text-[#22c55e] hover:bg-[#1f381f] border border-[#355935] flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer active:scale-98"
+                  className="px-5 py-2 rounded-xl text-xs font-mono font-bold bg-[#2f4f2f] text-white hover:bg-[#2b492b] border border-[#5d8c55] flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer active:scale-98"
                 >
                   <Calendar className="w-3.5 h-3.5 shrink-0" />
                   <span>VIEW ATTENDANCE</span>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, Trophy, X } from 'lucide-react';
+import { ExternalLink, Trophy } from 'lucide-react';
 import { GoldMedalIcon, SilverMedalIcon, BronzeMedalIcon } from './MedalIcons';
 import { SportIcon } from './MatchupVisuals';
 
@@ -268,7 +268,7 @@ export const MedalTallyCard: React.FC = () => {
           onClick={() => setSelectedCollege(null)}
         >
           <div
-            className="w-full max-w-2xl overflow-hidden rounded-t-3xl sm:rounded-2xl bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[88vh] flex flex-col font-sans"
+            className={`w-full max-w-2xl overflow-hidden rounded-t-3xl sm:rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[88vh] flex flex-col font-sans ${selectedCollege.bgGradient}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="college-standing-title"
@@ -295,14 +295,6 @@ export const MedalTallyCard: React.FC = () => {
                     </h3>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCollege(null)}
-                  aria-label="Close medal details"
-                  className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/10 text-white/80 transition-colors hover:bg-white/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
-                >
-                  <X className="h-4 w-4" />
-                </button>
               </div>
 
               <div className="relative z-10 mt-4 grid grid-cols-4 rounded-xl bg-black/10 py-2.5 text-center backdrop-blur-xs">
@@ -358,6 +350,16 @@ export const MedalTallyCard: React.FC = () => {
               <p className="mt-4 text-[10px] leading-relaxed text-stone-400">
                 Medal counts are based on the official college standings published by The Venom Publication.
               </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-stone-200 bg-white p-3 sm:px-5 sm:py-3.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setSelectedCollege(null)}
+                className="cursor-pointer rounded-xl px-4 py-2 text-xs font-mono font-semibold text-stone-600 transition-colors hover:bg-stone-100"
+              >
+                CLOSE
+              </button>
             </div>
           </div>
         </div>

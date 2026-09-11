@@ -19,6 +19,7 @@ import cswcdLogo from '../../assets/sw.png';
 import basketballIcon from '../../assets/basketball.png';
 import sepakIcon from '../../assets/sepak.png';
 import badmintonIcon from '../../assets/badminton.png';
+import soccerIcon from '../../assets/soccer.png';
 
 const collegeLogos: Record<string, string> = {
   CCS: ccsLogo,
@@ -63,6 +64,8 @@ export function SportIcon({ sport, className = 'h-5 w-5' }: { sport: string; cla
       ? sepakIcon
       : normalizedSport.includes('badminton')
         ? badmintonIcon
+        : normalizedSport.includes('football') || normalizedSport.includes('soccer')
+          ? soccerIcon
         : null;
 
   if (sportAsset) {
@@ -129,13 +132,17 @@ export function MatchupTeams({
 }) {
   const opponentCode = getCollegeCode(opponent);
   const opponentName = teamNames[opponentCode] ?? opponent;
+  const matchupLogoClassName = fullTeamNames
+    ? 'h-5 w-5 rounded-full bg-white p-0.5'
+    : 'h-5 w-5';
 
-  // Compact mode: just the opponent logo + code, used inline next to "CCS vs"
+  // Compact mode keeps mobile rows short while showing full team names on desktop.
   if (opponentOnly) {
     return (
       <span className={`inline-flex shrink-0 items-center gap-1 ${className}`}>
         <CollegeLogo college={opponent} className="h-4 w-4" />
-        <span className="font-semibold text-stone-600">{opponentCode}</span>
+        <span className="font-semibold text-stone-600 md:hidden">{opponentCode}</span>
+        <span className="font-semibold text-stone-600 hidden md:inline">{opponentName}</span>
       </span>
     );
   }
@@ -143,7 +150,7 @@ export function MatchupTeams({
   return (
     <div className={`inline-flex min-w-0 max-w-full items-center gap-1.5 ${fullTeamNames ? 'flex-nowrap whitespace-nowrap' : 'flex-wrap'} ${className}`}>
       <span className="inline-flex shrink-0 items-center gap-1">
-        <CollegeLogo college="CCS" className="h-5 w-5" />
+        <CollegeLogo college="CCS" className={matchupLogoClassName} />
         {fullTeamNames ? (
           <span>CCS Pixels</span>
         ) : (
@@ -155,7 +162,7 @@ export function MatchupTeams({
       </span>
       <span className="text-stone-400">vs</span>
       <span className="inline-flex shrink-0 items-center gap-1">
-        <CollegeLogo college={opponent} className="h-5 w-5" />
+        <CollegeLogo college={opponent} className={matchupLogoClassName} />
         {fullTeamNames ? (
           <span>{opponentName}</span>
         ) : (
