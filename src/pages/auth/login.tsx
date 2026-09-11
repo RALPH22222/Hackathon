@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, GraduationCap, ShieldCheck, UserCheck } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, GraduationCap, ShieldCheck, UserCheck, Info } from 'lucide-react';
 import { CyberBackground } from '../../components/auth/CyberBackground';
+import { ProjectDisclaimerModal } from '../../components/common/ProjectDisclaimerModal';
 import ccsLogo from '../../assets/CCS.png';
 
 // Campus & Department Slideshow Images
@@ -32,6 +33,7 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   // Background Slideshow timer
   useEffect(() => {
@@ -315,8 +317,26 @@ export function Login({ initialRole = 'student', onLoginSuccess, onNavigateToSig
               Sign Up
             </button>
           </div>
+
+          {/* Project Info & Disclaimer Button */}
+          <div className="pt-2 text-center border-t border-stone-200/60 mt-3">
+            <button
+              type="button"
+              onClick={() => setShowDisclaimer(true)}
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#355935] hover:text-[#1f381f] transition-colors py-1 px-2.5 rounded-lg hover:bg-[#edf5ec] cursor-pointer"
+            >
+              <Info className="w-3.5 h-3.5" />
+              <span>Project Concept & Disclaimer</span>
+            </button>
+          </div>
         </form>
       </div>
+
+      {/* Project Disclaimer & Features Modal */}
+      <ProjectDisclaimerModal
+        isOpen={showDisclaimer}
+        onClose={() => setShowDisclaimer(false)}
+      />
     </div>
   );
 }
