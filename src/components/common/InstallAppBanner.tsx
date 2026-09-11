@@ -119,60 +119,82 @@ export const InstallAppBanner: React.FC = () => {
 
       {/* Installation Instructions Modal (iOS & Fallback) */}
       {showIOSModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 sm:p-4">
-          <div className="bg-white rounded-2xl p-4 sm:p-5 max-w-sm w-full space-y-4 text-stone-800 shadow-2xl animate-in fade-in zoom-in-95 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-              <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-[#254625]" />
-                <h3 className="font-bold text-sm sm:text-base text-[#122412]">Add App to Home Screen</h3>
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/75"
+          role="presentation"
+          onClick={() => setShowIOSModal(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="install-app-title"
+            className="relative w-full max-w-md bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden font-sans max-h-[88vh] flex flex-col"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-[#142614] text-white p-3.5 sm:p-4 border-b border-[#355935] flex items-center justify-between shrink-0">
+              <div>
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#22c55e]">
+                  <Smartphone className="w-3 h-3 shrink-0" />
+                  <span>SYS.INSTALL // HOME SCREEN</span>
+                </div>
+                <h3 id="install-app-title" className="text-sm sm:text-base font-bold font-display uppercase tracking-wide mt-0.5 text-white">
+                  Add App to Home Screen
+                </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowIOSModal(false)}
-                className="p-1 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 cursor-pointer"
+                className="text-stone-400 hover:text-white p-1 rounded-lg hover:bg-white/10 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-stone-600 leading-relaxed">
-              To install <strong>CS Portal App</strong> on your device for offline access:
-            </p>
+            {/* Body */}
+            <div className="p-4 sm:p-5 space-y-3 sm:space-y-4 flex-1 overflow-y-auto font-mono">
+              <p className="text-xs text-stone-600 leading-relaxed">
+                To install <strong className="text-[#142614]">NodeShots Palaro Portal</strong> on your device for offline access:
+              </p>
 
-            <ol className="space-y-2.5 text-xs text-stone-700">
-              <li className="flex items-start gap-2.5 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
-                <span className="w-5 h-5 rounded-full bg-[#254625] text-white flex items-center justify-center font-bold text-[10.5px] shrink-0 mt-0.5">
-                  1
-                </span>
-                <span>
-                  Tap browser menu or <strong className="inline-flex items-center gap-1 text-[#122412]"><Share className="w-3.5 h-3.5 inline text-blue-600" /> Share button</strong>.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
-                <span className="w-5 h-5 rounded-full bg-[#254625] text-white flex items-center justify-center font-bold text-[10.5px] shrink-0 mt-0.5">
-                  2
-                </span>
-                <span>
-                  Select <strong className="inline-flex items-center gap-1 text-[#122412]"><PlusSquare className="w-3.5 h-3.5 inline text-stone-800" /> Add to Home Screen</strong> or <strong>Install App</strong>.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
-                <span className="w-5 h-5 rounded-full bg-[#254625] text-white flex items-center justify-center font-bold text-[10.5px] shrink-0 mt-0.5">
-                  3
-                </span>
-                <span>
-                  Confirm to add the app icon to your Home Screen.
-                </span>
-              </li>
-            </ol>
+              <ol className="space-y-2.5 text-xs text-stone-700">
+                <li className="flex items-start gap-2.5 bg-[#f8faf8] p-2.5 rounded-xl border border-[#e5efe4]">
+                  <span className="w-5 h-5 rounded-full bg-[#142614] text-[#22c55e] flex items-center justify-center font-bold text-[10.5px] shrink-0 mt-0.5 border border-[#355935]">
+                    1
+                  </span>
+                  <span>
+                    Tap browser menu or <strong className="inline-flex items-center gap-1 text-[#142614]"><Share className="w-3.5 h-3.5 inline text-emerald-700" /> Share button</strong>.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5 bg-[#f8faf8] p-2.5 rounded-xl border border-[#e5efe4]">
+                  <span className="w-5 h-5 rounded-full bg-[#142614] text-[#22c55e] flex items-center justify-center font-bold text-[10.5px] shrink-0 mt-0.5 border border-[#355935]">
+                    2
+                  </span>
+                  <span>
+                    Select <strong className="inline-flex items-center gap-1 text-[#142614]"><PlusSquare className="w-3.5 h-3.5 inline text-emerald-700" /> Add to Home Screen</strong> or <strong>Install App</strong>.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5 bg-[#f8faf8] p-2.5 rounded-xl border border-[#e5efe4]">
+                  <span className="w-5 h-5 rounded-full bg-[#142614] text-[#22c55e] flex items-center justify-center font-bold text-[10.5px] shrink-0 mt-0.5 border border-[#355935]">
+                    3
+                  </span>
+                  <span>
+                    Confirm and launch directly from your Home Screen anytime.
+                  </span>
+                </li>
+              </ol>
+            </div>
 
-            <button
-              type="button"
-              onClick={() => setShowIOSModal(false)}
-              className="w-full py-2.5 bg-[#122412] text-white rounded-xl font-semibold text-xs hover:bg-[#254625] transition-colors cursor-pointer"
-            >
-              Got it
-            </button>
+            {/* Action Buttons Footer */}
+            <div className="flex items-center justify-end gap-2 p-3 sm:px-5 sm:py-3.5 border-t border-stone-200 bg-stone-50/50 shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowIOSModal(false)}
+                className="px-5 py-2 rounded-xl text-xs font-mono font-bold bg-[#142614] text-[#22c55e] hover:bg-[#1f381f] border border-[#355935] flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer active:scale-98"
+              >
+                <span>GOT IT</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

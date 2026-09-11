@@ -262,12 +262,12 @@ export const MedalTallyCard: React.FC = () => {
 
       {selectedCollege && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#142614]/55 px-3 py-5 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/75"
           role="presentation"
           onClick={() => setSelectedCollege(null)}
         >
           <div
-            className="w-full max-w-2xl overflow-hidden rounded-2xl bg-[#f8fbf7] shadow-2xl animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-2xl overflow-hidden rounded-t-3xl sm:rounded-2xl bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[88vh] flex flex-col font-sans"
             role="dialog"
             aria-modal="true"
             aria-labelledby="college-standing-title"
@@ -298,7 +298,7 @@ export const MedalTallyCard: React.FC = () => {
                   type="button"
                   onClick={() => setSelectedCollege(null)}
                   aria-label="Close medal details"
-                  className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/10 text-white/80 transition-colors hover:bg-white/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/10 text-white/80 transition-colors hover:bg-white/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -328,7 +328,7 @@ export const MedalTallyCard: React.FC = () => {
               </div>
             </div>
 
-            <div className="max-h-[45vh] overflow-y-auto px-5 py-5 sm:px-7 border-x border-b border-[#c5d8c3] rounded-b-2xl">
+            <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 bg-white">
               <div className="mb-3 flex items-end justify-between gap-3">
                 <div>
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#5d8c55]">Medal breakdown</p>
@@ -339,7 +339,7 @@ export const MedalTallyCard: React.FC = () => {
 
               <div className="space-y-2">
                 {selectedCollege.medalsByGame.map((result) => (
-                  <div key={result.game} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce9da] bg-white px-3 py-3 shadow-xs">
+                  <div key={result.game} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce9da] bg-[#f8faf8] px-3 py-3 shadow-xs">
                     <span className="min-w-0 text-sm font-bold text-[#263c27]">{result.game}</span>
                     <div className="grid shrink-0 grid-cols-3 gap-2 text-center font-mono text-xs font-bold">
                       <span className="flex min-w-8 flex-col items-center gap-0.5 text-amber-600"><GoldMedalIcon className="h-4 w-4" />{result.gold}</span>
