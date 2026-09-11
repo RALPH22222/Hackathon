@@ -19,7 +19,9 @@ import {
   Calendar,
   Map as MapIcon,
   ListFilter,
+  ChevronDown,
 } from 'lucide-react';
+import { CollegeLogo, SportIcon as SharedSportIcon } from './MatchupVisuals';
 
 export type SportCategoryType =
   | 'basketball'
@@ -88,6 +90,15 @@ export const SportIcon: React.FC<{
   }
 };
 
+const TeamLogo: React.FC<{ team: string }> = ({ team }) =>
+  /all colleges/i.test(team) ? (
+    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#edf5ec] text-[#355935]">
+      <Trophy className="h-3 w-3" aria-hidden="true" />
+    </span>
+  ) : (
+    <CollegeLogo college={team} className="h-5 w-5" />
+  );
+
 const campusVenuesData: CampusVenue[] = [
   {
     id: 'wmsu-gym',
@@ -127,10 +138,10 @@ const campusVenuesData: CampusVenue[] = [
       },
       {
         id: 'gm-3',
-        sport: 'Palaro Championship Finals',
-        category: "Championship Awarding & Trophy Ceremony",
+        sport: 'MLBB Esports Championship Finals Men',
+        category: "Men's MLBB Esports Championship Finals",
         teamA: 'CCS Venom',
-        teamB: 'All Colleges',
+        teamB: 'COE Titans',
         time: '04:00 PM',
         date: 'Day 5',
         status: 'Upcoming',
@@ -305,10 +316,22 @@ const campusVenuesData: CampusVenue[] = [
   },
 ];
 
+const sportFilterOptions = [
+  { value: 'all', label: 'All Sports', iconName: 'All Sports' },
+  { value: 'basketball', label: 'Basketball', iconName: 'Basketball' },
+  { value: 'volleyball', label: 'Volleyball', iconName: 'Volleyball' },
+  { value: 'football', label: 'Football', iconName: 'Football' },
+  { value: 'track', label: 'Track & Field', iconName: 'Track & Field' },
+  { value: 'esports', label: 'Esports (MLBB/Valorant)', iconName: 'MLBB Esports' },
+  { value: 'badminton', label: 'Badminton', iconName: 'Badminton' },
+  { value: 'chess', label: 'Chess', iconName: 'Chess' },
+];
+
 export const CampusMatchMapCard: React.FC = () => {
   const [selectedVenueId, setSelectedVenueId] = useState<string>('wmsu-gym');
   const [hoveredVenueId, setHoveredVenueId] = useState<string | null>(null);
   const [sportFilter, setSportFilter] = useState<string>('all');
+  const [isSportMenuOpen, setIsSportMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [mobileTab, setMobileTab] = useState<'map' | 'details'>('map');
 
@@ -357,7 +380,7 @@ export const CampusMatchMapCard: React.FC = () => {
                 WMSU MAIN CAMPUS
               </span>
               <span className="text-[10.5px] font-mono text-stone-400">
-                BALIWASAN // NORMAL ROAD
+                BALIWASAN NORMAL ROAD
               </span>
             </div>
             <h2 className="text-base sm:text-xl font-black text-[#142614] tracking-tight uppercase font-display flex items-center gap-2">
@@ -386,20 +409,50 @@ export const CampusMatchMapCard: React.FC = () => {
             </div>
 
             {/* Sport Quick Selector */}
-            <select
-              value={sportFilter}
-              onChange={(e) => setSportFilter(e.target.value)}
-              className="px-2.5 py-1.5 text-xs font-mono font-semibold rounded-xl border border-[#c5d8c3] bg-white text-[#1f381f] focus:outline-none focus:border-[#355935] cursor-pointer"
-            >
-              <option value="all">All Sports</option>
-              <option value="basketball">Basketball</option>
-              <option value="volleyball">Volleyball</option>
-              <option value="football">Football</option>
-              <option value="track">Track & Field</option>
-              <option value="esports">Esports (MLBB/Valorant)</option>
-              <option value="badminton">Badminton</option>
-              <option value="chess">Chess</option>
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={isSportMenuOpen}
+                onClick={() => setIsSportMenuOpen((isOpen) => !isOpen)}
+                className="inline-flex min-w-[142px] items-center justify-between gap-2 rounded-xl border border-[#c5d8c3] bg-white px-2.5 py-1.5 text-xs font-mono font-semibold text-[#1f381f] transition-colors hover:border-[#355935] focus:outline-none focus:ring-2 focus:ring-[#c5d8c3] cursor-pointer"
+              >
+                <span className="inline-flex min-w-0 items-center gap-1.5">
+                  <SharedSportIcon
+                    sport={sportFilterOptions.find((option) => option.value === sportFilter)?.iconName || 'All Sports'}
+                    className="h-4 w-4 shrink-0"
+                  />
+                  <span className="truncate">
+                    {sportFilterOptions.find((option) => option.value === sportFilter)?.label || 'All Sports'}
+                  </span>
+                </span>
+                <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${isSportMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isSportMenuOpen && (
+                <div role="menu" className="absolute right-0 top-full z-30 mt-1.5 w-52 overflow-hidden rounded-xl border border-[#c5d8c3] bg-white p-1 shadow-lg">
+                  {sportFilterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        setSportFilter(option.value);
+                        setIsSportMenuOpen(false);
+                      }}
+                      className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-mono font-semibold transition-colors cursor-pointer ${
+                        sportFilter === option.value
+                          ? 'bg-[#edf5ec] text-[#1f381f]'
+                          : 'text-stone-600 hover:bg-[#f8faf8] hover:text-[#1f381f]'
+                      }`}
+                    >
+                      <SharedSportIcon sport={option.iconName} className="h-4 w-4 shrink-0" />
+                      <span className="truncate">{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -408,26 +461,26 @@ export const CampusMatchMapCard: React.FC = () => {
           <button
             type="button"
             onClick={() => setMobileTab('map')}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+            className={`flex-1 min-w-0 px-2 py-1.5 rounded-lg text-xs font-mono font-bold inline-flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer ${
               mobileTab === 'map'
                 ? 'bg-[#1f381f] text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
-            <MapIcon className="w-3.5 h-3.5" />
-            <span>Interactive Campus Map</span>
+            <MapIcon className="w-3.5 h-3.5 shrink-0" />
+            <span className="min-w-0 text-center leading-tight">Interactive Campus Map</span>
           </button>
           <button
             type="button"
             onClick={() => setMobileTab('details')}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+            className={`flex-1 min-w-0 py-1.5 rounded-lg text-xs font-mono font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
               mobileTab === 'details'
                 ? 'bg-[#1f381f] text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
-            <ListFilter className="w-3.5 h-3.5" />
-            <span>Venue Matches ({selectedVenue.matches.length})</span>
+            <ListFilter className="w-3.5 h-3.5 shrink-0" />
+            <span className="min-w-0 text-center leading-tight">Venue Matches ({selectedVenue.matches.length})</span>
           </button>
         </div>
       </div>
@@ -797,8 +850,11 @@ export const CampusMatchMapCard: React.FC = () => {
                     >
                       {/* Top Sport & Status */}
                       <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                        <span className="text-xs sm:text-[13px] font-black text-[#142614] font-display truncate">
-                          {match.sport}
+                        <span className="flex min-w-0 items-center gap-1.5 text-xs sm:text-[13px] font-black text-[#142614] font-display truncate">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#edf5ec] text-[#355935]">
+                            <SharedSportIcon sport={match.sport} className="h-4 w-4" />
+                          </span>
+                          <span className="truncate">{match.sport}</span>
                         </span>
 
                         <div className="shrink-0 flex items-center gap-1">
@@ -818,9 +874,15 @@ export const CampusMatchMapCard: React.FC = () => {
 
                       {/* Opponent Matchup (Responsive to mobile screens) */}
                       <div className="flex items-center justify-between gap-1 text-[11px] sm:text-xs py-1.5 px-2.5 rounded-lg sm:rounded-xl bg-white border border-[#e5efe4] font-mono">
-                        <span className="font-bold text-[#1f381f] truncate max-w-[44%]">{match.teamA}</span>
+                        <span className="inline-flex min-w-0 max-w-[44%] items-center gap-1.5 font-bold text-[#1f381f]">
+                          <TeamLogo team={match.teamA} />
+                          <span className="truncate">{match.teamA}</span>
+                        </span>
                         <span className="text-[9px] sm:text-[10px] text-stone-400 uppercase font-semibold shrink-0">VS</span>
-                        <span className="font-bold text-amber-900 truncate max-w-[44%] text-right">{match.teamB}</span>
+                        <span className="inline-flex min-w-0 max-w-[44%] items-center justify-end gap-1.5 text-right font-bold text-amber-900">
+                          <span className="truncate">{match.teamB}</span>
+                          <TeamLogo team={match.teamB} />
+                        </span>
                       </div>
 
                       {/* Facilitator Info (Coach removed per user request) */}

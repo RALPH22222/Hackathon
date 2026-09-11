@@ -14,6 +14,11 @@
   .font-display {
     font-family: 'Space Grotesk', sans-serif;
   }
+
+  .sport-asset-icon {
+    filter: brightness(0) saturate(100%) invert(28%) sepia(14%) saturate(1050%) hue-rotate(72deg) brightness(86%) contrast(92%);
+  }
+
 }
 
 /* Minimalist Light Card & Inputs using #355935 and #5d8c55 */

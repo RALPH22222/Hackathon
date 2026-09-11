@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ExternalLink, Trophy, X } from 'lucide-react';
 import { GoldMedalIcon, SilverMedalIcon, BronzeMedalIcon } from './MedalIcons';
+import { SportIcon } from './MatchupVisuals';
 
 import ccsLogo from '../../assets/ccs-whitie.png';
 import coeLogo from '../../assets/coe.png';
@@ -339,8 +340,13 @@ export const MedalTallyCard: React.FC = () => {
 
               <div className="space-y-2">
                 {selectedCollege.medalsByGame.map((result) => (
-                  <div key={result.game} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce9da] bg-[#f8faf8] px-3 py-3 shadow-xs">
-                    <span className="min-w-0 text-sm font-bold text-[#263c27]">{result.game}</span>
+                  <div key={result.game} className="flex items-center justify-between gap-3 rounded-xl border border-[#dce9da] bg-white px-3 py-3 shadow-xs">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#edf5ec] text-[#355935]">
+                        <SportIcon sport={result.game} className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0 text-sm font-bold text-[#263c27]">{result.game}</span>
+                    </div>
                     <div className="grid shrink-0 grid-cols-3 gap-2 text-center font-mono text-xs font-bold">
                       <span className="flex min-w-8 flex-col items-center gap-0.5 text-amber-600"><GoldMedalIcon className="h-4 w-4" />{result.gold}</span>
                       <span className="flex min-w-8 flex-col items-center gap-0.5 text-slate-500"><SilverMedalIcon className="h-4 w-4" />{result.silver}</span>
